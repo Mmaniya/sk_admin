@@ -1,0 +1,12 @@
+SELECT ROLE_name,role_abbr,no_of_roles FROM `bjp_role` where role_hierarchy='D'
+
+
+Loop
+
+SELECT count(*) as total_roles FROM `bjp_office_bearers` where role_position ='P' and role_hierarchy='D'
+
+
+if(total_roles<$V->no_of_roles) 
+ put role_name , id and role_abbr in array
+
+

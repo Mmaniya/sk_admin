@@ -1,0 +1,42 @@
+<?php
+ include("includes.php");
+
+ $qry="select ILI.id, date_format(ILI.added_date, '%Y-%m-%d') as added_date, (select concat(delivery_time,'|',delivery_time_duration) from ".TBL_SERVICES." where id=service_id and delivery_time > 0) as delivery_time from ".TBL_INVOICE_LINE_ITEM." ILI join ".TBL_INVOICE." I on I.id=ILI.invoice_id where is_deleted='N' and estimated_delivery_date='0000-00-00'";
+
+ $lineItemRes= dB::mExecuteSql($qry);
+//echo "<br>".count($lineItemRes);exit;
+echo "<table width='100%' border='1' cellpadding='2' cellspacing='0'>";
+ foreach($lineItemRes as $LK => $LV)
+ {
+     //echo $LV->delivery_time."<br>";
+    if($LV->delivery_time!==NULL)
+    {
+        $delivery_time_arr=explode("|",$LV->delivery_time);         
+        $val_to_add='';
+
+        switch($delivery_time_arr[1])
+        {
+            case "D":
+            $val_to_add="+".$delivery_time_arr[0]." day";
+            break;
+            case "M":
+            $val_to_add="+".$delivery_time_arr[0]." month";
+            break;
+        }
+
+        if($delivery_time_arr[0] > 1)
+                $val_to_add.="s";
+        
+        $delivery_due_date=date('Y-m-d',strtotime($val_to_add, strtotime($LV->added_date)));
+        
+        echo '<tr><td style="font-size:14px;font-family:verdana">'.$LV->id."</td><td>".$LV->delivery_time."</td><td>".$LV->added_date."</td><td>".$delivery_due_date."</td></tr>";
+
+        echo $updateQry="UPDATE ".TBL_INVOICE_LINE_ITEM." set estimated_delivery_date='".$delivery_due_date."' where id='".$LV->id."'";
+        echo "<br>";
+        dB::updateSql($updateQry);
+    }
+   
+ }
+
+ echo "</table>";
+?>
