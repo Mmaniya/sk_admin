@@ -195,8 +195,12 @@
 
     if($_POST['act'] == 'MandalofficeBearers') {
         ob_clean();  
-            $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $_POST['id'].'-INT','role_hierarchy'=>$_POST['role'].'-CHAR'),'orderby' => 'id', 'showSql' => 'N');
-            $stateMembersList = Table::getData($stateMembers);   
+            // $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $_POST['id'].'-INT','role_hierarchy'=>$_POST['role'].'-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+            // $stateMembersList = Table::getData($stateMembers); 
+
+            $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['id'].'" AND `role_hierarchy` ="'.$_POST['role'].'" OR `sub_role_hierarchy`="'.$_POST['role'].'"';
+            $stateMembersList=dB::mExecuteSql($qry); 
+
             if ($_POST['page'] == '') $page = 1;
             else $page = $_POST['page'];
             $TotalCount = count($stateMembersList);
@@ -210,8 +214,10 @@
     
     if($_POST['act'] == 'memberListpagination') {
         ob_clean();  
-            $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $_POST['mandalId'].'-INT','role_hierarchy'=>$_POST['role'].'-CHAR'),'orderby' => 'id', 'showSql' => 'N');
-            $stateMembersList = Table::getData($stateMembers);   
+            // $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $_POST['mandalId'].'-INT','role_hierarchy'=>$_POST['role'].'-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+            // $stateMembersList = Table::getData($stateMembers); 
+            $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['id'].'" AND `role_hierarchy` ="'.$_POST['role'].'" OR `sub_role_hierarchy`="'.$_POST['role'].'"';
+            $stateMembersList=dB::mExecuteSql($qry);   
             if ($_POST['page'] == '') $page = 1;
             else $page = $_POST['page'];
             $TotalCount = count($stateMembersList);

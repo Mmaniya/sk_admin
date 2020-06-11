@@ -20,32 +20,80 @@ $getMandalId = $_POST['id'];
       </tr>
    </thead>   
    <tbody>
-      <?php    
-         $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'S -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
-         $stateMembersList = Table::getData($stateMembers); 
+      <?php  
+
+      $qry1 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="S" OR `sub_role_hierarchy`="S" AND `status`="A"';
+      $mainRoleS=dB::mExecuteSql($qry1); 
+
+      $qry2 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="D" OR `sub_role_hierarchy`="D" AND `status`="A"';
+      $mainRoleD=dB::mExecuteSql($qry2); 
+
+      $qry3 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="M" OR `sub_role_hierarchy`="M" AND `status`="A"';
+      $mainRoleM=dB::mExecuteSql($qry3); 
+
+      $qry4 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="W" OR `sub_role_hierarchy`="W" AND `status`="A"';
+      $mainRoleW=dB::mExecuteSql($qry4);
+
+      $qry5 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="SK" OR `sub_role_hierarchy`="SK" AND `status`="A"';
+      $mainRoleSK=dB::mExecuteSql($qry5); 
+
+      $qry6 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="B" OR `sub_role_hierarchy`="B" AND `status`="A"';
+      $mainRoleB=dB::mExecuteSql($qry6); 
+
+
+      // // Mani Role Hierarchy  
+      //    $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'S -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $mainRoleS = Table::getData($stateMembers); 
          
-         $districtMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'D -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
-         $districtMembersList = Table::getData($districtMembers); 
+      //    $districtMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'D -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $mainRoleD = Table::getData($districtMembers); 
 
-         $mandalMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'M -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
-         $mandalMembersList = Table::getData($mandalMembers); 
+      //    $mandalMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'M -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $mainRoleM = Table::getData($mandalMembers); 
 
-         $wardMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'W -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
-         $wardMembersList = Table::getData($wardMembers); 
+      //    $wardMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'W -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $mainRoleW = Table::getData($wardMembers); 
 
-         $skMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'SK -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
-         $skMembersList = Table::getData($skMembers); 
+      //    $skMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'SK -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $mainRoleSK = Table::getData($skMembers); 
 
-         $boothMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'B -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
-         $boothMembersList = Table::getData($boothMembers); 
+      //    $boothMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','role_hierarchy'=>'B -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $mainRoleB = Table::getData($boothMembers); 
+
+      // // Sub Role Hierarchy
+      //    $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','sub_role_hierarchy'=>'S -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $subRoleS = Table::getData($stateMembers); 
+         
+      //    $districtMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','sub_role_hierarchy'=>'D -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $subRoleD = Table::getData($districtMembers); 
+
+      //    $mandalMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','sub_role_hierarchy'=>'M -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $subRoleM = Table::getData($mandalMembers); 
+
+      //    $wardMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','sub_role_hierarchy'=>'W -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $subRoleW = Table::getData($wardMembers); 
+
+      //    $skMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','sub_role_hierarchy'=>'SK -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $subRoleSK = Table::getData($skMembers); 
+
+      //    $boothMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $getMandalId.'-INT','sub_role_hierarchy'=>'B -CHAR','status'=> 'A-CHAR'),'orderby' => 'id', 'showSql' => 'N');
+      //    $subRoleB = Table::getData($boothMembers); 
+
       ?>	
       <tr align="center">
-         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php echo $_POST['id']?>,'S')"><?php  echo count($stateMembersList); ?></a></td>
-         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php echo $_POST['id']?>,'D')"><?php  echo count($districtMembersList); ?></a></td>
-         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php echo $_POST['id']?>,'M')"><?php  echo count($mandalMembersList); ?></a></td>
-         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php echo $_POST['id']?>,'W')"><?php  echo count($wardMembersList); ?></a></td>
-         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php echo $_POST['id']?>,'SK')"><?php  echo count($skMembersList); ?></a></td>
-         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php echo $_POST['id']?>,'B')"><?php  echo count($boothMembersList); ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'S')"><?php  echo count($mainRoleS); ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'D')"><?php  echo count($mainRoleD); ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'M')"><?php  echo count($mainRoleM); ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'W')"><?php  echo count($mainRoleW); ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'SK')"><?php  echo count($mainRoleSK); ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'B')"><?php  echo count($mainRoleB); ?></a></td>
+
+    <!-- <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php // echo $_POST['id']?>,'S')"><?php // echo count($mainRoleS) + count($subRoleS) ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php // echo $_POST['id']?>,'D')"><?php // echo count($mainRoleD) + count($subRoleD); ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php // echo $_POST['id']?>,'M')"><?php // echo count($mainRoleM) + count($subRoleM); ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php // echo $_POST['id']?>,'W')"><?php // echo count($mainRoleW) + count($subRoleW); ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php // echo $_POST['id']?>,'SK')"><?php // echo count($mainRoleSK) + count($subRoleSK); ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php // echo $_POST['id']?>,'B')"><?php // echo count($mainRoleB) + count($subRoleB); ?></a></td> -->
       </tr>
    </tbody>
 </table>

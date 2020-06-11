@@ -16,7 +16,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta name="description" content="">
       <meta name="author" content="">
-      <link rel="shortcut icon" href="assets/images/favicon.ico">
+      <link rel="shortcut icon" href="assets/images/fav.jpg">
       <title>Dashboard - BJP HOME</title>
       <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
       <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
@@ -52,7 +52,7 @@
          <!-- LOGO -->
          <div class="topbar-left">
             <div class="text-center">
-               <a href="dashboard.php" class="logo"><i class="mdi mdi-radar"></i> <span>Bharatiya Janata Party</span></a>
+               <a href="dashboard.php" class="logo"><img src="assets/images/bjp.png" width="50" height="50"> <span>Bharatiya Janata Party</span></a>
             </div>
          </div>
          <!-- Button mobile view to collapse sidebar menu -->
@@ -66,7 +66,7 @@
                <li class="list-inline-item dropdown notification-list">
                   <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button"
                      aria-haspopup="false" aria-expanded="false">
-                  <img src="assets/images/users/avatar-1.jpg" alt="user" class="rounded-circle">
+                     <img src="assets/images/modiji.png" alt="user" width="60" height="60" class="rounded-circle">
                   </a>
                   <div class="dropdown-menu dropdown-menu-right profile-dropdown " aria-labelledby="Preview">
                      <!-- item-->
@@ -97,7 +97,7 @@
             <!--- Divider -->
             <div id="sidebar-menu">
                <ul>
-                  <li class="menu-title">Main</li>
+                  <!-- <li class="menu-title">Main</li> -->
                   <li>
                      <a href="dashboard.php" class="waves-effect waves-primary">
                      <i class="ti-home"></i><span> Dashboard </span>
@@ -159,7 +159,7 @@
                <?php main(); ?>
             </div>
          </div>
-         <footer class="footer"><?php echo date('Y'); ?> ©  BJP.com <span style="float:right; cursor:pointer" class="scrollToTop">Top <i class="fas fa-arrow-up" style="color:#039CFD; font-size:14px"></i></span></footer>
+         <footer class="footer"><?php echo date('Y'); ?> ©  BJP.org <span style="float:right; cursor:pointer" class="scrollToTop">Top <i class="fas fa-arrow-up" style="color:#039CFD; font-size:14px"></i></span></footer>
       </div>
       <!-- Plugins  -->   		 
       <script src="assets/js/popper.min.js"></script><!-- Popper for Bootstrap -->

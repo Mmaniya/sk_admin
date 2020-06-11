@@ -32,7 +32,7 @@ require("includes.php");
         <meta name="description" content="">
         <meta name="author" content="">
         <link rel="shortcut icon" href="assets/images/logo.png">
-        <title>Login | Bizplan Easy</title>
+        <title>Login | BJP Admin</title>
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
         <link href="assets/css/style.css" rel="stylesheet" type="text/css">

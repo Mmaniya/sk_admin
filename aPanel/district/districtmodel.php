@@ -27,7 +27,7 @@
       <h5 class="modal-title"><?php echo $title; ?></h5>
    </div>
    <div class="modal-body">
-      <form action="javascript:void(0)" id="formData" method="POST">
+      <form action="javascript:void(0)" id="formDistrict" method="POST">
          <input type="hidden" value="addNewDisrict" name="act">
          <input type="hidden" value="<?php echo $modelId ?>" name="id">
          <div class="form-group">
@@ -50,7 +50,7 @@
             <label >Abbreviation  of District</label>
             <input type="text" class="form-control" name="district_abbr"  value="<?php echo $district_abbr; ?>" placeholder="Abbreviation of District">
          </div>
-         <input type="submit" id="submit"   class="btn btn-success"   data-dismiss="modal"  <?php  if($modelId == ''){ ?> value="Submit" <?php } else { ?> value="Update" <?php } ?>>
+         <input type="submit" id="submit" class="btn btn-success"     <?php  if($modelId == ''){ ?> value="Submit" <?php } else { ?> value="Update" <?php } ?>>
       </form>
    </div>
 </div>
@@ -455,7 +455,8 @@
  $param = array('tableName'=>TBL_BJP_DISTRICT,'fields'=>array('*'),'condition'=>array('id'=>$mandalData->district_id.'-INT'),'showSql'=>'N','status'=> 'A-CHAR');
  $DistrictData = Table::getData($param);
 
-?><div class="modal-content">
+?>
+<div class="modal-content">
    <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal">&times;</button>
       <h5 class="modal-title"> Add New Ward</h5>
@@ -538,7 +539,7 @@
                </select>
             </div>
          </div>
-         <input type="submit" id="submit"   class="btn btn-success"   data-dismiss="modal"  value="Submit">
+         <input type="submit" id="submit"  class="btn btn-success"   data-dismiss="modal"  value="Submit">
       </form>
    </div>
 </div>
@@ -618,38 +619,70 @@
 <?php } ?>
 <script>
 /************* FORM SUBMIT ************/
-$('form#formData').validate({
-   rules: {
-   role_hierarchy: "required",
-   membership_number: "required",
-   person_name: "required",
-   mobile_number: "required",
-   },
-   messages: {
-      role_hierarchy: "Please Select One Role Hierarchy",
-      membership_number: "Please Enter Membership Number",
-      person_name: "Enter Person Name",
-      mobile_number: "Enter Mobile Number"
-   },
-   submitHandler: function(form){
-   var formData = $('form#formData').serialize();
-   var closeId = $('#getOFId').val();
-   var id = $('#mandalID').val();
-   var role = $('#roleHierarchy').val();
-       ajax({
-          a:"districtajax",
-          b:formData,
-          c:function(){},
-          d:function(data){
-             $('#memberTable').html('<p style="color:green">Record Updated.!</p>');
-             $("#inputvalue" ).trigger( "keyup" );
-             $('#editOfficeBearers_'+closeId).remove();
-             officeBearesDetailsget(id);
-             getStateUsers(id,role);
+/* 1. Add District Form */
+   $('form#formDistrict').validate({
+      rules: {
+      state_id: "required",
+      district_name: "required",
+      },
+      messages: {
+         state_id: "Please Select One State",
+         district_name: "Please Enter District Name",
+      },
+      submitHandler: function(form){
+      var formData = $('form#formDistrict').serialize();
+         ajax({
+            a:"districtajax",
+            b:formData,
+            c:function(){},
+            d:function(data){
+               $('#myModal').modal('toggle');
+               paramData = {'act':'getAllData','type':'all'}; 
+                  ajax({
+                        a:"districtajax",
+                        b:paramData,
+                        c:function(){},
+                        d:function(data){
+                           $('#myTable').html(data);
+                        }
+                  });
             }          
-       });
-   }
-});
+         });
+      }
+   });
+
+   $('form#formData').validate({
+      rules: {
+      role_hierarchy: "required",
+      membership_number: "required",
+      person_name: "required",
+      mobile_number: "required",
+      },
+      messages: {
+         role_hierarchy: "Please Select One Role Hierarchy",
+         membership_number: "Please Enter Membership Number",
+         person_name: "Enter Person Name",
+         mobile_number: "Enter Mobile Number"
+      },
+      submitHandler: function(form){
+      var formData = $('form#formData').serialize();
+      var closeId = $('#getOFId').val();
+      var id = $('#mandalID').val();
+      var role = $('#roleHierarchy').val();
+         ajax({
+            a:"districtajax",
+            b:formData,
+            c:function(){},
+            d:function(data){
+               $('#memberTable').html('<p style="color:green">Record Updated.!</p>');
+               $("#inputvalue" ).trigger( "keyup" );
+               $('#editOfficeBearers_'+closeId).remove();
+               officeBearesDetailsget(id);
+               getStateUsers(id,role);
+               }          
+         });
+      }
+   });
 
 /*********** WRAD DETAILS GET *********/
    function wardDetailsget(id){
@@ -737,16 +770,22 @@ $('form#formData').validate({
             }
          });
          if (mainRole == "SK") {
+            $("#subRole").attr('disabled', false);
             $("#subRole").not(this).find("option[value=SK]").attr('disabled', true);
+            $("#subRole").not(this).find("option[value=W]").attr('disabled', false);
+            $("#subRole").not(this).find("option[value=B]").attr('disabled', false);
          } else if(mainRole == "M") {
+            $("#subRole").attr('disabled', false);
             $("#subRole").not(this).find("option[value=SK]").attr('disabled', false);
+            $("#subRole").not(this).find("option[value=W]").attr('disabled', false);
+            $("#subRole").not(this).find("option[value=B]").attr('disabled', false);
          } else if(mainRole == "W") {
-            $("#subRole").not(this).find("option[value=SK]").attr('disabled', true);
-            $("#subRole").not(this).find("option[value=W]").attr('disabled', true);
+            $("#subRole").attr('disabled', false);
+            $("#subRole").not(this).find("option[value=SK]").prop('disabled', true);
+            $("#subRole").not(this).find("option[value=W]").prop('disabled', true);
+            $("#subRole").not(this).find("option[value=B]").prop('disabled', false);
          } else if(mainRole == "B") {
-            $("#subRole").not(this).find("option[value=SK]").attr('disabled', true);
-            $("#subRole").not(this).find("option[value=W]").attr('disabled', true);
-            $("#subRole").not(this).find("option[value=B]").attr('disabled', true);
+            $("#subRole").attr('disabled', true);
          }
       });
    
@@ -789,6 +828,7 @@ $('form#formData').validate({
          });
       }
    
+/*********** CLOSE MEMBER EDIT CARD ******/
 
    function closeMemberCard(id){
          $('#editOfficeBearers_'+id).remove();

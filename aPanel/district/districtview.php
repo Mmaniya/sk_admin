@@ -18,7 +18,7 @@
       <div class="row">
          <div class="col-md-12">
             <div class="card mb-4">
-               <div class="card-header">
+               <div class="card-header" id="backToDist">
                   <strong style="font-size:2rem;">
                   <?php $param = array('tableName' => TBL_BJP_DISTRICT, 'fields' => array('*'),'condition' => array('id' => $_REQUEST['dist'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                      $district_list = Table::getData($param);
@@ -67,6 +67,7 @@
     });
    
      var id = $('#getDistrictid').val();
+
       paramData = {'dist_ID':id,'action':'districtCard'}; 
       ajax({
             a:"districtmodel",
@@ -76,6 +77,18 @@
                $('#mandaldetails').html(data);
             }
       });
+
+      // $('#backToDist').click(function (){
+      //    paramData = {'dist_ID':id,'action':'districtCard'}; 
+      //    ajax({
+      //          a:"districtmodel",
+      //          b:paramData,
+      //          c:function(){},
+      //          d:function(data){
+      //             $('#mandaldetails').html(data);
+      //          }
+      //    });
+      // });
    
     $('#inputvalue').keyup(function() {
            var filter_by = $(this).val();

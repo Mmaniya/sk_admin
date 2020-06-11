@@ -23,7 +23,7 @@ File: Main Css
   position: relative;
   width: 240px;
   z-index: 1;
-  background-color: #343c49;
+  background-color: #ff9933;
   max-height: 70px;
 }
 
@@ -37,7 +37,7 @@ File: Main Css
 
 .logo {
   color: #ffffff !important;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: .05em;
   line-height: 70px;
@@ -59,7 +59,7 @@ File: Main Css
 }
 
 .navbar-custom {
-  background-color: #343c49;
+  background-color: #ff9933;
   border-radius: 0;
   margin-bottom: 0;
   padding: 0 10px 0 0;
@@ -241,7 +241,7 @@ body.fixed-left .side-menu.left {
   display: inline-block;
   height: 70px;
   width: 60px;
-  background-color: #343c49;
+  background-color: #ff9933;
   font-size: 24px;
   z-index: 1;
 }
