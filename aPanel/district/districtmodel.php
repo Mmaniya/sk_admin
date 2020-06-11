@@ -343,7 +343,7 @@
                ?>
             </strong>
             <!-- <span>
-               <button type="button" class="btn btn-outline-primary btn-sm float-right" onClick="addofficebearers(<?php echo $mandal_list->id; ?>)" data-toggle="modal" data-target="#myModal">
+               <button type="button" class="btn btn-outline-primary btn-sm float-right" onClick="addofficebearers(<?php // echo $mandal_list->id; ?>)" data-toggle="modal" data-target="#myModal">
                <i class="fa fa-plus" aria-hidden="true"></i> Add Office Bearers
                </button>
             </span>
@@ -557,16 +557,17 @@
    ?>
    <div class="modal-content">
       <div class="modal-header">
-         <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
          <h5 class="modal-title"><?php echo $title ?></h5>
+         <button type="button" class="close" id="<?php echo $ofID ?>" onclick="closeMemberCard(this.id)">&times;</button>
       </div>
       <div class="modal-body">
          <form action="javascript:void(0)" id="formData" method="POST">
             <input type="hidden" value="addNewOfficeBearers" name="act">
             <input type="hidden" value="1" name="state_id">
             <input type="hidden" value="<?php echo $distID ?>" name="district_id">
-            <input type="hidden" value="<?php echo $mandalID ?>" name="mandal_id">
-            <input type="hidden" value="<?php echo $ofID ?>" name="id">
+            <input type="hidden" value="<?php echo $mandalID ?>" name="mandal_id" id="mandalID">
+            <input type="hidden" value="<?php echo $ofID ?>" name="id" id="getOFId">
+
             <div class="row">
                <div class="form-group col-sm-6">
                      <label >Role Hierarachy</label>
@@ -594,7 +595,6 @@
                <div class="col-md-6 col-lg-6">
                   <label>Role Position </label>
                   <select class="form-control" id="showData" name="role_id">
-                     <option selected="false" disabled="disabled" value="<?php if($officebearersList->role_id) echo 'selected'; ?>"> Select Position</option>
                   </select>
                </div>
                <div class="col-sm-6">
@@ -603,12 +603,14 @@
                         <div class="input-group-prepend">
                            <span class="input-group-text"><i class="fa fa-id-card"  aria-hidden="true"></i></span>
                         </div>
-                        <input type="text" class="form-control" id="memberID" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" required>                  
+                        <input type="text" class="form-control" id="memberID" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID">                  
                      </div>
-               </div>               
+               </div> 
             </div>
-            <span id="memberTable"></span>
-            <input type="submit" id="submit"   class="btn btn-success"   data-dismiss="modal"  value="Submit">
+            <span id="memberTable">
+               <!-- <span id="showNotifycation"></span>              -->
+            </span>
+            <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
          </form>
       </div>
    </div>
@@ -616,43 +618,38 @@
 <?php } ?>
 <script>
 /************* FORM SUBMIT ************/
-// $('form#formData').validate({
-
-//    role_hierarchy: "required",
-//    memberID: "required",
-//    person_name: "required",
-//    membership_number: "required",
-
-//    submitHandler: function(form){
-//    var formData = $('form#formData').serialize();
-//        ajax({
-//           a: "districtajax",
-//           b: formData,
-//           c:function(){},
-//           d:function(data){
-//              $('#showNotifycation').html('<p style="color:green">Record Updated.!</p>');
-//              $( "#inputvalue" ).trigger( "keyup" );
-//             //  $("#getTotalData").load(location.href + " #getTotalData");
-//              setTimeout(function() { $('#showNotifycation').fadeOut('slow');}, 2000);
-//              }
-//        });
-//    }
-// });
-
-   $("#submit").click(function(event){
-       var formData = $('form#formData').serialize();
+$('form#formData').validate({
+   rules: {
+   role_hierarchy: "required",
+   membership_number: "required",
+   person_name: "required",
+   mobile_number: "required",
+   },
+   messages: {
+      role_hierarchy: "Please Select One Role Hierarchy",
+      membership_number: "Please Enter Membership Number",
+      person_name: "Enter Person Name",
+      mobile_number: "Enter Mobile Number"
+   },
+   submitHandler: function(form){
+   var formData = $('form#formData').serialize();
+   var closeId = $('#getOFId').val();
+   var id = $('#mandalID').val();
+   var role = $('#roleHierarchy').val();
        ajax({
-          a: "districtajax",
-          b: formData,
+          a:"districtajax",
+          b:formData,
           c:function(){},
           d:function(data){
-             $('#showNotifycation').html('<p style="color:green">Record Updated.!</p>');
-             $( "#inputvalue" ).trigger( "keyup" );
-            //  $("#getTotalData").load(location.href + " #getTotalData");
-             setTimeout(function() { $('#showNotifycation').fadeOut('slow');}, 2000);
-             }
+             $('#memberTable').html('<p style="color:green">Record Updated.!</p>');
+             $("#inputvalue" ).trigger( "keyup" );
+             $('#editOfficeBearers_'+closeId).remove();
+             officeBearesDetailsget(id);
+             getStateUsers(id,role);
+            }          
        });
-   });
+   }
+});
 
 /*********** WRAD DETAILS GET *********/
    function wardDetailsget(id){
@@ -730,9 +727,14 @@
             a:"districtajax",
             b:paramPosition,
             c:function(){},
-            d:function(data){  
+            d:function(data){
+                  if(data.trim() != '') {
                   $('#showData').html(data);
+               }  
+               if(data.trim() == '') {
+                  $('#showData').html('<option selected="true" disabled="disabled" value="">Please Select Position</option>');
                }
+            }
          });
          if (mainRole == "SK") {
             $("#subRole").not(this).find("option[value=SK]").attr('disabled', true);
@@ -750,7 +752,7 @@
    
 /*********** SEARCH MEMBER DETAILS  ***/
 
-      function searchKey(id_attr) {  
+      function searchKey(id_attr) { 
          $( "#"+id_attr).autocomplete({
          source: function( request, response ) {
                $('#update_response_'+id_attr).html('processing...'); 
@@ -764,6 +766,7 @@
             search: request.term,mandal
             },
             success: function( data ) { 
+               // alert(data);
                response( data );
             }
             });
@@ -786,5 +789,9 @@
          });
       }
    
+
+   function closeMemberCard(id){
+         $('#editOfficeBearers_'+id).remove();
+   }
 
 </script>

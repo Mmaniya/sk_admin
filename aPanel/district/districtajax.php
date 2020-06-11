@@ -253,13 +253,12 @@
         $hierarchy_list = Table::getData($param);
           ?>
           <?php  foreach($hierarchy_list as $key=>$value) {            
-            $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_position'=>$value->role_abbr.'-CHAR','role_hierarchy'=>$hierarchy.'-CHAR'),'showSql'=>'Y','orderby'=>'id','sortby'=>'desc');
+            $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_position'=>$value->role_abbr.'-CHAR','role_hierarchy'=>$hierarchy.'-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
             $ob_list = Table::getData($param);
             $ob_count = count($ob_list); 
-            if($ob_count<$value->no_of_roles) {            
-            ?>    
+            if($ob_count<$value->no_of_roles) {  ?>    
           <option <?php if(in_array($value->position, $option)) echo 'selected="selected"'; ?>  value="<?php echo $value->id; ?>" ><?php echo $value->role_name; ?></option>
-          <?php } } 
+          <?php } }
           exit();
     } 
 /********* 13.GET MEMBER DETAILS**************/

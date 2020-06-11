@@ -30,7 +30,12 @@
 <input type="hidden" value="<?php echo $value->mandal_id; ?>" id="viewMandalID">
 <input type="hidden" value="<?php echo $value->role_hierarchy; ?>" id="memberRole">
 <div class="card">
-   <div class="card-header">Member Details</div>
+      <?php if($value->role_hierarchy != ''){ ?>
+         <div class="card-header"><?php switch( $value->role_hierarchy) {case "S" : echo 'State'; break; case "D" : echo 'District'; break; case "M" : echo 'Mandal'; break; case "W" : echo 'Ward'; break; case "SK" : echo 'Shakti Kendram'; break; case "B" : echo 'Booth'; break; } ?> Member Details
+
+         </div>
+         
+      <?php } ?>
    <input type="hidden" value="<?php echo $value->id ?>" id="officeBearersId">
    <div class="card-body row">
       <span class="col-sm-7">
@@ -48,7 +53,7 @@
       <?php } if($value->sub_role_hierarchy != ''){ ?>
       <label>Sub Role Hierarchy: <?php switch($value->sub_role_hierarchy) { case "D" : echo 'District'; break; case "M" : echo 'Mandal'; break; case "W" : echo 'Ward'; break; case "SK" : echo 'Shakti Kendram'; break; case "B" : echo 'Booth'; break; } ?> </label><br>
       <?php } if($value->role_id != '0'){ ?>
-      <label> Role : <span style="color:#4eab07">
+      <label> Role Position: <span style="color:#4eab07">
       <?php  
          $roleMembers = array('tableName' => TBL_BJP_ROLE, 'fields' => array('*'),'condition' => array('id' => $value->role_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
          $roleMembersList = Table::getData($roleMembers);
@@ -57,6 +62,7 @@
       </label><br>
       <?php } ?>
       <a href="javascript:void(0)" style="float:right"  onClick="editofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+
       </span>
    </div>
    <span id="editOfficeBearers_<?php echo $value->id ?>"></span>
