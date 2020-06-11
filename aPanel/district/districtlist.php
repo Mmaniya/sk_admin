@@ -34,10 +34,10 @@ Use: View District Table
    <thead class="bg-primary text-white">
       <tr>
          <th>#</th>
-         <th scope="col">State ID</th>
-         <th scope="col">District</th>
-         <th scope="col">Short Form</th>
-         <th scope="col" style="text-align:center">Action</th>
+         <th scope="col">STATE</th>
+         <th scope="col">DISTRICT</th>
+         <th scope="col">SHORTFORM</th>
+         <th scope="col" style="text-align:center">ACTION</th>
       </tr>
    </thead>
    <tbody>
@@ -58,11 +58,11 @@ Use: View District Table
          <td style="text-align:center">
          <?php if($value->status == 'A') { ?> <a href="javascript:void(0);" data-toggle="modal" onClick="openModelBox(<?php  echo $value->id; ?>)" data-target="#myModal" class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit </a>&nbsp; <?php } ?>
             <?php if($value->status == 'A') { ?>
-            <a href="javascript:void(0);" data-toggle="modal" onClick="deleteData(<?php  echo $value->id; ?>)" data-target="#myModal" class="btn btn-primary btn-sm"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>&nbsp;
+            <a href="javascript:void(0);" data-toggle="modal" onClick="deleteData(<?php  echo $value->id; ?>)" data-target="#myModal" class="btn btn-warning btn-sm"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>&nbsp;
             <?php } else { ?>
             <a href="javascript:void(0);" data-toggle="modal" onClick="restoreData(<?php  echo $value->id; ?>)" data-target="#myModal" class="btn btn-primary btn-sm"><i class="fa fa-refresh" aria-hidden="true"></i> Restore</a>&nbsp;
             <?php } ?>
-            <a href="javascript:void(0);" <?php if($value->status == 'A') { ?> class="btn btn-success btn-sm" <?php } else { ?> class="btn btn-danger btn-sm" <?php } ?> ><i class="fa fa-exclamation-circle" aria-hidden="true"> </i> <?php if($value->status == 'A') { ?> Active <?php } else { ?> Inactive <?php } ?></a></span>
+            <a href="javascript:void(0);" <?php if($value->status == 'I') { ?> class="btn btn-danger btn-sm" ><i class="fa fa-exclamation-circle" aria-hidden="true"> </i>  Inactive <?php } ?></a></span>
           </td>
       </tr>
       <?php $i++; } 

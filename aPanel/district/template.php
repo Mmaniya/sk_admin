@@ -54,6 +54,7 @@
          <!-- LOGO -->
          <div class="topbar-left">
             <div class="text-center">
+            <!-- <a href="dashboard.php" class="logo"><img src="https://www.bjp.org/logo/bjp-end-logo.png" width="240" height="60"></a> -->
                <a href="dashboard.php" class="logo"><img src="../assets/images/bjp.png" width="50" height="50"><span>Bharatiya Janata Party</span></a>
             </div>
          </div>

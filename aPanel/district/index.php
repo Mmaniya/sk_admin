@@ -17,20 +17,20 @@
       <div class="row">
          <div class="col-md-12">
             <div class="card mb-4">
-               <div class="card-header"><i class="fa fa-chart-bar mr-1"></i>District List
-                  <button type="button" class="btn btn-outline-primary btn-sm float-right" onClick="openModelBox()" data-toggle="modal" data-target="#myModal">
-                  <i class="fa fa-plus" aria-hidden="true"></i> Add New
+               <div class="card-header"><img src="../assets/images/bjpnamelogo.png" height="40">
+                  <button type="button" class="btn btn-sm btn-bjp float-right" onClick="openModelBox()" data-toggle="modal" data-target="#myModal">
+                  <i class="fa fa-plus" aria-hidden="true"></i><strong> Add New</strong>
                   </button>
                </div>
                <div class="card-body">
                <span class ="row" id="getTotalData" >
                   <input type="inputvalue" id="inputvalue" class="form-control card-margin col-sm-2" placeholder="Search District Here.." />
-                  <h5 class="col-sm-5" id="mytextcolor">Total Active District : <?php
+                  <h5 class="col-sm-5" style="color:#ff9933">TOTAL ACTIVE DISTRICT : <?php
                   $param = array('tableName' => TBL_BJP_DISTRICT, 'fields' => array('*'),'condition'  =>array('status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                   $district_list = Table::getData($param);
                   echo $TotalCount = count($district_list);
                   ?></h5>
-                   <h5 class=" col-sm-4" id="mytextcolor">Total Inactive District : <?php
+                   <h5 class=" col-sm-4" style="color:#ff9933">TOTAL INACTIVE DISTRICT : <?php
                   $param = array('tableName' => TBL_BJP_DISTRICT, 'fields' => array('*'),'condition'  =>array('status'=> 'I-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                   $district_list = Table::getData($param);
                   echo $TotalCount = count($district_list);

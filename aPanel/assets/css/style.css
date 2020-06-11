@@ -5906,3 +5906,27 @@ File: Responsive
 .card-margin {
   margin-right: 10px;
 }
+
+
+.btn-bjp {
+  background:#f5821f !important;
+  color: white;
+}
+
+.mytextcolor {
+    text-transform: uppercase;
+    background: linear-gradient(to right, #30CFD0 0%, #330867 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1.3vw;
+   font-family: 'Poppins', sans-serif;
+ };
+
+
+ .valueCounter {
+  /* background: linear-gradient(to right, #30CFD0 0%, #330867 100%); */
+  /* -webkit-text-fill-color: transparent; */
+  font-size: 2.3vw;
+ /* font-family: 'Poppins', sans-serif; */
+ }
+ 

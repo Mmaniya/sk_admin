@@ -14,7 +14,7 @@ session_start();
             $rsRecords = Table::getData($param);
             echo urldecode($rsRecords->description);*/
    ?> 
-
+<div class="container"> <img src="https://new-img.patrika.com/upload/images/2015/09/02/bjp-1441178844_835x547.jpg" style="width:100%; height:100%"></div>
 <script>
    function dash_invoice_paymentDtls(invoicePaymentId,invoice_id) {
    	  //paramData = {'act':'show_dash_invoice_payment_details','invoice_id':invoice_id,'invoice_payment_id':invoicePaymentId};
