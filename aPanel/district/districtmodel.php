@@ -352,7 +352,7 @@
    <div class="col-md-12">
       <div class="card mb-4">
          <div class="card-header">
-            <strong class="mytextcolor" style="font-size:1.5rem;">
+            <strong style="font-size:1.5rem;">
             <?php $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('id' => $_POST['mandal_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                $mandal_list = Table::getData($param);
                echo $mandal_list->mandal_tname; 
@@ -370,56 +370,93 @@
          <div class="card-body">
             <div class="row">
                <div class="col-md-12">
-                  <div class="row">
-                     <div class="col-md-5">
-                        <input type="hidden" value="<?php echo $mandal_list->id ?>" id="getMandalid">
-                        <h5>Total Wards 
-                           <span  class="valueCounter mytextcolor" style="float: right;font-size: 2rem;">
+               <input type="hidden" value="<?php echo $mandal_list->id ?>" id="getMandalid">  
+               <div class="row">
+                  <div class="card col-sm-5 bg-info text-white">
+                     <div class="card-body">
+                        <h4>Total Wards
+                        <span   class="valueCounter" style="float: right; right;font-size: 3rem;">
                            <?php $wardquery = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-                              $ward_list = Table::getData($wardquery);  
+                              $ward_list = Table::getData($wardquery);         
                               echo count($ward_list);                                                                       
                               ?>               
                            </span>
-                        </h5>
-                        <hr>
-                        <h5>Total Shakti Kendram 
-                           <span   class="valueCounter mytextcolor" style="float: right; right;font-size: 2rem;">
-                           <?php $skquery = array('tableName' => TBL_BJP_SK, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
+                           </h4>
+                     </div>
+                  </div>
+                  <div class="card offset-sm-1 col-sm-5 text-white" style="background-color:#ea8a2a">
+                     <div class="card-body">
+                        <h4>Total Shakti Kendram 
+                           <span   class="valueCounter" style="float: right; right;font-size: 3rem;">
+                           <?php
+                              $skquery = array('tableName' => TBL_BJP_SK, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                               $sk_list = Table::getData($skquery);    
                               echo count($sk_list);                                                                       
                               ?>               
                            </span>
-                        </h5>
-                        <hr>
-                        <h5>Total Users 
-                           <span  class="valueCounter mytextcolor" style="float: right;font-size: 2rem;">
+                        </h4>
+                     </div>
+                  </div>
+               </div>
+               <br>
+               <div class="row">
+                  <div class="card col-sm-5 text-white" style="background-color:#f95e22">
+                     <div class="card-body">
+                        <h4>Total Booths 
+                        <span   class="valueCounter" style="float: right; right;font-size: 3rem;">
+                           <?php
+                              $boothqry = "SELECT * FROM ".TBL_BJP_BOOTH." WHERE ward_id IN (SELECT id FROM ".TBL_BJP_WARD." WHERE mandal_id = ".$mandal_list->id." AND status = 'A')";
+                              $boothList=dB::mExecuteSql($boothqry);   
+                              echo count($boothList);                                                                     
+                              ?>               
+                           </span>
+                        </h4>
+                     </div>
+                  </div>
+                  <div class="card offset-sm-1 col-sm-5 text-white" style="background-color:#bb4470">
+                     <div class="card-body">               
+                         <h4>Total Members 
+                         <span   class="valueCounter" style="float: right; right;font-size: 3rem;">
                            <?php $memquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                               $mem_list = Table::getData($memquery);  
                               echo  count($mem_list);                                                                         
                               ?>               
                            </span>
-                        </h5>
+                        </h4>
                      </div>
-                     <div class="col-md-5 offset-md-2">
-                        <h5>Verified Users
-                           <span  class="valueCounter mytextcolor" style="float: right;font-size: 2rem;">
+                  </div>
+               </div>
+               <br>
+               <div class="row">
+                  <div class="card col-sm-5 text-white" style="background-color:#d0bd62">
+                     <div class="card-body">
+                        <h4>Verified Members
+                        <span class="">
+                        <span   class="valueCounter" style="float: right; right;font-size: 3rem;">
                            <?php $memqueryverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-INT','is_verified'=>'Y-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                               $verifiedlist = Table::getData($memqueryverified);   
                               echo count($verifiedlist);                                                                       
                               ?>               
                            </span>
-                        </h5>
-                        <hr>
-                        <h5>Non Verified Users
-                           <span  class="valueCounter mytextcolor" style="float: right;font-size: 2rem;">
+                           </span>
+                        </h4>
+                     </div>
+                  </div>
+                  <div class="card offset-sm-1 col-sm-5 text-white" style="background-color:#25bf9c">
+                     <div class="card-body">
+                        <h4>Non Verified Members
+                        <span   class="valueCounter" style="float: right; right;font-size: 3rem;">
                            <?php $memquerynonverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-INT','is_verified'=>'N-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                               $nonverifiedlist = Table::getData($memquerynonverified);   
                               echo count($nonverifiedlist);                                                                       
                               ?>               
                            </span>
-                        </h5>
+                        </h4>
                      </div>
                   </div>
+               </div>
+
+
                   <hr>
                   <ul class="nav nav-tabs" role="tablist">
                      <li class="nav-item">
