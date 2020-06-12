@@ -11,7 +11,7 @@
    <div class="container-fluid">
       <h2 class="mt-3">District Details</h2>
       <ol class="breadcrumb mb-3">
-         <a href="dashboard.php" class="breadcrumb-item">Home</a>
+      <a href="../dashboard.php" class="breadcrumb-item">Home</a>
          <a href="index.php" class="breadcrumb-item active">District Details</a>
       </ol>
       <div class="row">
@@ -19,7 +19,7 @@
             <div class="card mb-4">
                <div class="card-header"><img src="../assets/images/bjpnamelogo.png" height="40">
                   <button type="button" class="btn btn-sm btn-bjp float-right" onClick="openModelBox()" data-toggle="modal" data-target="#myModal">
-                  <i class="fa fa-plus" aria-hidden="true"></i><strong> Add New</strong>
+                  <i class="fa fa-plus" aria-hidden="true"></i><strong>ADD NEW DISTRICT</strong>
                   </button>
                </div>
                <div class="card-body">

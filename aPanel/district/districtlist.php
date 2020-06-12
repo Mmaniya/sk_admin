@@ -50,8 +50,8 @@ Use: View District Table
          <td><?php  echo $i; ?></td>
          <td><?php  if( $value->state_id == '1' ) echo 'Tamilnadu'; ?></td>
          <td> <?php if($value->status == 'A') { ?>
-            <a href="districtview.php?dist=<?php echo $value->id ?>" ><?php  echo $value->district_name; ?> (<?php  echo $value->district_name_ta ?>)</a>
-         <?php } else { ?><a href="javascript:void(0);" id="inactivedistrict"><?php  echo $value->district_name; ?> (<?php  echo $value->district_name_ta ?>)</a>
+                          <a href="districtview.php?dist=<?php echo $value->id ?>" ><?php  echo $value->district_name; ?> (<?php  echo $value->district_name_ta ?>)</a>
+         <?php } else { ?><a href="javascript:void(0);" data-toggle="modal" onClick="alertData()" data-target="#myModal"><?php  echo $value->district_name; ?> (<?php  echo $value->district_name_ta ?>)</a>
          <?php } ?>
           </td>
          <td><?php  echo $value->district_abbr; ?></td>
@@ -75,9 +75,19 @@ Use: View District Table
    </tbody>
 </table>
 <script>	
-$('#inactivedistrict').click(function (){
-   alert('Not Allowed. District Deactivated.!');
-})
+   function alertData(){
+   // alert('Not Allowed. District Deactivated.!');
+   paramData = {'action':'alertBox'}
+      ajax({
+            a:"districtmodel",
+            b:paramData,
+            c:function(){},
+            d:function(data){
+               $('#modelview').html(data);
+            }
+      });          
+
+}
    function ShowParentCatListPagination(page,condition,value) { 
       paramData = {'act':'parentListpagination','page':page,'filterby':value }; 
       ajax({

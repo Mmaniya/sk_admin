@@ -1,7 +1,7 @@
 <!--==================================
    Name: Manikandan;
    Create: 5/6/2020;
-   Update: 10/6/2020;
+   Update: 12/6/2020;
    Use: ADD DISTRICT
    ====================================-->
    <?php
@@ -9,13 +9,12 @@
     $modelId = $_POST['dist_ID'];
     $modelAction = $_POST['action'];
     $subAction = $_POST['subaction'];
-    $title = 'Add New District';
     $joined_date ='';
     if($modelId>0) { 
          $param = array('tableName'=>TBL_BJP_DISTRICT,'fields'=>array('*'),'condition'=>array('id'=>$modelId.'-INT'),'showSql'=>'N',);
          $roleData = Table::getData($param);
         foreach($roleData as $K=>$V)  $$K=$V;
-        $title = 'Edit District ';
+        $title = 'EDIT';
         $joined_date = date('m/d/Y',strtotime($joined_date));
     }
    ?>
@@ -24,7 +23,13 @@
 <div class="modal-content">
    <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal">&times;</button>
-      <h5 class="modal-title"><?php echo $title; ?></h5>
+      <h5 class="modal-title">
+      <?php if($title == 'EDIT'){ ?> 
+         <span style="color:#eab15c"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> EDIT DISTRICT </span>
+      <?php } else { ?>
+         <span style="color:#286b28"><i class="fa fa-files-o" aria-hidden="true"></i> ADD DISTRICT </span>
+      <?php } ?>
+      </h5>
    </div>
    <div class="modal-body">
       <form action="javascript:void(0)" id="formDistrict" method="POST">
@@ -58,7 +63,7 @@
 <?php } else if ($modelAction == 'delete'){ ?>
 <div class="modal-content">
    <div class="modal-header">
-      <h5 class="modal-title">Delete Record</h5>
+      <h5 class="modal-title" style="color:red"><i class="fa fa-trash" aria-hidden="true"></i>  DELETE RECORD</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
       </button>
@@ -80,7 +85,7 @@
 <?php } else if ($modelAction == 'restore'){ ?>
 <div class="modal-content">
    <div class="modal-header">
-      <h5 class="modal-title">Restore Record</h5>
+      <h5 class="modal-title" style="color:#286b28"><i class="fa fa-recycle" aria-hidden="true"></i> RESTORE RECORD</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
       </button>
@@ -98,12 +103,26 @@
       </div>
    </form>
 </div>
-<!-- 4. ADD NEW MANDAL DATA -->
+<!-- 3. ALERT BOX MODEL  ---->
+<?php } else if ($modelAction == 'alertBox'){ ?>
+<div class="modal-content">
+   <div class="modal-header">
+      <h5 class="modal-title" style="color:red"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> ALERT</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      </button>
+   </div>
+   <div class="modal-body">
+      <p>Not Allowed. District Deactivated.!</p>
+   </div>
+   </form>
+</div>
+<!-- 5. ADD NEW MANDAL DATA -->
 <?php } else if ($modelAction == 'addnewmandal') { ?>
 <div class="modal-content">
    <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal">&times;</button>
-      <h5 class="modal-title"> Add New Mandal</h5>
+      <h5 style="color:#286b28"><i class="fa fa-files-o" aria-hidden="true"></i> ADD MANDAL </h5>
    </div>
    <div class="modal-body">
       <form action="javascript:void(0)" id="formDataMandal" method="POST">
@@ -163,12 +182,12 @@
       </form>
    </div>
 </div>
-<!-- 5. DISTRICT DETAILS SHOW -->
+<!-- 6. DISTRICT DETAILS SHOW -->
 <?php } else if ($modelAction == 'districtCard') { ?>
 <div class="row" >
    <div class="card col-sm-4">
       <div class="card-body ">
-      <span class="mytextcolor">Active Mandal  <?php
+      <span >Active Mandal  <?php
             $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span> 
@@ -178,7 +197,7 @@
    </div>
    <div class="card col-sm-4">
       <div class="card-body ">
-      <span class="mytextcolor">Inactive Mandal  <?php
+      <span >Inactive Mandal  <?php
             $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'I-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span> 
@@ -188,7 +207,7 @@
    </div>
    <div class="card col-sm-4">
       <div class="card-body " >
-         <span class="mytextcolor" >Total Mandal  <?php
+         <span  >Total Mandal  <?php
             $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span> 
@@ -201,7 +220,7 @@
 <div class="row">
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor">Active Wards  <?php
+         <span >Active Wards  <?php
             $param = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
@@ -210,7 +229,7 @@
    </div>
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor">Inactive Wards  <?php
+         <span >Inactive Wards  <?php
             $param = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'I-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
@@ -219,7 +238,7 @@
    </div>
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor">Total Wards  <?php
+         <span >Total Wards  <?php
             $param = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
@@ -231,7 +250,7 @@
 <div class="row">
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor">Active MP Constituency  <?php
+         <span >Active MP Constituency  <?php
             $param = array('tableName' => TBL_BJP_MP_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span> 
@@ -241,7 +260,7 @@
    </div>
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor">Inactive MP Constituency  <?php
+         <span >Inactive MP Constituency  <?php
             $param = array('tableName' => TBL_BJP_MP_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'I-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span> 
@@ -251,7 +270,7 @@
    </div>
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor">Total MP Constituency  <?php
+         <span >Total MP Constituency  <?php
             $param = array('tableName' => TBL_BJP_MP_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span> 
@@ -264,7 +283,7 @@
 <div class="row">
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor" >Active LG Constituency <?php
+         <span  >Active LG Constituency <?php
             $param = array('tableName' => TBL_BJP_LG_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
@@ -273,7 +292,7 @@
    </div>
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor" >Inactive LG Constituency <?php
+         <span  >Inactive LG Constituency <?php
             $param = array('tableName' => TBL_BJP_LG_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'I-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
@@ -282,7 +301,7 @@
    </div>
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor" >Total LG Constituency <?php
+         <span  >Total LG Constituency <?php
             $param = array('tableName' => TBL_BJP_LG_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
             ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
@@ -294,7 +313,7 @@
 <div class="row">
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor">verified users            
+         <span >verified users            
          <?php $memqueryverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','is_verified'=>'Y-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $verifiedlist = Table::getData($memqueryverified);   
             ?>               
@@ -305,7 +324,7 @@
    </div>
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor">unverified users           
+         <span >unverified users           
          <?php $memqueryverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','is_verified'=>'N-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $verifiedlist = Table::getData($memqueryverified);   
             ?>               
@@ -317,7 +336,7 @@
    </div>
    <div class="card col-sm-4">
       <div class="card-body ">
-         <span class="mytextcolor">Total users            
+         <span >Total users            
          <?php $memqueryverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $verifiedlist = Table::getData($memqueryverified);   
             ?>               
@@ -327,7 +346,7 @@
       </div>
    </div>
 </div>
-<!-- 6. MANDAL DETAILS SHOW -->
+<!-- 7. MANDAL DETAILS SHOW -->
 <?php } else if ($modelAction == 'mandalCard'){?>
 <div class="row">
    <div class="col-md-12">
@@ -342,15 +361,9 @@
                echo ')';
                ?>
             </strong>
-            <!-- <span>
-               <button type="button" class="btn btn-outline-primary btn-sm float-right" onClick="addofficebearers(<?php // echo $mandal_list->id; ?>)" data-toggle="modal" data-target="#myModal">
-               <i class="fa fa-plus" aria-hidden="true"></i> Add Office Bearers
-               </button>
-            </span>
-            <br> -->
             <span>
                <button type="button" class="btn btn-warning btn-sm float-right" id="getmandalvalue" data-toggle="modal" data-target="#myModal">
-               <i class="fa fa-plus" aria-hidden="true"></i> Add New Ward 
+               <i class="fa fa-plus" aria-hidden="true"></i> ADD NEW WARD 
                </button>
             </span>
          </div>
@@ -416,13 +429,13 @@
                      </li>
                      <li class="nav-item">
                         <a class="nav-link" href="#officebearers" role="tab"  onClick="officeBearesDetailsget(<?php  echo $mandal_list->id; ?>)" data-toggle="tab">
-                           <h5>Office Bearers</h5>
+                           <h5>OFFICE BEARERS</h5>
                         </a>
                      </li>
 
                      <li class="nav-item" style="margin-left: 50%;">
-                         <a class="nav-link" href="#newofficebearers" role="tab" onClick="addofficebearers(<?php echo $mandal_list->id; ?>,<?php echo $mandal_list->district_id; ?>)" data-toggle="tab">
-                              <i class="fa fa-plus" aria-hidden="true"></i> Add Office Bearers
+                         <a class="nav-link btn btn-warning btn-sm" style="color:#ffffff" href="#newofficebearers" role="tab" onClick="addofficebearers(<?php echo $mandal_list->id; ?>,<?php echo $mandal_list->district_id; ?>)" data-toggle="tab">
+                              <i class="fa fa-plus" aria-hidden="true"></i> ADD OFFICE BEARERS
                            </a>   
                      </li>
             
@@ -446,7 +459,7 @@
       </div>
    </div>
 </div>
-<!-- 7. ADD NEW WARD -->
+<!-- 8. ADD NEW WARD -->
 <?php } else if ($modelAction == 'addnewWard') { 
 
  $param = array('tableName'=>TBL_BJP_MANDAL,'fields'=>array('*'),'condition'=>array('id'=>$_POST['id'].'-INT'),'showSql'=>'N','status'=> 'A-CHAR');
@@ -459,7 +472,7 @@
 <div class="modal-content">
    <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal">&times;</button>
-      <h5 class="modal-title"> Add New Ward</h5>
+      <h5 style="color:#286b28"><i class="fa fa-files-o" aria-hidden="true"></i> ADD WARD </h5>
    </div>
    <div class="modal-body">
       <form action="javascript:void(0)" id="formDataWard" method="POST">
@@ -521,7 +534,7 @@
          <div class="row">
             <div class="form-group col-sm-6">
                <label >Ward Category</label>
-               <select class="form-control" name="ward_category" required>
+               <select class="form-control" name="ward_category">
                <?php (isset($_POST["ward_category"])) ? $ward_category = $_POST["ward_category"] : $ward_category; ?>
                   <option selected="true" disabled="disabled" value="">Please Select Category</option>
                   <option <?php if ($ward_category == "P" ) echo 'selected' ; ?> value="P" >PUBLIC</option>
@@ -531,7 +544,7 @@
             </div>
             <div class="form-group col-sm-6">
                <label >Ward Type</label>
-               <select class="form-control" name="ward_type" required>
+               <select class="form-control" name="ward_type">
                <?php (isset($_POST["ward_type"])) ? $ward_type = $_POST["ward_type"] : $ward_type; ?>
                   <option selected="true" disabled="disabled" value="">Please Select Category</option>
                   <option <?php if ($ward_type == "R" ) echo 'selected' ; ?> value="R" >RURAL</option>
@@ -539,7 +552,7 @@
                </select>
             </div>
          </div>
-         <input type="submit" id="submit"  class="btn btn-success"   data-dismiss="modal"  value="Submit">
+         <input type="submit" id="submit"  class="btn btn-success" value="Submit">
       </form>
    </div>
 </div>
@@ -705,15 +718,21 @@
    /* 4. Add Ward Form */
       $('form#formDataWard').validate({
          rules: {
-         state_id: "required",
+         district_id: "required",
+         mandal_id: "required",
          mp_const_id: "required",
          lg_const_id: "required",
-         mandal_name: "required",
+         ward_number: "required",
+         ward_category: "required",
+         ward_type: "required",
+
          },
          messages: {
             mp_const_id: "Please Select One MP Constituency",
             lg_const_id: "Please Select One LG Constituency",
-            mandal_name: "Select Enter Mandal Name",
+            ward_number: "Select Enter Ward Name",
+            ward_category: "Please Select Category",
+            ward_type: "Please Select Ward Type",
          },
          submitHandler: function(form){
          var formData = $('form#formDataWard').serialize();

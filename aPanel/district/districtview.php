@@ -29,7 +29,7 @@
                      ?>   
                   </strong>
                   <button type="button" class="btn btn-warning btn-sm float-right" id="getvalue" data-toggle="modal" data-target="#myModal">
-                  <i class="fa fa-plus" aria-hidden="true"></i> Add New Mandal
+                  <i class="fa fa-plus" aria-hidden="true"></i> ADD NEW MANDAL
                   </button>
                </div>
                <div class="card-body">
