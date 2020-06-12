@@ -12,14 +12,14 @@
    <div class="container-fluid">
       <h2 class="mt-3">District Details</h2>
       <ol class="breadcrumb mb-3">
-         <a href="dashboard.php" class="breadcrumb-item">Home</a>
+         <a href="../dashboard.php" class="breadcrumb-item">Home</a>
          <a href="index.php" class="breadcrumb-item active">District Details</a>
       </ol>
       <div class="row">
          <div class="col-md-12">
             <div class="card mb-4">
                <div class="card-header" id="backToDist">
-                  <strong style="font-size:2rem;">
+                  <strong style="font-size:2rem;" class="mytextcolor">
                   <?php $param = array('tableName' => TBL_BJP_DISTRICT, 'fields' => array('*'),'condition' => array('id' => $_REQUEST['dist'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                      $district_list = Table::getData($param);
                      echo $district_list->district_name_ta;
@@ -28,7 +28,7 @@
                      echo ')';
                      ?>   
                   </strong>
-                  <button type="button" class="btn btn-outline-primary btn-sm float-right" id="getvalue" data-toggle="modal" data-target="#myModal">
+                  <button type="button" class="btn btn-warning btn-sm float-right" id="getvalue" data-toggle="modal" data-target="#myModal">
                   <i class="fa fa-plus" aria-hidden="true"></i> Add New Mandal
                   </button>
                </div>

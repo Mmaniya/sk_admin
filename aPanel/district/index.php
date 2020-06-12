@@ -25,12 +25,12 @@
                <div class="card-body">
                <span class ="row" id="getTotalData" >
                   <input type="inputvalue" id="inputvalue" class="form-control card-margin col-sm-2" placeholder="Search District Here.." />
-                  <h5 class="col-sm-5" style="color:#ff9933">TOTAL ACTIVE DISTRICT : <?php
+                  <h5 class="col-sm-5 mytextcolor" >TOTAL ACTIVE DISTRICT : <?php
                   $param = array('tableName' => TBL_BJP_DISTRICT, 'fields' => array('*'),'condition'  =>array('status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                   $district_list = Table::getData($param);
                   echo $TotalCount = count($district_list);
                   ?></h5>
-                   <h5 class=" col-sm-4" style="color:#ff9933">TOTAL INACTIVE DISTRICT : <?php
+                   <h5 class=" col-sm-4 mytextcolor"  >TOTAL INACTIVE DISTRICT : <?php
                   $param = array('tableName' => TBL_BJP_DISTRICT, 'fields' => array('*'),'condition'  =>array('status'=> 'I-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                   $district_list = Table::getData($param);
                   echo $TotalCount = count($district_list);

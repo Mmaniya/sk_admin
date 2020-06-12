@@ -50,7 +50,7 @@
             <label >Abbreviation  of District</label>
             <input type="text" class="form-control" name="district_abbr"  value="<?php echo $district_abbr; ?>" placeholder="Abbreviation of District">
          </div>
-         <input type="submit" id="submit" class="btn btn-success"     <?php  if($modelId == ''){ ?> value="Submit" <?php } else { ?> value="Update" <?php } ?>>
+         <input type="submit" id="submit" class="btn btn-success" <?php  if($modelId == ''){ ?> value="Submit" <?php } else { ?> value="Update" <?php } ?>>
       </form>
    </div>
 </div>
@@ -66,13 +66,13 @@
    <div class="modal-body">
       <p>Are you sure cofirm delete this data.?</p>
    </div>
-   <form id="formData" action="javascipt:void(0)">
+   <form id="formDistrictDelete" action="javascipt:void(0)">
       <input type="hidden" name="act" value="statusDataUpdate">
       <input type="hidden" name="id" value="<?php echo $modelId; ?>">
       <input type="hidden" value="I" name="status">
       <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-         <a href="javascript:void(0)" id="submit" class="btn btn-danger"  data-dismiss="modal">Delete</a>
+         <input type="submit" id="submit" class="btn btn-danger" value="Delete">
       </div>
    </form>
 </div>
@@ -88,13 +88,13 @@
    <div class="modal-body">
       <p>Are you sure cofirm restore this data.?</p>
    </div>
-   <form id="formData" action="javascipt:void(0)">
+   <form id="formDistrictDelete" action="javascipt:void(0)">
       <input type="hidden" name="act" value="statusDataUpdate">
       <input type="hidden" name="id" value="<?php echo $modelId; ?>">
       <input type="hidden" value="A" name="status">
       <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-         <a href="javascript:void(0)" id="submit" class="btn btn-success"   data-dismiss="modal">Restore</a>
+         <input type="submit" id="submit" class="btn btn-success"  value="Restore">
       </div>
    </form>
 </div>
@@ -106,13 +106,13 @@
       <h5 class="modal-title"> Add New Mandal</h5>
    </div>
    <div class="modal-body">
-      <form action="javascript:void(0)" id="formData" method="POST">
+      <form action="javascript:void(0)" id="formDataMandal" method="POST">
          <input type="hidden" value="addNewMandal" name="act">
          <!-- <input type="hidden" value="<?php //echo $modelId ?>" name="id"> -->
          <div class="row">
             <div class="form-group col-sm-6">
                <label for="exampleInputEmail1">Select State</label>
-               <select class="form-control" name="state_id" required readonly>
+               <select class="form-control" name="state_id" readonly>
                   <?php (isset($_POST["state_id"])) ? $state_id = $_POST["state_id"] : $role_hierarchy;  ?>
                   <!-- <option selected="true" disabled="disabled" value="">Please Select State</option> -->
                   <option <?php if ($state_id == "1" ) echo 'selected' ; ?> value="1" >Tamilnadu</option>
@@ -120,7 +120,7 @@
             </div>
             <div class="form-group col-sm-6">
                <label >Name of District</label>
-               <select class="form-control" name="district_id" required readonly>
+               <select class="form-control" name="district_id" readonly>
                   <option  value="<?php echo $roleData->id ?>" ><?php echo $roleData->district_name ?></option>
                </select>
             </div>
@@ -128,7 +128,7 @@
          <div class="row">
             <div class="form-group col-sm-6">
                <label >MP Constituency </label>
-               <select class="form-control" name="mp_const_id" required>
+               <select class="form-control" name="mp_const_id">
                   <?php (isset($_POST["mp_const_id"])) ? $mp_const_id = $_POST["mp_const_id"] : $mp_const_id; ?>
                   <option selected="true" disabled="disabled" value="">Please Select MP Constituency</option>
                   <?php $mpquery = array('tableName' => TBL_BJP_MP_CONST, 'fields' => array('*'),'condition'=>array('district_id'=>$modelId.'-INT'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
@@ -140,7 +140,7 @@
             </div>
             <div class="form-group col-sm-6">
                <label >LG Constituency </label>
-               <select class="form-control" name="lg_const_id" required>
+               <select class="form-control" name="lg_const_id" >
                   <?php (isset($_POST["lg_const_id"])) ? $lg_const_id = $_POST["lg_const_id"] : $lg_const_id; ?>
                   <option selected="true" disabled="disabled" value="">Please Select LG Constituency</option>
                   <?php $lgquery = array('tableName' => TBL_BJP_LG_CONST, 'fields' => array('*'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
@@ -159,7 +159,7 @@
             <label >Tamil Name of Mandal </label>
             <input type="text" class="form-control" name="mandal_tname"  value="<?php echo $mandal_tname; ?>" placeholder="Enter Mandal Tamil Name.">
          </div>
-         <input type="submit" id="submit"   class="btn btn-success"   data-dismiss="modal"  value="Submit">
+         <input type="submit" id="submit"   class="btn btn-success" value="Submit">
       </form>
    </div>
 </div>
@@ -333,7 +333,7 @@
    <div class="col-md-12">
       <div class="card mb-4">
          <div class="card-header">
-            <strong style="font-size:1.5rem;">
+            <strong class="mytextcolor" style="font-size:1.5rem;">
             <?php $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('id' => $_POST['mandal_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                $mandal_list = Table::getData($param);
                echo $mandal_list->mandal_tname; 
@@ -349,7 +349,7 @@
             </span>
             <br> -->
             <span>
-               <button type="button" class="btn btn-outline-primary btn-sm float-right" id="getmandalvalue" data-toggle="modal" data-target="#myModal">
+               <button type="button" class="btn btn-warning btn-sm float-right" id="getmandalvalue" data-toggle="modal" data-target="#myModal">
                <i class="fa fa-plus" aria-hidden="true"></i> Add New Ward 
                </button>
             </span>
@@ -360,7 +360,7 @@
                   <div class="row">
                      <div class="col-md-5">
                         <input type="hidden" value="<?php echo $mandal_list->id ?>" id="getMandalid">
-                        <h5 class="mytextcolor">Total Wards 
+                        <h5>Total Wards 
                            <span  class="valueCounter mytextcolor" style="float: right;font-size: 2rem;">
                            <?php $wardquery = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                               $ward_list = Table::getData($wardquery);  
@@ -369,7 +369,7 @@
                            </span>
                         </h5>
                         <hr>
-                        <h5 class="mytextcolor">Total Shakti Kendram 
+                        <h5>Total Shakti Kendram 
                            <span   class="valueCounter mytextcolor" style="float: right; right;font-size: 2rem;">
                            <?php $skquery = array('tableName' => TBL_BJP_SK, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                               $sk_list = Table::getData($skquery);    
@@ -378,7 +378,7 @@
                            </span>
                         </h5>
                         <hr>
-                        <h5 class="mytextcolor">Total Users 
+                        <h5>Total Users 
                            <span  class="valueCounter mytextcolor" style="float: right;font-size: 2rem;">
                            <?php $memquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                               $mem_list = Table::getData($memquery);  
@@ -388,7 +388,7 @@
                         </h5>
                      </div>
                      <div class="col-md-5 offset-md-2">
-                        <h5 class="mytextcolor">Verified Users
+                        <h5>Verified Users
                            <span  class="valueCounter mytextcolor" style="float: right;font-size: 2rem;">
                            <?php $memqueryverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-INT','is_verified'=>'Y-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                               $verifiedlist = Table::getData($memqueryverified);   
@@ -397,7 +397,7 @@
                            </span>
                         </h5>
                         <hr>
-                        <h5 class="mytextcolor">Non Verified Users
+                        <h5>Non Verified Users
                            <span  class="valueCounter mytextcolor" style="float: right;font-size: 2rem;">
                            <?php $memquerynonverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-INT','is_verified'=>'N-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                               $nonverifiedlist = Table::getData($memquerynonverified);   
@@ -462,7 +462,7 @@
       <h5 class="modal-title"> Add New Ward</h5>
    </div>
    <div class="modal-body">
-      <form action="javascript:void(0)" id="formData" method="POST">
+      <form action="javascript:void(0)" id="formDataWard" method="POST">
          <input type="hidden" value="addNewWard" name="act">
          <div class="row">
             <div class="form-group col-sm-6">
@@ -619,37 +619,115 @@
 <?php } ?>
 <script>
 /************* FORM SUBMIT ************/
-/* 1. Add District Form */
-   $('form#formDistrict').validate({
-      rules: {
-      state_id: "required",
-      district_name: "required",
-      },
-      messages: {
-         state_id: "Please Select One State",
-         district_name: "Please Enter District Name",
-      },
-      submitHandler: function(form){
-      var formData = $('form#formDistrict').serialize();
-         ajax({
-            a:"districtajax",
-            b:formData,
-            c:function(){},
-            d:function(data){
-               $('#myModal').modal('toggle');
-               paramData = {'act':'getAllData','type':'all'}; 
-                  ajax({
-                        a:"districtajax",
-                        b:paramData,
-                        c:function(){},
-                        d:function(data){
-                           $('#myTable').html(data);
-                        }
-                  });
-            }          
-         });
-      }
-   });
+   /* 1. Add Edit District Form */
+      $('form#formDistrict').validate({
+         rules: {
+         state_id: "required",
+         district_name: "required",
+         },
+         messages: {
+            state_id: "Please Select One State",
+            district_name: "Please Enter District Name",
+         },
+         submitHandler: function(form){
+         var formData = $('form#formDistrict').serialize();
+            ajax({
+               a:"districtajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  $('#myModal').modal('toggle');
+                  paramData = {'act':'getAllData','type':'all'}; 
+                     ajax({
+                           a:"districtajax",
+                           b:paramData,
+                           c:function(){},
+                           d:function(data){
+                              $('#myTable').html(data);
+                           }
+                     });
+               }          
+            });
+         }
+      });
+
+   /*  2. Delete Restore District Form */
+      $('form#formDistrictDelete').validate({
+         submitHandler: function(form){
+         var formData = $('form#formDistrictDelete').serialize();
+            ajax({
+               a:"districtajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  $('#myModal').modal('toggle');
+                  paramData = {'act':'getAllData','type':'all'}; 
+                     ajax({
+                           a:"districtajax",
+                           b:paramData,
+                           c:function(){},
+                           d:function(data){
+                              $('#myTable').html(data);
+                           }
+                     });
+               }          
+            });
+         }
+      })
+
+   /* 3. Add Mandal Form */
+      $('form#formDataMandal').validate({
+         rules: {
+         state_id: "required",
+         mp_const_id: "required",
+         lg_const_id: "required",
+         mandal_name: "required",
+         },
+         messages: {
+            mp_const_id: "Please Select One MP Constituency",
+            lg_const_id: "Please Select One LG Constituency",
+            mandal_name: "Select Enter Mandal Name",
+         },
+         submitHandler: function(form){
+         var formData = $('form#formDataMandal').serialize();
+            ajax({
+               a:"districtajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  $('#myModal').modal('toggle');
+                  $("#inputvalue" ).trigger( "keyup" );
+               }          
+            });
+         }
+      });
+
+   /* 4. Add Ward Form */
+      $('form#formDataWard').validate({
+         rules: {
+         state_id: "required",
+         mp_const_id: "required",
+         lg_const_id: "required",
+         mandal_name: "required",
+         },
+         messages: {
+            mp_const_id: "Please Select One MP Constituency",
+            lg_const_id: "Please Select One LG Constituency",
+            mandal_name: "Select Enter Mandal Name",
+         },
+         submitHandler: function(form){
+         var formData = $('form#formDataWard').serialize();
+            ajax({
+               a:"districtajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  $('#myModal').modal('toggle');
+                  $("#inputvalue" ).trigger( "keyup" );
+               }          
+            });
+         }
+      });
 
    $('form#formData').validate({
       rules: {
