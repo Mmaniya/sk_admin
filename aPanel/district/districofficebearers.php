@@ -22,22 +22,22 @@ $getMandalId = $_POST['id'];
    <tbody>
       <?php  
 
-      $qry1 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="S" OR `sub_role_hierarchy`="S" AND `status`="A" ORDER BY id DESC';
+      $qry1 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="S"  AND `status`="A" ORDER BY id DESC';
       $mainRoleS=dB::mExecuteSql($qry1); 
 
-      $qry2 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="D" OR `sub_role_hierarchy`="D" AND `status`="A" ORDER BY id DESC';
+      $qry2 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="D" AND `status`="A" ORDER BY id DESC';
       $mainRoleD=dB::mExecuteSql($qry2); 
 
-      $qry3 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="M" OR `sub_role_hierarchy`="M" AND `status`="A" ORDER BY id DESC';
+      $qry3 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="M"  AND `status`="A" ORDER BY id DESC';
       $mainRoleM=dB::mExecuteSql($qry3); 
 
-      $qry4 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="W" OR `sub_role_hierarchy`="W" AND `status`="A" ORDER BY id DESC';
+      $qry4 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="W"  AND `status`="A" ORDER BY id DESC';
       $mainRoleW=dB::mExecuteSql($qry4);
 
-      $qry5 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="SK" OR `sub_role_hierarchy`="SK" AND `status`="A" ORDER BY id DESC';
+      $qry5 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="SK"  AND `status`="A" ORDER BY id DESC';
       $mainRoleSK=dB::mExecuteSql($qry5); 
 
-      $qry6 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="B" OR `sub_role_hierarchy`="B" AND `status`="A" ORDER BY id DESC';
+      $qry6 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="B"  AND `status`="A" ORDER BY id DESC';
       $mainRoleB=dB::mExecuteSql($qry6); 
 
 

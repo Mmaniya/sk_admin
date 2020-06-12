@@ -32,7 +32,7 @@
 <div class="card">
    <?php// if($value->role_hierarchy != ''){ ?>
    <div class="card-header">
-   Member Details
+   Office Bearers Details
    <!-- <?php // switch( $value->role_hierarchy) {case "S" : echo 'State'; break; case "D" : echo 'District'; break; case "M" : echo 'Mandal'; break; case "W" : echo 'Ward'; break; case "SK" : echo 'Shakti Kendram'; break; case "B" : echo 'Booth'; break; } ?> Member Details -->
    </div>
    <?php //} ?>
