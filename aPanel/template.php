@@ -18,19 +18,24 @@
       <meta name="author" content="">
       <link rel="shortcut icon" href="assets/images/fav.jpg">
       <title>Dashboard - BJP HOME</title>
-      <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-      <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
-      <link href="assets/css/custom.css" rel="stylesheet" type="text/css">
-      <link href="assets/css/multiselectbootsrap.css" rel="stylesheet" type="text/css">
-      <link href="assets/css/style.css" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" href="assets/css/bootstrap.min.css"  type="text/css">
+      <link rel="stylesheet" href="assets/css/icons.css"  type="text/css">
+      <link rel="stylesheet" href="assets/css/custom.css"  type="text/css">
+      <link rel="stylesheet" href="assets/css/multiselectbootsrap.css"  type="text/css">
+      <link rel="stylesheet" href="assets/css/style.css"  type="text/css">
       <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
-      <script src="assets/js/jquery.min.js"></script>	
-      <script src="assets/js/modernizr.min.js"></script>        	
-      <script src="assets/js/default.js"></script> 
-      <link href='assets/autocomplete/jquery-ui.css' rel='stylesheet' type='text/css'>
-      <script src='assets/autocomplete/jquery-ui.min.js' type='text/javascript'></script> 
+      <link rel='stylesheet' href='assets/autocomplete/jquery-ui.css'  type='text/css'>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
+      <link rel="stylesheet" href="assets/css/bootstrap.css" type="text/css"/>
+      <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css" type="text/css"/>
+      <script type="text/javascript" src="assets/js/jquery.min.js"></script>	
+      <script type="text/javascript" src="assets/js/modernizr.min.js"></script>        	
+      <script type="text/javascript" src="assets/js/default.js"></script> 
+      <script type="text/javascript" src="assets/autocomplete/jquery-ui.min.js"></script> 
       <script type="text/javascript" src="assets/autocomplete/jquery-ui.min.js"></script>
+      <script type="text/javascript" src="assets/js/jquery.validate.min.js"></script>
+      <script type="text/javascript" src="assets/js/jquery.dataTables.min.js"></script>
+
       <style>
          .scrollToTop {
          margin: 0 30px 20px 0;

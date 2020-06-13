@@ -27,86 +27,156 @@
    foreach($ListingParentCatListArr as $key=>$value) {
    
      ?>
+<style></style>
 <div class="card">
-   <div class="card-header">
-   Ward Details
-   </div>
+   <div class="card-header"> WARD (<?php echo $value->ward_number; ?>) <span style="float:right">Pin code :<?php echo $value->ward_zipcode; ?></span></div>
    <input type="hidden" value="<?php echo $value->id ?>" id="officeBearersId">
    <div class="card-body row">
-      <span class="col-sm-7">
-      <label>Ward Name : <?php echo $value->ward_number; ?> </label><br>
-      <label>Mobile : <?php echo $value->ward_zipcode; ?> </label><br>
-      <?php if($value->address) { ?>
-      <label>Address : <?php echo $value->address; ?> </label><br>
-      <?php } if($value->email_address) { ?>
-      <label>E-Mail : <?php echo $value->email_address; ?> </label>
-      <?php } ?>
-      </span>
-      <span class="col-sm-5">
-      <?php $param = array('tableName'=>TBL_BJP_MEMBER,'fields'=>array('*'),'condition'=>array('id'=>$value->member_id.'-INT','status'=>'A-CHAR'),'showSql'=>'N','sortby'=>'asc');
-         $member_list = Table::getData($param);
-         
-         if($member_list->membership_number != ''){ ?>
-      <label>Membership Number : <?php echo $member_list->membership_number; ?> </label><br>
-      <?php } if($value->role_hierarchy != ''){ ?>
-      <label>Role Hierarchy: <?php switch($value->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?> </label><br>
-      <?php } if($value->sub_role_hierarchy != ''){ ?>
-      <label>Sub Role Hierarchy: <?php switch($value->sub_role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?> </label><br>
-      <?php } if($value->role_id != '0'){ ?>
-      <label> Role Position: <span style="color:#4eab07">
-      <?php  
-         $roleMembers = array('tableName' => TBL_BJP_ROLE, 'fields' => array('*'),'condition' => array('id' => $value->role_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
-         $roleMembersList = Table::getData($roleMembers);
-         echo $roleMembersList->role_name;
-         ?></span>
-      </label><br>
-      <?php } ?>
-      <a href="javascript:void(0)" style="float:right"  onClick="editofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
-      </span>
+        <table class=" wardDetails table table-striped table-bordered" >
+            <thead>
+            <tr><th colspan='5'>OFFICE BEARERS</th></tr>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Role Hierarchy</th>
+                    <th>address</th>
+                    <th>Verified</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            <?php 
+                 $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N','orderby' => 'role_hierarchy', 'sortby' => 'asc');
+                 $officeberasList = Table::getData($officebearers); 
+                $i = 1; 
+                foreach($officeberasList as $key =>$val) { ?>
+                <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $val->person_name ?> (<?php echo $val->person_name_ta ?>)</td>
+                    <td><?php echo $val->mobile_number ?></td>
+                    <td><?php switch($val->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?></td>
+                    <td><?php echo $val->address ?></td>
+                    <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
+                </tr>    
+            <?php $i ++;} ?>      
+            </tbody>    
+        </table>
+        <br><br>
+        <table  class=" wardDetails table table-striped table-bordered" >
+            <thead>
+            <tr><th colspan='5'>BOOTH DETAILS</th></tr>
+                <tr>
+                    <th>#</th>
+                    <th>Booth Number</th>
+                    <th>Total Voters</th>
+                    <th>Male Voters</th>
+                    <th>Female Voters</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            <?php 
+             $boothquery = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N');
+             $booth_list = Table::getData($boothquery);
+            $i = 1; 
+            ?><pre><?php// print_r( $booth_list) ?></pre><?php
+
+            foreach($booth_list as $key =>$val) { ?>
+                <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $val->booth_number ?></td>
+                    <td><?php echo $val->total_voters ?></td>
+                    <td><?php echo $val->male_voters_count ?></td>
+                    <td><?php echo $val->female_voters_count ?></td>
+                </tr>    
+            <?php $i ++;} ?>      
+            </tbody>    
+        </table>
+        <br><br>
+        <table  class="wardDetails table table-striped table-bordered" >
+            <thead>
+            <tr><th colspan='5'>MEMBERS</th></tr>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Membership Number</th>
+                    <th>Mobile</th>
+                    <th>Address</th>
+                    <th>Verified</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            <?php 
+              $memberquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N');
+              $member_list = Table::getData($memberquery);
+            $i = 1; 
+            ?><pre><?php// print_r( $booth_list) ?></pre><?php
+
+            foreach($member_list as $key =>$val) { ?>
+                <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $val->member_name ?></td>
+                    <td><?php echo $val->membership_number ?></td>
+                    <td><?php echo $val->member_mobile ?></td>
+                    <td><?php echo $val->member_address ?></td>
+                    <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
+                </tr>    
+            <?php $i ++;} ?>      
+            </tbody>    
+        </table>
    </div>
-   <span id="editOfficeBearers_<?php echo $value->id ?>"></span>
 </div>
 <br>
 <?php   } ?>
 <?php } else{ ?>
 <tr>
-   <td colspan="5">No results Found
-   <td>
+   <td colspan="5">No results Found<td>
 </tr>
 <?php } echo $table_val; ?>
+
 <script>
-   function ShowParentCatListPagination(page,condition,value) { 
-      var mandalid = $('#viewMandalID').val();
-      var value = $('#memberRole').val();
-         paramData = {'act':'memberListpagination','page':page,'role':value,'mandalId':mandalid}; 
-         ajax({
-         a:"districtajax",
-         b: paramData,
-         c:function(){},
-         d:function(data){
-               $('#mandalofficeBeares').html(data);
-            } 
-         });
-   }
+$(document).ready(function() {
+    $('.wardDetails').DataTable( {
+        "scrollY":        "200px",
+        "scrollCollapse": true,
+        "paging":         false
+    } );
+} );;
+
+//    function ShowParentCatListPagination(page,condition,value) { 
+//       var mandalid = $('#viewMandalID').val();
+//       var value = $('#memberRole').val();
+//          paramData = {'act':'memberListpagination','page':page,'role':value,'mandalId':mandalid}; 
+//          ajax({
+//          a:"districtajax",
+//          b: paramData,
+//          c:function(){},
+//          d:function(data){
+//                $('#mandalofficeBeares').html(data);
+//             } 
+//          });
+//    }
    
-   function editofficebearers(id,mandalid,districtID,member_id) {
-           paramData = {'obid':id,'mandalid':mandalid,'districtID':districtID,'action':'add_edit_OfficeBearers'}                     
-            ajax({
-                  a:"districtmodel",
-                  b:paramData,
-                  c:function(){},
-                  d:function(data){
-                     $('#editOfficeBearers_'+id).html(data);
-                  }
-            });
-            paramMember = {'act':'memberDetails','filter_by':member_id }; 
-                  ajax({
-                     a:"districtajax",
-                     b:paramMember,
-                     c:function(){},
-                     d:function(data){
-                        $('#memberTable').html(data);
-                     }
-               });                     
-      }
+//    function editofficebearers(id,mandalid,districtID,member_id) {
+//            paramData = {'obid':id,'mandalid':mandalid,'districtID':districtID,'action':'add_edit_OfficeBearers'}                     
+//             ajax({
+//                   a:"districtmodel",
+//                   b:paramData,
+//                   c:function(){},
+//                   d:function(data){
+//                      $('#editOfficeBearers_'+id).html(data);
+//                   }
+//             });
+//             paramMember = {'act':'memberDetails','filter_by':member_id }; 
+//                   ajax({
+//                      a:"districtajax",
+//                      b:paramMember,
+//                      c:function(){},
+//                      d:function(data){
+//                         $('#memberTable').html(data);
+//                      }
+//                });                     
+//       }
 </script>

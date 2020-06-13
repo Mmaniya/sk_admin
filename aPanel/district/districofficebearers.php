@@ -11,11 +11,11 @@ $getMandalId = $_POST['id'];
 <table class="table table-hover" style="border: 2px solid #eee;" >
    <thead class="bg-primary text-white">
       <tr>
-         <th scope="col">State Members</th>
-         <th scope="col">District Members</th>
-         <th scope="col">Mandal Members</th>
-         <th scope="col">Ward Members</th>
-         <th scope="col">SK Members</th>
+         <th scope="col">State Office Bearers</th>
+         <th scope="col">District Office Bearers</th>
+         <th scope="col">Mandal Office Bearers</th>
+         <th scope="col">Ward Office Bearers</th>
+         <th scope="col">SK Office Bearers</th>
          <!-- <th scope="col">Booth Members</th> -->
       </tr>
    </thead>   

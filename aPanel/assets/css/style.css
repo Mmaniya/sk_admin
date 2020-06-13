@@ -5935,3 +5935,4 @@ File: Responsive
    /* background-color: #60bbf5; */
    color: #ffffff;
  }
+ .dataTables_wrapper { width: 100%; }

@@ -34,7 +34,7 @@
       <tr>
          <th scope="col">Ward Name</th>
          <th scope="col">Total Office Bearers</th>
-         <th scope="col">Total Shakti Kendram</th>
+         <!-- <th scope="col">Total Shakti Kendram</th> -->
          <th scope="col">Total Booths</th>
          <th scope="col">Verified/Unverified Members</th>
       </tr>
@@ -53,13 +53,13 @@
                 $member_list = Table::getData($memberquery);
                 $verifiedquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','is_verified'=>'Y-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
                 $verifiedmember = Table::getData($verifiedquery); 
-                $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N');
+                $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'n');
                 $officeberasList = Table::getData($officebearers);                 
          	?>	
       <tr align="center">
          <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateWard(<?php  echo $value->id; ?>)" ><?php  echo $value->ward_number; ?></a></td>
          <td><a href="javascript:void(0);"><?php  echo count($officeberasList); ?></a></td>
-         <td><a href="javascript:void(0);"><?php  echo count($sk_list); ?></a></td>
+         <!-- <td><a href="javascript:void(0);"><?php // echo count($sk_list); ?></a></td> -->
          <td><a href="javascript:void(0);"><?php  echo count($booth_list); ?></a></td>
          <td style="text-align:center"><a href="javascript:void(0);"><?php  echo count($verifiedmember); echo ' / '; echo count($member_list); ?></a></td>
       </tr>
