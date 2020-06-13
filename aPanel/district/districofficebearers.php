@@ -16,7 +16,7 @@ $getMandalId = $_POST['id'];
          <th scope="col">Mandal Office Bearers</th>
          <th scope="col">Ward Office Bearers</th>
          <th scope="col">SK Office Bearers</th>
-         <!-- <th scope="col">Booth Members</th> -->
+         <th scope="col">Booth Members</th>
       </tr>
    </thead>   
    <tbody>
@@ -36,8 +36,8 @@ $getMandalId = $_POST['id'];
       $qry5 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="SK"  AND `status`="A" ORDER BY id DESC';
       $mainRoleSK=dB::mExecuteSql($qry5); 
 
-      // $qry6 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="B"  AND `status`="A" ORDER BY id DESC';
-      // $mainRoleB=dB::mExecuteSql($qry6); 
+      $qry6 = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$getMandalId.'" AND `role_hierarchy` ="B"  AND `status`="A" ORDER BY id DESC';
+      $mainRoleB=dB::mExecuteSql($qry6); 
 
       ?>	
       <tr align="center">
@@ -46,7 +46,7 @@ $getMandalId = $_POST['id'];
          <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'M')"><?php  echo count($mainRoleM); ?></a></td>
          <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'W')"><?php  echo count($mainRoleW); ?></a></td>
          <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'SK')"><?php echo count($mainRoleSK); ?></a></td>
-         <!-- <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'B')"><?php  echo count($mainRoleB); ?></a></td>     -->
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'B')"><?php  echo count($mainRoleB); ?></a></td>    
       </tr>
    </tbody>
 </table>
