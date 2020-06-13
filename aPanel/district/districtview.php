@@ -28,7 +28,7 @@
                      echo ')';
                      ?>   
                   </strong>
-                  <button type="button" class="btn btn-warning btn-sm float-right" id="getvalue" data-toggle="modal" data-target="#myModal">
+                  <button type="button" class="btn btn-warning btn-sm float-right" style="color:#FFF" id="getvalue" data-toggle="modal" data-target="#myModal">
                   <i class="fa fa-plus" aria-hidden="true"></i> ADD NEW MANDAL
                   </button>
                </div>

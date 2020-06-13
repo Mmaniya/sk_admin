@@ -5936,3 +5936,11 @@ File: Responsive
    color: #ffffff;
  }
  .dataTables_wrapper { width: 100%; }
+
+ .nav-tabs{
+  background-image: linear-gradient(to  right, #ff9933, #098669);
+ }
+ .bg-img{
+   font-weight: 800;
+  background-image: linear-gradient(to  right, #ff9933, #098669);
+ }

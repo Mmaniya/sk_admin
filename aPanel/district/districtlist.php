@@ -58,7 +58,7 @@ Use: View District Table
          <td style="text-align:center">
          <?php if($value->status == 'A') { ?> <a href="javascript:void(0);" data-toggle="modal" onClick="openModelBox(<?php  echo $value->id; ?>)" data-target="#myModal" class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit </a>&nbsp; <?php } ?>
             <?php if($value->status == 'A') { ?>
-            <a href="javascript:void(0);" data-toggle="modal" onClick="deleteData(<?php  echo $value->id; ?>)" data-target="#myModal" class="btn btn-warning btn-sm"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>&nbsp;
+            <a href="javascript:void(0);" data-toggle="modal" onClick="deleteData(<?php  echo $value->id; ?>)" data-target="#myModal" class="btn btn-warning btn-sm" style="color:#FFF"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>&nbsp;
             <?php } else { ?>
             <a href="javascript:void(0);" data-toggle="modal" onClick="restoreData(<?php  echo $value->id; ?>)" data-target="#myModal" class="btn btn-primary btn-sm"><i class="fa fa-refresh" aria-hidden="true"></i> Restore</a>&nbsp;
             <?php } ?>

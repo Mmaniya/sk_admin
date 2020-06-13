@@ -29,13 +29,16 @@
      ?>
 <style></style>
 <div class="card">
-   <div class="card-header"> WARD (<?php echo $value->ward_number; ?>) <span style="float:right">Pin code :<?php echo $value->ward_zipcode; ?></span></div>
+   <div class="card-header bg-img"> WARD (<?php echo $value->ward_number; ?>)</div>
    <input type="hidden" value="<?php echo $value->id ?>" id="officeBearersId">
    <div class="card-body row">
-        <table class=" wardDetails table table-striped table-bordered" >
+   <?php  $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N','orderby' => 'role_hierarchy', 'sortby' => 'asc');
+          $officeberasList = Table::getData($officebearers); 
+    ?>
+        <table class="table table-striped table-bordered" >
             <thead>
-            <tr><th colspan='5'>OFFICE BEARERS</th></tr>
-                <tr>
+            <tr><th colspan='6' style="color:#ff9933">WARD INCHARGE</th></tr>
+                <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Name</th>
                     <th>Mobile</th>
@@ -46,11 +49,11 @@
             </thead>
             <tbody>
 
-            <?php 
-                 $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N','orderby' => 'role_hierarchy', 'sortby' => 'asc');
-                 $officeberasList = Table::getData($officebearers); 
+            <?php                 
                 $i = 1; 
-                foreach($officeberasList as $key =>$val) { ?>
+                foreach($officeberasList as $key =>$val) {
+                    if($val->role_hierarchy == 'W'){
+                    ?>
                 <tr>
                     <td><?php echo $i; ?></td>
                     <td><?php echo $val->person_name ?> (<?php echo $val->person_name_ta ?>)</td>
@@ -59,14 +62,44 @@
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
                 </tr>    
-            <?php $i ++;} ?>      
+            <?php $i ++;} } ?>      
+            </tbody>    
+        </table>
+        <table class="table table-striped table-bordered" >
+            <thead >
+            <tr><th colspan='6' style="color:#ff9933">SHAKTI KENDRAM</th></tr>
+                <tr class="bg-primary text-white">
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Role Hierarchy</th>
+                    <th>address</th>
+                    <th>Verified</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            <?php                 
+                $i = 1; 
+                foreach($officeberasList as $key =>$val) {
+                    if($val->role_hierarchy == 'SK'){
+                    ?>
+                <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $val->person_name ?> (<?php echo $val->person_name_ta ?>)</td>
+                    <td><?php echo $val->mobile_number ?></td>
+                    <td><?php switch($val->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?></td>
+                    <td><?php echo $val->address ?></td>
+                    <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
+                </tr>    
+            <?php $i ++;} } ?>      
             </tbody>    
         </table>
         <br><br>
         <table  class=" wardDetails table table-striped table-bordered" >
             <thead>
-            <tr><th colspan='5'>BOOTH DETAILS</th></tr>
-                <tr>
+            <tr><th colspan='5' style="color:#ff9933">BOOTH DETAILS</th></tr>
+                <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Booth Number</th>
                     <th>Total Voters</th>
@@ -93,7 +126,7 @@
             <?php $i ++;} ?>      
             </tbody>    
         </table>
-        <br><br>
+        <!-- <br><br>
         <table  class="wardDetails table table-striped table-bordered" >
             <thead>
             <tr><th colspan='5'>MEMBERS</th></tr>
@@ -109,23 +142,23 @@
             <tbody>
 
             <?php 
-              $memberquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N');
-              $member_list = Table::getData($memberquery);
-            $i = 1; 
+            //   $memberquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N');
+            //   $member_list = Table::getData($memberquery);
+            // $i = 1; 
             ?><pre><?php// print_r( $booth_list) ?></pre><?php
 
-            foreach($member_list as $key =>$val) { ?>
+            // foreach($member_list as $key =>$val) { ?>
                 <tr>
-                    <td><?php echo $i; ?></td>
-                    <td><?php echo $val->member_name ?></td>
-                    <td><?php echo $val->membership_number ?></td>
-                    <td><?php echo $val->member_mobile ?></td>
-                    <td><?php echo $val->member_address ?></td>
-                    <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
+                    <td><?php //echo $i; ?></td>
+                    <td><?php //echo $val->member_name ?></td>
+                    <td><?php //echo $val->membership_number ?></td>
+                    <td><?php //echo $val->member_mobile ?></td>
+                    <td><?php //echo $val->member_address ?></td>
+                    <td><?php //if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
                 </tr>    
-            <?php $i ++;} ?>      
+            <?php //$i ++;} ?>      
             </tbody>    
-        </table>
+        </table> -->
    </div>
 </div>
 <br>
@@ -143,40 +176,5 @@ $(document).ready(function() {
         "scrollCollapse": true,
         "paging":         false
     } );
-} );;
-
-//    function ShowParentCatListPagination(page,condition,value) { 
-//       var mandalid = $('#viewMandalID').val();
-//       var value = $('#memberRole').val();
-//          paramData = {'act':'memberListpagination','page':page,'role':value,'mandalId':mandalid}; 
-//          ajax({
-//          a:"districtajax",
-//          b: paramData,
-//          c:function(){},
-//          d:function(data){
-//                $('#mandalofficeBeares').html(data);
-//             } 
-//          });
-//    }
-   
-//    function editofficebearers(id,mandalid,districtID,member_id) {
-//            paramData = {'obid':id,'mandalid':mandalid,'districtID':districtID,'action':'add_edit_OfficeBearers'}                     
-//             ajax({
-//                   a:"districtmodel",
-//                   b:paramData,
-//                   c:function(){},
-//                   d:function(data){
-//                      $('#editOfficeBearers_'+id).html(data);
-//                   }
-//             });
-//             paramMember = {'act':'memberDetails','filter_by':member_id }; 
-//                   ajax({
-//                      a:"districtajax",
-//                      b:paramMember,
-//                      c:function(){},
-//                      d:function(data){
-//                         $('#memberTable').html(data);
-//                      }
-//                });                     
-//       }
+} );
 </script>

@@ -84,7 +84,7 @@
                      <a href="settings.php" class="dropdown-item notify-item">
                      <i class="mdi mdi-settings"></i> <span>Settings</span>
                      </a>
-                     <a href="logout.php" class="dropdown-item notify-item"><i class="mdi mdi-logout"></i> <span>Logout</span></a>
+                     <a href="../logout.php" class="dropdown-item notify-item"><i class="mdi mdi-logout"></i> <span>Logout</span></a>
                   </div>
                </li>
             </ul>

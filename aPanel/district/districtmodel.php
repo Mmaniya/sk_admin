@@ -237,7 +237,7 @@
       </div>
    </div>
    <div class="card col-sm-4">
-      <div class="card-body ">
+      <div class="card-body">
          <span >Total Wards  <?php
             $param = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
             $district_list = Table::getData($param);
@@ -362,7 +362,7 @@
                ?>
             </strong>
             <span>
-               <button type="button" class="btn btn-warning btn-sm float-right" id="getmandalvalue" data-toggle="modal" data-target="#myModal">
+               <button type="button" class="btn btn-warning btn-sm float-right" style="color:#FFF" id="getmandalvalue" data-toggle="modal" data-target="#myModal">
                <i class="fa fa-plus" aria-hidden="true"></i> ADD NEW WARD 
                </button>
             </span>
@@ -372,7 +372,21 @@
                <div class="col-md-12">
                <input type="hidden" value="<?php echo $mandal_list->id ?>" id="getMandalid">  
                <div class="row">
-                  <div class="card col-sm-5 bg-info text-white">
+                  <div class="card col-sm-12">
+                     <div class="card-body">
+                     <?php    
+                           $mandal = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$mandal_list->id.'" AND `role_hierarchy` ="M"  AND  `role_position` = "MP" AND `status`="A"';
+                           $Mincharge = dB::mExecuteSql($mandal);
+                           foreach($Mincharge as $K=>$V)
+                             ?>
+                        <h2>Name  : <?php echo $V->person_name; echo '('; echo $V->person_name_ta; echo ')'; ?></h2>
+                        <h2>Mobile: <?php echo $V->mobile_number ?></h2>
+                     </div>
+                  </div>
+               </div>
+               <br>
+               <div class="row">
+                  <div class="card col-sm-5 text-white" style="background-color:#71dff1">
                      <div class="card-body">
                         <h4>Total Wards
                         <span   class="valueCounter" style="float: right; right;font-size: 3rem;">
@@ -384,7 +398,7 @@
                            </h4>
                      </div>
                   </div>
-                  <div class="card offset-sm-1 col-sm-5 text-white" style="background-color:#ea8a2a">
+                  <div class="card offset-sm-1 col-sm-5 text-white" style="background-color:#ffba76">
                      <div class="card-body">
                         <h4>Total Shakti Kendram 
                            <span   class="valueCounter" style="float: right; right;font-size: 3rem;">
@@ -400,7 +414,7 @@
                </div>
                <br>
                <div class="row">
-                  <div class="card col-sm-5 text-white" style="background-color:#f95e22">
+                  <div class="card col-sm-5 text-white" style="background-color:#ef8f6a">
                      <div class="card-body">
                         <h4>Total Booths 
                         <span   class="valueCounter" style="float: right; right;font-size: 3rem;">
@@ -413,7 +427,7 @@
                         </h4>
                      </div>
                   </div>
-                  <div class="card offset-sm-1 col-sm-5 text-white" style="background-color:#bb4470">
+                  <div class="card offset-sm-1 col-sm-5 text-white" style="background-color:#e46594">
                      <div class="card-body">               
                          <h4>Total Members 
                          <span   class="valueCounter" style="float: right; right;font-size: 3rem;">
@@ -459,16 +473,16 @@
                   <ul class="nav nav-tabs" role="tablist">
                      <li class="nav-item">
                         <a class="nav-link" href="#ward" role="tab" onClick="wardDetailsget(<?php  echo $mandal_list->id; ?>)" data-toggle="tab">
-                           <h5 style="color:#ff9933">WARD</h5>
+                           <h5 style="color:#000">WARD</h5>
                         </a>
                      </li>
                      <li class="nav-item">
                         <a class="nav-link" href="#officebearers" role="tab"  onClick="officeBearesDetailsget(<?php  echo $mandal_list->id; ?>)" data-toggle="tab">
-                           <h5 style="color:#ff9933">OFFICE BEARERS</h5>
+                           <h5 style="color:#000">OFFICE BEARERS</h5>
                         </a>
                      </li>
-                     <li class="nav-item" style="margin-left: 50%;">
-                         <a class="nav-link btn btn-warning btn-sm" style="color:#ffffff" href="#newofficebearers" role="tab" onClick="addofficebearers(<?php echo $mandal_list->id; ?>,<?php echo $mandal_list->district_id; ?>)" data-toggle="tab">
+                     <li class="nav-item" style="margin-left: 42%;margin-top: 0.5%">
+                         <a class="nav-link" href="#newofficebearers" role="tab" onClick="addofficebearers(<?php echo $mandal_list->id; ?>,<?php echo $mandal_list->district_id; ?>)" data-toggle="tab">
                               <i class="fa fa-plus" aria-hidden="true"></i> ADD OFFICE BEARERS
                            </a>   
                      </li>            
