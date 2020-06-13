@@ -455,32 +455,29 @@
                      </div>
                   </div>
                </div>
-
-
                   <hr>
                   <ul class="nav nav-tabs" role="tablist">
                      <li class="nav-item">
                         <a class="nav-link" href="#ward" role="tab" onClick="wardDetailsget(<?php  echo $mandal_list->id; ?>)" data-toggle="tab">
-                           <h5>WARD</h5>
+                           <h5 style="color:#ff9933">WARD</h5>
                         </a>
                      </li>
                      <li class="nav-item">
                         <a class="nav-link" href="#officebearers" role="tab"  onClick="officeBearesDetailsget(<?php  echo $mandal_list->id; ?>)" data-toggle="tab">
-                           <h5>OFFICE BEARERS</h5>
+                           <h5 style="color:#ff9933">OFFICE BEARERS</h5>
                         </a>
                      </li>
-
                      <li class="nav-item" style="margin-left: 50%;">
                          <a class="nav-link btn btn-warning btn-sm" style="color:#ffffff" href="#newofficebearers" role="tab" onClick="addofficebearers(<?php echo $mandal_list->id; ?>,<?php echo $mandal_list->district_id; ?>)" data-toggle="tab">
                               <i class="fa fa-plus" aria-hidden="true"></i> ADD OFFICE BEARERS
                            </a>   
-                     </li>
-            
+                     </li>            
                   </ul>
                   <!-- Tab panes -->
                   <div class="tab-content">
                      <div role="tabpanel" class="tab-pane fade in" id="ward">
                         <div id="wardDetails"></div>
+                        <div id="wardFullDetails"></div>
                      </div>
                      <div role="tabpanel" class="tab-pane fade" id="officebearers">
                         <div id="officebearersDetails"></div>
@@ -845,16 +842,16 @@
    }
 
 /*********** VALUE COUNTER  ***********/
-   $('.valueCounter').each(function () {
-      var $this = $(this);
-      jQuery({ Counter: 0 }).animate({ Counter: $this.text() }, {
-         duration: 1500,
-         easing: 'swing',
-         step: function () {
-            $this.text(Math.ceil(this.Counter));
-         }
-      });
-   });
+   // $('.valueCounter').each(function () {
+   //    var $this = $(this);
+   //    jQuery({ Counter: 0 }).animate({ Counter: $this.text() }, {
+   //       duration: 1500,
+   //       easing: 'swing',
+   //       step: function () {
+   //          $this.text(Math.ceil(this.Counter));
+   //       }
+   //    });
+   // });
 
 /*********** ADD NEW WARD  ************/
    $('#getmandalvalue').click(function() {
@@ -895,7 +892,7 @@
             b:paramPosition,
             c:function(){},
             d:function(data){
-                  if(data.trim() != '') {
+               if(data.trim() != '') {
                   $('#showData').html(data);
                }  
                if(data.trim() == '') {

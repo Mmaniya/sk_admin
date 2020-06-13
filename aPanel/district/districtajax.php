@@ -256,10 +256,9 @@
         ob_clean();
         $hierarchy = $_POST['position'];
         $option = explode(",", $_POST['roleoption']);   
-        $param = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('role_hierarchy'=>$hierarchy.'-CHAR'),'showSql'=>'N','orderby'=>'position','sortby'=>'desc');
+        $param = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('role_hierarchy'=>$hierarchy.'-CHAR'),'showSql'=>'Y','orderby'=>'position','sortby'=>'desc');
         $hierarchy_list = Table::getData($param);
-          ?>
-          <?php  foreach($hierarchy_list as $key=>$value) {            
+         foreach($hierarchy_list as $key=>$value) {            
             $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_position'=>$value->role_abbr.'-CHAR','role_hierarchy'=>$hierarchy.'-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
             $ob_list = Table::getData($param);
             $ob_count = count($ob_list); 
@@ -327,6 +326,39 @@
             echo $rsDtls;
 
         }
+        exit();
+    }
+/********* 15.WARD FULL DETAILS *************/
+
+    if($_POST['act'] == 'MandalWardDetails') {
+        ob_clean();  
+            $qry = 'select * from '.TBL_BJP_WARD.' where `id`="'.$_POST['wardId'].'" AND `status`="A"';
+            $wardFullDetails=dB::mExecuteSql($qry); 
+
+            if ($_POST['page'] == '') $page = 1;
+            else $page = $_POST['page'];
+            $TotalCount = count($wardFullDetails);
+            $totalPages = ceil(($TotalCount) / (PAGE_LIMIT));
+            if ($totalPages == 0) $totalPages = PAGE_LIMIT;
+            $StartIndex = ($page - 1) * PAGE_LIMIT;
+            if (count($wardFullDetails) > 0) $ListingParentCatListArr = array_slice($wardFullDetails, $StartIndex, PAGE_LIMIT, true);
+            include 'districtcompletewardetails.php';
+        exit();
+    }
+
+    if($_POST['act'] == 'MandalWardDetailsPagination') {
+        ob_clean();  
+            $qry = 'select * from '.TBL_BJP_WARD.' where `id`="'.$_POST['wardId'].'" AND `status`="A"';
+            $wardFullDetails=dB::mExecuteSql($qry);
+
+            if ($_POST['page'] == '') $page = 1;
+            else $page = $_POST['page'];
+            $TotalCount = count($wardFullDetails);
+            $totalPages = ceil(($TotalCount) / (PAGE_LIMIT));
+            if ($totalPages == 0) $totalPages = PAGE_LIMIT;
+            $StartIndex = ($page - 1) * PAGE_LIMIT;
+            if (count($wardFullDetails) > 0) $ListingParentCatListArr = array_slice($wardFullDetails, $StartIndex, PAGE_LIMIT, true);
+            include 'districtcompletewardetails.php';
         exit();
     }
 ?>

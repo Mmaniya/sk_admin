@@ -55,6 +55,7 @@
 <input type="hidden" id="getDistrictid" value="<?php echo $_REQUEST['dist']; ?>">
 <script type="text/javascript">
    $(document).ready(function(){
+
     var getDistrictid = $('#getDistrictid').val();
     paramData = {'act':'getMandalData','filter_by': getDistrictid}; 
     ajax({

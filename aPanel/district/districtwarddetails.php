@@ -1,7 +1,7 @@
 <!--==============================
    Name: Manikandan;
    Create: 5/6/2020;
-   Update: 6/6/2020;
+   Update: 12/6/2020;
    Use: View Ward Details Table 
    ================================-->
    <?php
@@ -57,7 +57,7 @@
                 $officeberasList = Table::getData($officebearers);                 
          	?>	
       <tr align="center">
-         <td><a href="javascript:void(0);" onClick="openModelBox(<?php  echo $value->id; ?>)" data-target="#myModal" ><?php  echo $value->ward_number; ?></a></td>
+         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateWard(<?php  echo $value->id; ?>)" ><?php  echo $value->ward_number; ?></a></td>
          <td><a href="javascript:void(0);"><?php  echo count($officeberasList); ?></a></td>
          <td><a href="javascript:void(0);"><?php  echo count($sk_list); ?></a></td>
          <td><a href="javascript:void(0);"><?php  echo count($booth_list); ?></a></td>
@@ -72,14 +72,14 @@
    </tbody>
 </table>
 <script>
-   function openModelBox(id){
-      paramData = {'action':'showWardDetails','id':id };
+   function getStateWard(id){
+      paramData = {'act':'MandalWardDetails','wardId':id}; 
          ajax({
-            a:"districtmodel",
+            a:"districtajax",
             b:paramData,
             c:function(){},
             d:function(data){
-               $('#modelview').html(data);
+               $('#wardFullDetails').html(data);
             }
       });
    }

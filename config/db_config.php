@@ -9,7 +9,7 @@ if ($dev_server) {
     define("BA_DBHOST", "localhost");
     define("BA_DBUSER", "root");
     define("BA_DBPASSWORD", "");
-    define("BA_DBNAME", "cbe_bjp");
+    define("BA_DBNAME", "sk_admin");
    
    // DB connection 
    $con=mysqli_connect(BA_DBHOST,BA_DBUSER,BA_DBPASSWORD,BA_DBNAME);
