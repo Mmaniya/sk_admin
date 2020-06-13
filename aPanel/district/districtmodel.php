@@ -1,7 +1,7 @@
 <!--==================================
    Name: Manikandan;
    Create: 5/6/2020;
-   Update: 12/6/2020;
+   Update: 13/6/2020;
    Use: ADD DISTRICT
    ====================================-->
    <?php
@@ -183,169 +183,108 @@
    </div>
 </div>
 <!-- 6. DISTRICT DETAILS SHOW -->
-<?php } else if ($modelAction == 'districtCard') { ?>
+<?php } else if ($modelAction == 'districtCard') { 
+   $district = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_position ) as position from '.TBL_BJP_OFFICE_BEARERS.' where `district_id`="'.$modelId.'" AND `role_hierarchy` ="D" AND `status`="A"';
+   $distpresitent = dB::mExecuteSql($district);
+   foreach($distpresitent as $K=>$V){
+   if($V->position == 'DP'){                           
+      ?>
+   <div class="row">
+      <div class="card col-sm-12">
+         <div class="card-body row"> 
+            <div class="col-sm-10">               
+               <h4><?php echo $V->person_name; echo '('; echo $V->person_name_ta; echo ')'; ?></h4>
+               <h4><?php echo $V->mobile_number ?></h4>  
+            </div> 
+            <div class="col-sm-2">
+               <img  src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-user-vector-avatar-png-image_4830521.jpg" height="100" weight="30" alt="Mandal President">
+            </div>                                      
+         </div>
+      </div>
+   </div>
+   <br>
+   <?php } } ?>
 <div class="row" >
-   <div class="card col-sm-4">
-      <div class="card-body ">
-      <span >Active Mandal  <?php
-            $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span> 
-         <span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
+   <div class="col-sm-6">
+      <div class="card text-white" style="background-color:#71dff1">
+         <div class="card-body">
+            <h3>Total Mandal  <?php
+                  $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
+                  $mandal_list = Table::getData($param);
+                  ?>
+               <span  class="valueCounter" style="font-size:3rem; float:right"><?php echo $TotalCount = count($mandal_list);?></span>
+            </h3> 
+         </div>
       </div>
    </div>
-   <div class="card col-sm-4">
-      <div class="card-body ">
-      <span >Inactive Mandal  <?php
-            $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'I-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span> 
-         <span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
-      </div>
-   </div>
-   <div class="card col-sm-4">
-      <div class="card-body " >
-         <span  >Total Mandal  <?php
-            $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span> 
-         <span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
+   <div class="col-sm-6">
+      <div class="card text-white" style="background-color:#ffba76">
+         <div class="card-body" >
+            <h3 >Total Wards  <?php
+               $param = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
+               $ward_list = Table::getData($param);
+               ?>
+               <span  class="valueCounter" style="font-size:3rem; float:right"><?php echo $TotalCount = count($ward_list);?>
+            </h3> 
+         </div>
       </div>
    </div>
 </div>
 <br>
-<div class="row">
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span >Active Wards  <?php
-            $param = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
+<div class="row" >
+   <div class="col-sm-6">
+      <div class="card text-white" style="background-color:#ef8f6a">
+         <div class="card-body">
+            <h3>Total MP Constituency  <?php
+                 $param = array('tableName' => TBL_BJP_MP_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
+                 $constituency_list = Table::getData($param);
+                 ?>
+              <span  class="valueCounter" style="font-size:3rem; float:right"><?php echo $TotalCount = count($constituency_list);?></span>
+            </h3> 
+         </div>
       </div>
    </div>
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span >Inactive Wards  <?php
-            $param = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'I-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
-      </div>
-   </div>
-   <div class="card col-sm-4">
-      <div class="card-body">
-         <span >Total Wards  <?php
-            $param = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
+   <div class="col-sm-6">
+      <div class="card text-white" style="background-color:#e46594">
+         <div class="card-body" >
+            <h3 >Total LG Constituency  <?php
+               $param = array('tableName' => TBL_BJP_LG_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
+               $lg_constituency_list = Table::getData($param);
+               ?>
+               <span  class="valueCounter" style="font-size:3rem; float:right"><?php echo $TotalCount = count($lg_constituency_list);?></span>
+            </h3> 
+         </div>
       </div>
    </div>
 </div>
 <br>
-<div class="row">
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span >Active MP Constituency  <?php
-            $param = array('tableName' => TBL_BJP_MP_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span> 
-         <span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
+<div class="row" >
+   <div class="col-sm-6">
+      <div class="card text-white" style="background-color:#d0bd62">
+         <div class="card-body">
+            <h3>Total Booth  <?php
+                 $param = "SELECT * FROM ".TBL_BJP_BOOTH." WHERE ward_id IN (SELECT id FROM ".TBL_BJP_WARD." WHERE district_id = ". $_POST['dist_ID']." AND status = 'A')";
+                 $Booth_list = dB::mExecuteSql($param);   
+                 ?>
+              <span  class="valueCounter" style="font-size:3rem; float:right"><?php echo $TotalCount = count($Booth_list);?></span>
+            </h3> 
+         </div>
       </div>
    </div>
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span >Inactive MP Constituency  <?php
-            $param = array('tableName' => TBL_BJP_MP_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'I-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span> 
-         <span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
-      </div>
-   </div>
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span >Total MP Constituency  <?php
-            $param = array('tableName' => TBL_BJP_MP_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span> 
-         <span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
+   <div class="col-sm-6">
+      <div class="card text-white" style="background-color:#25bf9c">
+         <div class="card-body" >
+            <h3 >Total Members<?php              
+              $memqueryverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
+              $verifiedlist = Table::getData($memqueryverified);   
+              ?>               
+               <span  class="valueCounter" style="font-size:3rem; float:right"><?php echo  count($verifiedlist);?></span>
+            </h3> 
+         </div>
       </div>
    </div>
 </div>
-<br>
-<div class="row">
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span  >Active LG Constituency <?php
-            $param = array('tableName' => TBL_BJP_LG_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
-      </div>
-   </div>
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span  >Inactive LG Constituency <?php
-            $param = array('tableName' => TBL_BJP_LG_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','status'=> 'I-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
-      </div>
-   </div>
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span  >Total LG Constituency <?php
-            $param = array('tableName' => TBL_BJP_LG_CONST, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $district_list = Table::getData($param);
-            ?></span><span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
-      </div>
-   </div>
-</div>
-<br>
-<div class="row">
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span >verified users            
-         <?php $memqueryverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','is_verified'=>'Y-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $verifiedlist = Table::getData($memqueryverified);   
-            ?>               
-         </span> 
-         <span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo  count($verifiedlist);
-            ?></span>
-      </div>
-   </div>
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span >unverified users           
-         <?php $memqueryverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT','is_verified'=>'N-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $verifiedlist = Table::getData($memqueryverified);   
-            ?>               
-         </span>
-         </span>
-         <span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo $TotalCount = count($district_list);
-            ?></span>
-      </div>
-   </div>
-   <div class="card col-sm-4">
-      <div class="card-body ">
-         <span >Total users            
-         <?php $memqueryverified = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('district_id' => $_POST['dist_ID'].'-INT'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-            $verifiedlist = Table::getData($memqueryverified);   
-            ?>               
-         </span> 
-         <span  class="valueCounter mytextcolor" style="font-size:3rem; float:right"><?php echo  count($verifiedlist);
-            ?></span>
-      </div>
-   </div>
-</div>
+
 <!-- 7. MANDAL DETAILS SHOW -->
 <?php } else if ($modelAction == 'mandalCard'){?>
 <div class="row">
@@ -393,7 +332,7 @@
                <br>
                <?php } } ?>
                <div class="row">
-                  <div class="col-sm-6 ">
+                  <div class="col-sm-4">
                      <div class="card text-white" style="background-color:#71dff1">
                         <div class="card-body">
                            <h5>Total Wards
@@ -407,10 +346,10 @@
                         </div>
                      </div>
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                      <div class="card text-white" style="background-color:#ffba76">
                         <div class="card-body">
-                           <h5>Total Shakti Kendram 
+                           <h5>Total SK
                               <span   class="valueCounter" style="float: right; right;font-size: 2.5rem;">
                               <?php
                                  $skquery = array('tableName' => TBL_BJP_SK, 'fields' => array('*'),'condition' => array('mandal_id' => $mandal_list->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
@@ -422,13 +361,10 @@
                         </div>
                      </div>
                   </div>
-               </div>
-               <br>
-               <div class="row">
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                      <div class="card  text-white" style="background-color:#ef8f6a">
                         <div class="card-body">
-                           <h5>Total Booths 
+                           <h5>Total Booth
                               <span   class="valueCounter" style="float: right; right;font-size: 2.5rem;">
                               <?php
                                  $boothqry = "SELECT * FROM ".TBL_BJP_BOOTH." WHERE ward_id IN (SELECT id FROM ".TBL_BJP_WARD." WHERE mandal_id = ".$mandal_list->id." AND status = 'A')";
@@ -440,7 +376,10 @@
                         </div>
                      </div>
                   </div>
-                  <div class="col-sm-6">
+               </div>
+               <br>
+               <div class="row">
+                  <div class="col-sm-4">
                      <div class="card text-white" style="background-color:#e46594">
                         <div class="card-body">               
                            <h5>Total Members 
@@ -454,10 +393,7 @@
                         </div>
                      </div>
                   </div>
-               </div>
-               <br>
-               <div class="row">
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                      <div class="card text-white" style="background-color:#d0bd62">
                         <div class="card-body">
                            <h5>Verified Members
@@ -473,7 +409,7 @@
                         </div>
                      </div>
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-4">
                      <div class="card text-white" style="background-color:#25bf9c">
                         <div class="card-body">
                            <h5>Unverified Members
@@ -488,6 +424,8 @@
                      </div>
                   </div>
                </div>
+               <br>
+   
                   <hr>
                   <ul class="nav nav-tabs" role="tablist">
                      <li class="nav-item">
