@@ -195,10 +195,7 @@
 
     if($_POST['act'] == 'MandalofficeBearers') {
         ob_clean();  
-            // $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $_POST['id'].'-INT','role_hierarchy'=>$_POST['role'].'-CHAR'),'orderby' => 'id', 'showSql' => 'N');
-            // $stateMembersList = Table::getData($stateMembers); 
-
-           $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['id'].'" AND `role_hierarchy` ="'.$_POST['role'].'" AND `status`="A" ORDER BY id DESC';
+            $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['id'].'" AND `role_hierarchy` ="'.$_POST['role'].'" AND `status`="A" ORDER BY id DESC';
             $stateMembersList=dB::mExecuteSql($qry); 
 
             if ($_POST['page'] == '') $page = 1;
@@ -214,9 +211,7 @@
     
     if($_POST['act'] == 'memberListpagination') {
         ob_clean();  
-            // $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $_POST['mandalId'].'-INT','role_hierarchy'=>$_POST['role'].'-CHAR'),'orderby' => 'id', 'showSql' => 'N');
-            // $stateMembersList = Table::getData($stateMembers); 
-             $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['mandalId'].'" AND `role_hierarchy` ="'.$_POST['role'].'" AND `status`="A" ORDER BY id DESC';
+            $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['mandalId'].'" AND `role_hierarchy` ="'.$_POST['role'].'" AND `status`="A" ORDER BY id DESC';
             $stateMembersList=dB::mExecuteSql($qry);
 
             if ($_POST['page'] == '') $page = 1;
@@ -256,13 +251,20 @@
         ob_clean();
         $hierarchy = $_POST['position'];
         $mandalID = $_POST['mandalID'];
+        $wardID = $_POST['wardID'];
         $option = explode(",", $_POST['roleoption']);   
         $param = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('role_hierarchy'=>$hierarchy.'-CHAR'),'showSql'=>'N','orderby'=>'position','sortby'=>'desc');
         $hierarchy_list = Table::getData($param);?>
             <option value="" selected="true" disabled="disabled">Please Select Position</option>
         <?php
-         foreach($hierarchy_list as $key=>$value) {            
-            $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_position'=>$value->role_abbr.'-CHAR','role_hierarchy'=>$hierarchy.'-CHAR','mandal_id'=>$mandalID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+         foreach($hierarchy_list as $key=>$value) {  
+            // $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `role_hierarchy` ="'.$hierarchy.'" AND `role_id`="'.$value->id.'" AND `status`="A" AND `mandal_id`="'.$mandalID.'" OR `ward_id`="'.$wardID.'"  ORDER BY id DESC';
+            // $ob_list=dB::mExecuteSql($qry); 
+            if($wardID = $_POST['wardID'] != ''){
+            $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_id'=>$value->id.'-INT','role_hierarchy'=>$hierarchy.'-CHAR','mandal_id'=>$mandalID.'-INT','ward_id'=>$wardID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+            } else {
+                $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_id'=>$value->id.'-INT','role_hierarchy'=>$hierarchy.'-CHAR','mandal_id'=>$mandalID.'-INT','status'=>'A-CHAR'),'showSql'=>'Y','orderby'=>'id','sortby'=>'desc');
+            }
             $ob_list = Table::getData($param);
             $ob_count = count($ob_list); 
             if($ob_count<$value->no_of_roles) {  ?>    
@@ -307,10 +309,10 @@
     if ($_POST['act'] == 'addNewOfficeBearers') {
         ob_clean();
 
-        $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-CHAR','status'=>'A-CHAR'),'showSql'=>'Y','sortby'=>'desc');
+        $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-CHAR','status'=>'A-CHAR'),'showSql'=>'N','sortby'=>'desc');
         $role_list = Table::getData($query);
 
-         $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
+         $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
         foreach($paramsOB as $key => $Val) {
             $param[$Val] = $$Val = check_input($_POST[$Val]);
         }
@@ -365,7 +367,7 @@
         exit();
     }
 
-/********* 15. DELETE OFFICE BEARERS *************/
+/********* 15.DELETE OFFICE BEARERS **********/
 
     if($_POST['act'] == 'delete_member'){
         ob_clean();
@@ -377,4 +379,53 @@
         echo $rsDtls;
         exit();
     }
+
+/********* 16.FETCH MANDAL THALAIVAR *********/
+    if($_POST['act'] == 'fetchMandalThalaivar'){
+        
+        $mandal = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_id ) as position, (select role_name from '.TBL_BJP_ROLE.' where id = role_id ) as rolename from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['id'].'" AND `role_hierarchy` ="M" AND `status`="A"';
+        $Mincharge = dB::mExecuteSql($mandal);
+        foreach($Mincharge as $K=>$V){
+        if($V->position == 'MP'){     ?>                               
+        <div class="row">
+           <div class="card col-sm-12">
+              <div class="card-body row"> 
+                 <div class="col-sm-10">               
+                    <h4><?php  echo $V->person_name; echo '('; echo $V->person_name_ta; echo ')'; ?></h4>
+                    <h4><?php echo $V->mobile_number ?></h4> 
+                    <h4 class="mytextcolor"><?php  echo $V->rolename ?></h4>   
+                 </div> 
+                 <div class="col-sm-2">
+                    <?php  
+                       $mandal_member = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('id' => $V->member_id.'-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
+                       $mandal_member_list = Table::getData($mandal_member);
+
+                       if($mandal_member_list->member_photo != ''){
+                          ?>               
+                          <img  src="<?php  echo TBL_MEMBER_BASE_URL ?><?php  echo $mandal_member_list->member_photo ?>" height="100" weight="30" alt="Mandal President">
+                         <?php  } else { ?>
+                          <img  src="../assets/images/user.jpg" height="100" weight="30" alt="District President">
+                       <?php  } ?>
+                 </div>                                  
+              </div>
+           </div>
+        </div>
+        <br> 
+       <?php   } } 
+
+    }
+/********* 17.SELECT NEW WARD ****************/
+
+    if($_POST['act']=='wardincharge'){
+        ob_clean();
+        $mandalID = $_POST['mandalID'];   
+
+        $param = array('tableName'=>TBL_BJP_WARD,'fields'=>array('*'),'condition'=>array('mandal_id'=>$mandalID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+        $ward_list = Table::getData($param); ?>
+        <option value="" selected="true" disabled="disabled">Please Select Ward</option>
+        <?php foreach($ward_list as $Key=>$value) {  ?>    
+        <option  value="<?php echo $value->id; ?>" ><?php echo $value->ward_number; ?></option>
+        <?php } 
+        exit();
+    } 
 ?>

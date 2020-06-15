@@ -29,13 +29,10 @@
      ?>
 <input type="hidden" value="<?php echo $value->mandal_id; ?>" id="viewMandalID">
 <input type="hidden" value="<?php echo $value->role_hierarchy; ?>" id="memberRole">
-<div class="card">
-   <?php// if($value->role_hierarchy != ''){ ?>
+<div class="card" id="deleteOfficeBearers_<?php echo $value->id ?>">
    <div class="card-header">
    Office Bearers Details
-   <!-- <?php // switch( $value->role_hierarchy) {case "S" : echo 'State'; break; case "D" : echo 'District'; break; case "M" : echo 'Mandal'; break; case "W" : echo 'Ward'; break; case "SK" : echo 'Shakti Kendram'; break; case "B" : echo 'Booth'; break; } ?> Member Details -->
    </div>
-   <?php //} ?>
    <input type="hidden" value="<?php echo $value->id ?>" id="officeBearersId">
    <div class="card-body row">
       <span class="col-sm-7">
@@ -97,26 +94,26 @@
    
    function editofficebearers(id,mandalid,districtID,member_id) {
 
-           paramData = {'obid':id,'mandalid':mandalid,'districtID':districtID,'action':'add_edit_OfficeBearers'}                     
+      paramData = {'obid':id,'mandalid':mandalid,'districtID':districtID,'action':'editOfficeBearers'}                     
+      ajax({
+            a:"districtmodel",
+            b:paramData,
+            c:function(){},
+            d:function(data){
+               $('#editOfficeBearers_'+id).show();
+               $('#editOfficeBearers_'+id).html(data);
+            }
+      });
+      paramMember = {'act':'memberDetails','filter_by':member_id }; 
             ajax({
-                  a:"districtmodel",
-                  b:paramData,
-                  c:function(){},
-                  d:function(data){
-                     $('#editOfficeBearers_'+id).show();
-                     $('#editOfficeBearers_'+id).html(data);
-                  }
-            });
-            paramMember = {'act':'memberDetails','filter_by':member_id }; 
-                  ajax({
-                     a:"districtajax",
-                     b:paramMember,
-                     c:function(){},
-                     d:function(data){
-                        $('#memberTable').html(data);
-                     }
-               });                     
-      }
+               a:"districtajax",
+               b:paramMember,
+               c:function(){},
+               d:function(data){
+                  $('#memberTable').html(data);
+               }
+         });                     
+   }
 
    function deleteofficebearers(id) {
 
@@ -126,8 +123,7 @@
                   b:paramData,
                   c:function(){},
                   d:function(data){
-                     $('#editOfficeBearers_'+id).html('<p style="color:red">Record Deleted Successfully.</p>');
-                     getStateUsers(id,role);
+                     $('#deleteOfficeBearers_'+id).remove();
 
                   }
             });                     

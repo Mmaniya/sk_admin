@@ -324,37 +324,7 @@
             <div class="row">
                <div class="col-md-12">
                <input type="hidden" value="<?php echo $mandal_list->id ?>" id="getMandalid">  
-               <?php
-               $mandal = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_id ) as position, (select role_name from '.TBL_BJP_ROLE.' where id = role_id ) as rolename from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$mandal_list->id.'" AND `role_hierarchy` ="M" AND `status`="A"';
-               $Mincharge = dB::mExecuteSql($mandal);
-               foreach($Mincharge as $K=>$V){
-               if($V->position == 'MP'){                           
-                  ?>
-               <div class="row">
-                  <div class="card col-sm-12">
-                     <div class="card-body row"> 
-                        <div class="col-sm-10">               
-                           <h4><?php echo $V->person_name; echo '('; echo $V->person_name_ta; echo ')'; ?></h4>
-                           <h4><?php echo $V->mobile_number ?></h4> 
-                           <h4 class="mytextcolor"><?php echo $V->rolename ?></h4>   
-                        </div> 
-                        <div class="col-sm-2">
-                           <?php  
-                              $mandal_member = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('id' => $V->member_id.'-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
-                              $mandal_member_list = Table::getData($mandal_member);
-
-                              if($mandal_member_list->member_photo != ''){
-                                 ?>               
-                                 <img  src="<?php echo TBL_MEMBER_BASE_URL ?><?php echo $mandal_member_list->member_photo ?>" height="100" weight="30" alt="Mandal President">
-                                <?php } else { ?>
-                                 <img  src="../assets/images/user.jpg" height="100" weight="30" alt="District President">
-                              <?php } ?>
-                        </div>                                  
-                     </div>
-                  </div>
-               </div>
-               <br>
-               <?php } } ?>
+               <span id="mandalThalaivar"></span>              
                <div class="row">
                   <div class="col-sm-4">
                      <div class="card text-white" style="background-color:#71dff1">
@@ -586,18 +556,16 @@
       </form>
    </div>
 </div>
-<?php } else if ($modelAction == 'add_edit_OfficeBearers'){
+<?php } else if ($modelAction == 'editOfficeBearers'){
 
    $ofID = $_POST['obid'];
-   $title = ' Add New Office Bearers';
    $mandalID = $_POST['mandalid'];
    $distID = $_POST['districtID'];
-
-   if($ofID>0){
+   // if($ofID>0){
    $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition'=>array('id'=>$ofID.'-INT','status'=> 'A-CHAR'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
    $officebearersList = Table::getData($officebearers);
    $title = 'Edit Office Bearers';
-   }
+   // }
    ?>
    <div class="modal-content">
       <div class="modal-header">
@@ -624,6 +592,7 @@
                         <option <?php if ($officebearersList->role_hierarchy == "B" ) echo 'selected' ; ?> value="B" >Booth</option>
                      </select>
                </div>
+
                <div class="form-group col-sm-6">
                      <label >Sub Role Hierarachy</label><br>
                      <label class="radio-inline">
@@ -635,21 +604,26 @@
                      <label class="radio-inline">
                         <input type="radio" name="sub_role_hierarchy" id="subRoleB" value="B"> BOOTH
                      </label>
-                     <!-- <select class="form-control" name="sub_role_hierarchy" id="subRole">
-                     <?php // (isset($officebearersList->sub_role_hierarchy)) ? $officebearersList->sub_role_hierarchy =$officebearersList->sub_role_hierarchy : $officebearersList->sub_role_hierarchy; ?>
-                        <option selected="true" disabled="disabled" value="">Please Select Category</option>
-                        <option <?php // if ($officebearersList->sub_role_hierarchy == "SK" ) echo 'selected' ; ?> value="SK" >Shakti Kendram</option>
-                        <option <?php // if ($officebearersList->sub_role_hierarchy == "W" ) echo 'selected' ; ?> value="W" >Ward</option>
-                        <option <?php // if ($officebearersList->sub_role_hierarchy == "B" ) echo 'selected' ; ?> value="B" >Booth</option>
-                     </select> -->
                </div>
             </div>
+
             <div class="row">
-               <div class="col-md-6 col-lg-6">
-                  <label>Role Position </label>
-                  <select class="form-control" id="showData" name="role_id">
-                  </select>
+
+            <div class="col-md-3 col-lg-3" id="wardroleHierachy1">
+                  <label>Select Ward</label>
+                  <select class="form-control" id="selectWard" name="ward_id"></select>
                </div>
+               <div class="col-md-3 col-lg-3" id="wardroleHierachy2">
+                  <label>Role Position </label>
+                  <select class="form-control showData" name="role_id"></select>
+               </div>
+
+               <div class="col-md-6 col-lg-6" id="roleHierachy">
+                  <label>Role Position </label>
+                  <select class="form-control showData" name="role_id"></select>
+               </div>
+            
+
                <div class="col-sm-6">
                      <label>Member Id </label>
                      <div class="input-group mb-3">
@@ -661,13 +635,81 @@
                </div> 
             </div>
             <span id="memberTable">
-               <!-- <span id="showNotifycation"></span>              -->
             </span>
             <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
          </form>
       </div>
 </div>
-<?php }  ?>
+<?php } else if ($modelAction == 'officeBearersNew'){ ?>
+   <div class="modal-content">
+      <div class="modal-header">
+         <h5 class="modal-title">ADD NEW OFFICE BEARERS</h5>
+      </div>
+      <div class="modal-body">
+         <form action="javascript:void(0)" id="formData" method="POST">
+            <input type="hidden" value="addNewOfficeBearers" name="act">
+            <input type="hidden" value="1" name="state_id">
+            <input type="hidden" value="<?php echo $_POST['districtID'] ?>" name="district_id">
+            <input type="hidden" value="<?php echo $_POST['mandalid'] ?>" name="mandal_id" id="mandalID">
+
+            <div class="row">
+               <div class="form-group col-sm-6">
+                     <label >Role Hierarachy</label>
+                     <select class="form-control" name="role_hierarchy" id="roleHierarchy">
+                     <?php (isset($officebearersList->role_hierarchy)) ? $officebearersList->role_hierarchy = $officebearersList->role_hierarchy : $officebearersList->role_hierarchy; ?>
+                        <option selected="true" disabled="disabled" value="">Please Select Category</option>
+                        <option <?php if ($officebearersList->role_hierarchy == "M" ) echo 'selected' ; ?> value="M" >Mandal</option>
+                        <option <?php if ($officebearersList->role_hierarchy == "SK" ) echo 'selected' ; ?> value="SK" >Shakti Kendram</option>
+                        <option <?php if ($officebearersList->role_hierarchy == "W" ) echo 'selected' ; ?> value="W" >Ward</option>
+                        <option <?php if ($officebearersList->role_hierarchy == "B" ) echo 'selected' ; ?> value="B" >Booth</option>
+                     </select>
+               </div>
+               <div class="form-group col-sm-6">
+                     <label >Sub Role Hierarachy</label><br>
+                     <label class="radio-inline">
+                        <input type="radio" name="sub_role_hierarchy" id="subRoleSK" value="SK"> SHAKTI KENDRAM
+                     </label>&nbsp;&nbsp;
+                     <label class="radio-inline">
+                        <input type="radio" name="sub_role_hierarchy" id="subRoleW" value="W"> WARD 
+                     </label>&nbsp;&nbsp;
+                     <label class="radio-inline">
+                        <input type="radio" name="sub_role_hierarchy" id="subRoleB" value="B"> BOOTH
+                     </label>
+               </div>
+            </div>
+            <div class="row">
+
+               <div class="col-md-3 col-lg-3" id="wardroleHierachy1">
+                  <label>Select Ward</label>
+                  <select class="form-control" id="selectWard" name="ward_id"></select>
+               </div>
+               <div class="col-md-3 col-lg-3" id="wardroleHierachy2">
+                  <label>Role Position </label>
+                  <select class="form-control showData" name="role_id"></select>
+               </div>
+
+               <div class="col-md-6 col-lg-6" id="roleHierachy">
+                  <label>Role Position </label>
+                  <select class="form-control showData" name="role_id"></select>
+               </div>
+
+               <div class="col-sm-6">
+                     <label>Member Id </label>
+                     <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                           <span class="input-group-text"><i class="fa fa-id-card"  aria-hidden="true"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="memberID" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="<?php echo $officebearersList->mobile_number ?>">                  
+                     </div>
+               </div> 
+            </div>
+            <span id="memberTable">
+            </span>            
+            <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
+         </form>
+      </div>
+</div>
+<?php } ?>
 
 
 <script>
@@ -816,6 +858,17 @@
                $('#editOfficeBearers_'+closeId).remove();
                officeBearesDetailsget(id);
                getStateUsers(id,role);
+               // $(ducument).trigger("ready");
+
+                        paramData = {'act':'fetchMandalThalaivar','id':id}; 
+                           ajax({
+                              a:"districtajax",
+                              b:paramData,
+                              c:function(){},
+                              d:function(data){
+                                 $('#mandalThalaivar').html(data);
+                              }
+                        });
                }          
          });
       }
@@ -876,7 +929,7 @@
 /*********** ADD NEW OFFICEBEARERS ****/
 
       function addofficebearers(id,distID) {
-           paramData = {'mandalid':id,'districtID':distID,'action':'add_edit_OfficeBearers'}
+           paramData = {'mandalid':id,'districtID':distID,'action':'officeBearersNew'}
             ajax({
                   a:"districtmodel",
                   b:paramData,
@@ -891,14 +944,14 @@
       $(document).ready(function() {
          var mandalID = $('#mandalID').val();
          var mainRole = $('#roleHierarchy').val();
-
+  
          paramPosition = {'act':'findrolePosition','position':mainRole,'mandalID':mandalID };
          ajax({
             a:"districtajax",
             b:paramPosition,
             c:function(){},
             d:function(data){
-               $('#showData').html(data);
+               $('.showData').html(data);
             }
          });
 
@@ -907,31 +960,47 @@
       $('#roleHierarchy').change(function() {
          var mandalID = $('#mandalID').val();
          var mainRole = $(this).val();
-
-         paramPosition = {'act':'findrolePosition','position':mainRole,'mandalID':mandalID };
+         var wardID = $('#selectWard').val();
+         
+         paramPosition = {'act':'findrolePosition','position':mainRole,'mandalID':mandalID,'wardID':wardID };
          ajax({
             a:"districtajax",
             b:paramPosition,
             c:function(){},
             d:function(data){
-               $('#showData').html(data);
+               $('.showData').html(data);
             }
          });
          if (mainRole == "M") {
             $("#subRoleSK").prop('disabled', false);
             $("#subRoleW").prop('disabled', false);
             $("#subRoleB").prop('disabled', false);
+
+            $('#roleHierachy').show();
+            $('#wardroleHierachy2').hide();
+            $('#wardroleHierachy1').hide();
+
          } else if(mainRole == "SK") {
             $("#subRoleSK").prop('disabled', true);
             $('#subRoleSK').prop('checked', false);
             $("#subRoleW").prop('disabled', false);
             $("#subRoleB").prop('disabled', false);
+
+            $('#roleHierachy').hide();
+            $('#wardroleHierachy2').show();
+            $('#wardroleHierachy1').show();
+
          } else if(mainRole == "W") {
             $("#subRoleSK").prop('disabled', true);
             $("#subRoleW").prop('disabled', true);
             $('#subRoleSK').prop('checked', false);
             $('#subRoleW').prop('checked', false);
             $("#subRoleB").prop('disabled', false);
+            
+            $('#roleHierachy').hide();
+            $('#wardroleHierachy2').show();
+            $('#wardroleHierachy1').show();
+
          } else if(mainRole == "B") {
             $("#subRoleSK").prop('disabled', true);
             $("#subRoleW").prop('disabled', true);
@@ -939,6 +1008,11 @@
             $('#subRoleSK').prop('checked', false);
             $('#subRoleW').prop('checked', false);
             $("#subRoleB").prop('checked', false);
+
+            $('#roleHierachy').show();
+            $('#wardroleHierachy2').hide();
+            $('#wardroleHierachy1').hide();
+
          }
       });
    
@@ -981,10 +1055,46 @@
          });
       }
    
-/*********** CLOSE MEMBER EDIT CARD ******/
+/*********** CLOSE MEMBER EDIT CARD ***/
 
    function closeMemberCard(id){
          $('#editOfficeBearers_'+id).hide();
    }
+
+/*********** GET MANDAL THALAIVAR *****/
+   $(document).ready(function() {
+      var id = $('#getMandalid').val();
+      paramData = {'act':'fetchMandalThalaivar','id':id}; 
+         ajax({
+            a:"districtajax",
+            b:paramData,
+            c:function(){},
+            d:function(data){
+               $('#mandalThalaivar').html(data);
+            }
+      });
+
+
+   });
+
+/*********** GET WARD INCHARCE ********/
+
+   $(document).ready(function() {
+      var id = $('#getMandalid').val();
+
+      $('#roleHierachy').show();
+      $('#wardroleHierachy2').hide();
+      $('#wardroleHierachy1').hide();
+
+      paramData = {'act':'wardincharge','mandalID':id }; 
+         ajax({
+            a:"districtajax",
+            b:paramData,
+            c:function(){},
+            d:function(data){
+               $('#selectWard').html(data);
+            }
+      });
+   });
 
 </script>
