@@ -18,8 +18,8 @@
                   </div>
                   <div class="col-md-6">    
                       <div class="input-group mb-3">
-                          <span class="input-group-text"><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                          <input type="text" class="form-control" name="email_address" placeholder="Your Email" value="'.$member_list->member_email_address.'">
+                          <span class="input-group-text"><i class="fa fa-user" aria-hidden="true"></i></span>
+                          <input type="text" class="form-control" name="person_name_ta" placeholder="Your Name In Tamil" value="'.$member_list->person_name_ta.'">
                           <div class="input-group-append">
                           </div>
                       </div>

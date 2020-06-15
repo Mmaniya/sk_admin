@@ -45,7 +45,7 @@
       <!-- Modal -->
       <div class="modal fade" id="myModal" role="dialog">
          <div class="modal-dialog">
-            <span id="modelview">
+            <span id="modelview"></span>
          </div>
       </div>
    </div>

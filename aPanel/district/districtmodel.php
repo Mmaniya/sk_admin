@@ -59,6 +59,7 @@
       </form>
    </div>
 </div>
+
 <!-- 2. DELETE MODEL DATA -->
 <?php } else if ($modelAction == 'delete'){ ?>
 <div class="modal-content">
@@ -81,6 +82,7 @@
       </div>
    </form>
 </div>
+
 <!-- 3. RESTORE MODEL DATA -->
 <?php } else if ($modelAction == 'restore'){ ?>
 <div class="modal-content">
@@ -103,6 +105,7 @@
       </div>
    </form>
 </div>
+
 <!-- 3. ALERT BOX MODEL  ---->
 <?php } else if ($modelAction == 'alertBox'){ ?>
 <div class="modal-content">
@@ -117,6 +120,7 @@
    </div>
    </form>
 </div>
+
 <!-- 5. ADD NEW MANDAL DATA -->
 <?php } else if ($modelAction == 'addnewmandal') { ?>
 <div class="modal-content">
@@ -182,6 +186,7 @@
       </form>
    </div>
 </div>
+
 <!-- 6. DISTRICT DETAILS SHOW -->
 <?php } else if ($modelAction == 'districtCard') { 
   $district = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_id ) as position,(select role_name from '.TBL_BJP_ROLE.' where id = role_id ) as rolename from '.TBL_BJP_OFFICE_BEARERS.' where `district_id`="'.$modelId.'" AND `role_hierarchy` ="D" AND `status`="A"';
@@ -483,6 +488,7 @@
       </div>
    </div>
 </div>
+
 <!-- 8. ADD NEW WARD -->
 <?php } else if ($modelAction == 'addnewWard') { 
 
@@ -650,7 +656,7 @@
                         <div class="input-group-prepend">
                            <span class="input-group-text"><i class="fa fa-id-card"  aria-hidden="true"></i></span>
                         </div>
-                        <input type="text" class="form-control" id="memberID" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID">                  
+                        <input type="text" class="form-control" id="memberID" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="<?php echo $officebearersList->mobile_number ?>">                  
                      </div>
                </div> 
             </div>
@@ -660,9 +666,10 @@
             <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
          </form>
       </div>
-   </div>
+</div>
+<?php }  ?>
 
-<?php } ?>
+
 <script>
 /************* FORM SUBMIT ************/
    /* 1. Add Edit District Form */
@@ -881,6 +888,21 @@
       };
 
 /*********** MAIN ROLE HIERARCHY   ****/
+      $(document).ready(function() {
+         var mandalID = $('#mandalID').val();
+         var mainRole = $('#roleHierarchy').val();
+
+         paramPosition = {'act':'findrolePosition','position':mainRole,'mandalID':mandalID };
+         ajax({
+            a:"districtajax",
+            b:paramPosition,
+            c:function(){},
+            d:function(data){
+               $('#showData').html(data);
+            }
+         });
+
+      });
 
       $('#roleHierarchy').change(function() {
          var mandalID = $('#mandalID').val();
@@ -892,13 +914,7 @@
             b:paramPosition,
             c:function(){},
             d:function(data){
-               // alert(data);
-               // if(data.trim() != '') {
-                  $('#showData').html(data);
-               // }  
-               // if(data.trim() == '') {
-               //    $('#showData').html('<option selected="true" disabled="disabled" value="">Please Select Position</option>');
-               // }
+               $('#showData').html(data);
             }
          });
          if (mainRole == "M") {
@@ -907,16 +923,22 @@
             $("#subRoleB").prop('disabled', false);
          } else if(mainRole == "SK") {
             $("#subRoleSK").prop('disabled', true);
+            $('#subRoleSK').prop('checked', false);
             $("#subRoleW").prop('disabled', false);
             $("#subRoleB").prop('disabled', false);
          } else if(mainRole == "W") {
             $("#subRoleSK").prop('disabled', true);
             $("#subRoleW").prop('disabled', true);
+            $('#subRoleSK').prop('checked', false);
+            $('#subRoleW').prop('checked', false);
             $("#subRoleB").prop('disabled', false);
          } else if(mainRole == "B") {
             $("#subRoleSK").prop('disabled', true);
             $("#subRoleW").prop('disabled', true);
             $("#subRoleB").prop('disabled', true);
+            $('#subRoleSK').prop('checked', false);
+            $('#subRoleW').prop('checked', false);
+            $("#subRoleB").prop('checked', false);
          }
       });
    
@@ -962,7 +984,7 @@
 /*********** CLOSE MEMBER EDIT CARD ******/
 
    function closeMemberCard(id){
-         $('#editOfficeBearers_'+id).remove();
+         $('#editOfficeBearers_'+id).hide();
    }
 
 </script>

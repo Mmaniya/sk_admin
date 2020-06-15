@@ -198,7 +198,7 @@
             // $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $_POST['id'].'-INT','role_hierarchy'=>$_POST['role'].'-CHAR'),'orderby' => 'id', 'showSql' => 'N');
             // $stateMembersList = Table::getData($stateMembers); 
 
-            $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['id'].'" AND `role_hierarchy` ="'.$_POST['role'].'" ORDER BY id DESC';
+           $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['id'].'" AND `role_hierarchy` ="'.$_POST['role'].'" AND `status`="A" ORDER BY id DESC';
             $stateMembersList=dB::mExecuteSql($qry); 
 
             if ($_POST['page'] == '') $page = 1;
@@ -216,7 +216,7 @@
         ob_clean();  
             // $stateMembers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('mandal_id' => $_POST['mandalId'].'-INT','role_hierarchy'=>$_POST['role'].'-CHAR'),'orderby' => 'id', 'showSql' => 'N');
             // $stateMembersList = Table::getData($stateMembers); 
-            $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['mandalId'].'" AND `role_hierarchy` ="'.$_POST['role'].'" ORDER BY id DESC';
+             $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['mandalId'].'" AND `role_hierarchy` ="'.$_POST['role'].'" AND `status`="A" ORDER BY id DESC';
             $stateMembersList=dB::mExecuteSql($qry);
 
             if ($_POST['page'] == '') $page = 1;
@@ -262,7 +262,7 @@
             <option value="" selected="true" disabled="disabled">Please Select Position</option>
         <?php
          foreach($hierarchy_list as $key=>$value) {            
-            $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_position'=>$value->role_abbr.'-CHAR','role_hierarchy'=>$hierarchy.'-CHAR','mandal_id'=>$mandalID.'-INT'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+            $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_position'=>$value->role_abbr.'-CHAR','role_hierarchy'=>$hierarchy.'-CHAR','mandal_id'=>$mandalID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
             $ob_list = Table::getData($param);
             $ob_count = count($ob_list); 
             if($ob_count<$value->no_of_roles) {  ?>    
@@ -307,10 +307,10 @@
     if ($_POST['act'] == 'addNewOfficeBearers') {
         ob_clean();
 
-        $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-CHAR'),'showSql'=>'N','sortby'=>'desc');
+        $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-CHAR','status'=>'A-CHAR'),'showSql'=>'Y','sortby'=>'desc');
         $role_list = Table::getData($query);
 
-         $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','person_name','mobile_number','address','email_address','is_verified');
+         $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
         foreach($paramsOB as $key => $Val) {
             $param[$Val] = $$Val = check_input($_POST[$Val]);
         }
@@ -362,6 +362,19 @@
             $StartIndex = ($page - 1) * PAGE_LIMIT;
             if (count($wardFullDetails) > 0) $ListingParentCatListArr = array_slice($wardFullDetails, $StartIndex, PAGE_LIMIT, true);
             include 'districtcompletewardetails.php';
+        exit();
+    }
+
+/********* 15. DELETE OFFICE BEARERS *************/
+
+    if($_POST['act'] == 'delete_member'){
+        ob_clean();
+        $param['status'] = 'I';
+        $param['updated_date'] = date('Y-m-d H:i:s', time());
+        $param['updated_by'] = $_SESSION['user_id'];
+        $where = array('id' => $_POST['id']);
+        $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'Y'));
+        echo $rsDtls;
         exit();
     }
 ?>

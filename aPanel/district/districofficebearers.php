@@ -11,8 +11,8 @@ $getMandalId = $_POST['id'];
 <table class="table table-hover" style="border: 2px solid #eee;" >
    <thead class="bg-primary text-white">
       <tr>
-         <th scope="col">State Office Bearers</th>
-         <th scope="col">District Office Bearers</th>
+         <!-- <th scope="col">State Office Bearers</th> -->
+         <!-- <th scope="col">District Office Bearers</th> -->
          <th scope="col">Mandal Office Bearers</th>
          <th scope="col">Ward Office Bearers</th>
          <th scope="col">SK Office Bearers</th>
@@ -41,8 +41,8 @@ $getMandalId = $_POST['id'];
 
       ?>	
       <tr align="center">
-         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'S')"><?php  echo count($mainRoleS); ?></a></td>
-         <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'D')"><?php  echo count($mainRoleD); ?></a></td>
+         <!-- <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php // echo $_POST['id']?>,'S')"><?php // echo count($mainRoleS); ?></a></td> -->
+         <!-- <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php // echo $_POST['id']?>,'D')"><?php // echo count($mainRoleD); ?></a></td> -->
          <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'M')"><?php  echo count($mainRoleM); ?></a></td>
          <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'W')"><?php  echo count($mainRoleW); ?></a></td>
          <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateUsers(<?php  echo $_POST['id']?>,'SK')"><?php echo count($mainRoleSK); ?></a></td>
