@@ -32,4 +32,5 @@ define("TBL_BJP_WARD_SCHEMES","bjp_ward_schemes");
 define("TBL_BJP_SK","bjp_sk");
 define('TBL_BJP_APP_VERSION','bjp_app_version');
 define('TBL_BJP_NOTIFICATION','bjp_notification');
+define('TBL_MEMBER_BASE_URL','../../images/member/');
 ?>

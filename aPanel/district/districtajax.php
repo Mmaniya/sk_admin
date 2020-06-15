@@ -274,7 +274,7 @@
         ob_clean();
         $search = $_POST['search']; 
         $mandal = $_POST['mandal']; 
-        $qry = 'select * from '.TBL_BJP_MEMBER.' where ((member_name like "%'.$search.'%") or (member_mobile like "%'.$search.'%") or (membership_number like "%'.$search.'%")) and (mandal_id = '.$mandal.') limit 20';
+       $qry = 'select * from '.TBL_BJP_MEMBER.' where ((member_name like "%'.$search.'%") or (member_mobile like "%'.$search.'%") or (membership_number like "%'.$search.'%")) and (mandal_id = '.$mandal.') limit 20';
         $rsMembers=dB::mExecuteSql($qry); 
         if(count($rsMembers)>0) {
           foreach($rsMembers as $key=>$val) {

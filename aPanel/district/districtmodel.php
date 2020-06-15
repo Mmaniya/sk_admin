@@ -184,7 +184,7 @@
 </div>
 <!-- 6. DISTRICT DETAILS SHOW -->
 <?php } else if ($modelAction == 'districtCard') { 
-   $district = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_position ) as position from '.TBL_BJP_OFFICE_BEARERS.' where `district_id`="'.$modelId.'" AND `role_hierarchy` ="D" AND `status`="A"';
+ $district = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_position ) as position from '.TBL_BJP_OFFICE_BEARERS.' where `district_id`="'.$modelId.'" AND `role_hierarchy` ="D" AND `status`="A"';
    $distpresitent = dB::mExecuteSql($district);
    foreach($distpresitent as $K=>$V){
    if($V->position == 'DP'){                           
@@ -197,7 +197,11 @@
                <h4><?php echo $V->mobile_number ?></h4>  
             </div> 
             <div class="col-sm-2">
-               <img  src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-user-vector-avatar-png-image_4830521.jpg" height="100" weight="30" alt="Mandal President">
+               <?php  
+                    $mem = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('id' => $V->member_id.'-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
+                    $memberquery = Table::getData($mem);
+               ?>
+               <img  src="<?php echo TBL_MEMBER_BASE_URL ?><?php echo $memberquery->member_photo ?>" height="100" weight="30" alt="District President">
             </div>                                      
          </div>
       </div>
@@ -324,8 +328,12 @@
                            <h4><?php echo $V->mobile_number ?></h4>  
                         </div> 
                         <div class="col-sm-2">
-                           <img  src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-user-vector-avatar-png-image_4830521.jpg" height="100" weight="30" alt="Mandal President">
-                        </div>                                      
+                           <?php  
+                              $mem = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('id' => $V->member_id.'-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
+                              $memberquery = Table::getData($mem);
+                           ?>
+                           <img  src="<?php echo TBL_MEMBER_BASE_URL ?><?php echo $memberquery->member_photo ?>" height="100" weight="30" alt="Mandal President">
+                        </div>                                  
                      </div>
                   </div>
                </div>
@@ -600,14 +608,23 @@
                      </select>
                </div>
                <div class="form-group col-sm-6">
-                     <label >Sub Role Hierarachy</label>
-                     <select class="form-control" name="sub_role_hierarchy" id="subRole">
-                     <?php (isset($officebearersList->sub_role_hierarchy)) ? $officebearersList->sub_role_hierarchy =$officebearersList->sub_role_hierarchy : $officebearersList->sub_role_hierarchy; ?>
+                     <label >Sub Role Hierarachy</label><br>
+                     <label class="radio-inline">
+                        <input type="radio" name="sub_role_hierarchy" id="subRoleSK"> SHAKTI KENDRAM
+                     </label>&nbsp;&nbsp;
+                     <label class="radio-inline">
+                        <input type="radio" name="sub_role_hierarchy" id="subRoleW"> WARD 
+                     </label>&nbsp;&nbsp;
+                     <label class="radio-inline">
+                        <input type="radio" name="sub_role_hierarchy" id="subRoleB"> BOOTH
+                     </label>
+                     <!-- <select class="form-control" name="sub_role_hierarchy" id="subRole">
+                     <?php // (isset($officebearersList->sub_role_hierarchy)) ? $officebearersList->sub_role_hierarchy =$officebearersList->sub_role_hierarchy : $officebearersList->sub_role_hierarchy; ?>
                         <option selected="true" disabled="disabled" value="">Please Select Category</option>
-                        <option <?php if ($officebearersList->sub_role_hierarchy == "SK" ) echo 'selected' ; ?> value="SK" >Shakti Kendram</option>
-                        <option <?php if ($officebearersList->sub_role_hierarchy == "W" ) echo 'selected' ; ?> value="W" >Ward</option>
-                        <option <?php if ($officebearersList->sub_role_hierarchy == "B" ) echo 'selected' ; ?> value="B" >Booth</option>
-                     </select>
+                        <option <?php // if ($officebearersList->sub_role_hierarchy == "SK" ) echo 'selected' ; ?> value="SK" >Shakti Kendram</option>
+                        <option <?php // if ($officebearersList->sub_role_hierarchy == "W" ) echo 'selected' ; ?> value="W" >Ward</option>
+                        <option <?php // if ($officebearersList->sub_role_hierarchy == "B" ) echo 'selected' ; ?> value="B" >Booth</option>
+                     </select> -->
                </div>
             </div>
             <div class="row">
@@ -872,23 +889,22 @@
                }
             }
          });
-         if (mainRole == "SK") {
-            $("#subRole").attr('disabled', false);
-            $("#subRole").not(this).find("option[value=SK]").attr('disabled', true);
-            $("#subRole").not(this).find("option[value=W]").attr('disabled', false);
-            $("#subRole").not(this).find("option[value=B]").attr('disabled', false);
-         } else if(mainRole == "M") {
-            $("#subRole").attr('disabled', false);
-            $("#subRole").not(this).find("option[value=SK]").attr('disabled', false);
-            $("#subRole").not(this).find("option[value=W]").attr('disabled', false);
-            $("#subRole").not(this).find("option[value=B]").attr('disabled', false);
+         if (mainRole == "M") {
+            $("#subRoleSK").prop('disabled', false);
+            $("#subRoleW").prop('disabled', false);
+            $("#subRoleB").prop('disabled', false);
+         } else if(mainRole == "SK") {
+            $("#subRoleSK").prop('disabled', true);
+            $("#subRoleW").prop('disabled', false);
+            $("#subRoleB").prop('disabled', false);
          } else if(mainRole == "W") {
-            $("#subRole").attr('disabled', false);
-            $("#subRole").not(this).find("option[value=SK]").prop('disabled', true);
-            $("#subRole").not(this).find("option[value=W]").prop('disabled', true);
-            $("#subRole").not(this).find("option[value=B]").prop('disabled', false);
+            $("#subRoleSK").prop('disabled', true);
+            $("#subRoleW").prop('disabled', true);
+            $("#subRoleB").prop('disabled', false);
          } else if(mainRole == "B") {
-            $("#subRole").attr('disabled', true);
+            $("#subRoleSK").prop('disabled', true);
+            $("#subRoleW").prop('disabled', true);
+            $("#subRoleB").prop('disabled', true);
          }
       });
    
