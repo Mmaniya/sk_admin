@@ -45,15 +45,15 @@
          if( count($ListingParentCatListArr)>0) {
          	$i = 1;
                foreach($ListingParentCatListArr as $key=>$value) {
-                $skquery = array('tableName' => TBL_BJP_SK, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N');
+                $skquery = array('tableName' => TBL_BJP_SK, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N');
                 $sk_list = Table::getData($skquery);
-                $boothquery = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N');
+                $boothquery = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N');
                 $booth_list = Table::getData($boothquery);
-                $memberquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N');
+                $memberquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N');
                 $member_list = Table::getData($memberquery);
-                $verifiedquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','is_verified'=>'Y-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
+                $verifiedquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','is_verified'=>'Y-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
                 $verifiedmember = Table::getData($verifiedquery); 
-                $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'n');
+                $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'n');
                 $officeberasList = Table::getData($officebearers);                 
          	?>	
       <tr align="center">

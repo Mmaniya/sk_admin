@@ -184,7 +184,7 @@
 </div>
 <!-- 6. DISTRICT DETAILS SHOW -->
 <?php } else if ($modelAction == 'districtCard') { 
- $district = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_position ) as position from '.TBL_BJP_OFFICE_BEARERS.' where `district_id`="'.$modelId.'" AND `role_hierarchy` ="D" AND `status`="A"';
+  $district = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_id ) as position,(select role_name from '.TBL_BJP_ROLE.' where id = role_id ) as rolename from '.TBL_BJP_OFFICE_BEARERS.' where `district_id`="'.$modelId.'" AND `role_hierarchy` ="D" AND `status`="A"';
    $distpresitent = dB::mExecuteSql($district);
    foreach($distpresitent as $K=>$V){
    if($V->position == 'DP'){                           
@@ -195,13 +195,18 @@
             <div class="col-sm-10">               
                <h4><?php echo $V->person_name; echo '('; echo $V->person_name_ta; echo ')'; ?></h4>
                <h4><?php echo $V->mobile_number ?></h4>  
+               <h4 class="mytextcolor"><?php echo $V->rolename ?></h4>  
             </div> 
             <div class="col-sm-2">
                <?php  
-                    $mem = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('id' => $V->member_id.'-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
+                   $mem = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('id' => $V->member_id.'-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
                     $memberquery = Table::getData($mem);
-               ?>
-               <img  src="<?php echo TBL_MEMBER_BASE_URL ?><?php echo $memberquery->member_photo ?>" height="100" weight="30" alt="District President">
+                    if($memberquery->member_photo != ''){
+                     ?>               
+                     <img  src="<?php echo TBL_MEMBER_BASE_URL ?><?php echo $memberquery->member_photo ?>" height="100" weight="30" alt="District President">
+                    <?php } else { ?>
+                     <img  src="../assets/images/user.jpg" height="100" weight="30" alt="District President">
+                  <?php } ?>
             </div>                                      
          </div>
       </div>
@@ -315,7 +320,7 @@
                <div class="col-md-12">
                <input type="hidden" value="<?php echo $mandal_list->id ?>" id="getMandalid">  
                <?php
-               $mandal = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_id ) as position from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$mandal_list->id.'" AND `role_hierarchy` ="M" AND `status`="A"';
+               $mandal = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_id ) as position, (select role_name from '.TBL_BJP_ROLE.' where id = role_id ) as rolename from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$mandal_list->id.'" AND `role_hierarchy` ="M" AND `status`="A"';
                $Mincharge = dB::mExecuteSql($mandal);
                foreach($Mincharge as $K=>$V){
                if($V->position == 'MP'){                           
@@ -325,14 +330,20 @@
                      <div class="card-body row"> 
                         <div class="col-sm-10">               
                            <h4><?php echo $V->person_name; echo '('; echo $V->person_name_ta; echo ')'; ?></h4>
-                           <h4><?php echo $V->mobile_number ?></h4>  
+                           <h4><?php echo $V->mobile_number ?></h4> 
+                           <h4 class="mytextcolor"><?php echo $V->rolename ?></h4>   
                         </div> 
                         <div class="col-sm-2">
                            <?php  
-                              $mem = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('id' => $V->member_id.'-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
-                              $memberquery = Table::getData($mem);
-                           ?>
-                           <img  src="<?php echo TBL_MEMBER_BASE_URL ?><?php echo $memberquery->member_photo ?>" height="100" weight="30" alt="Mandal President">
+                              $mandal_member = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('id' => $V->member_id.'-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
+                              $mandal_member_list = Table::getData($mandal_member);
+
+                              if($mandal_member_list->member_photo != ''){
+                                 ?>               
+                                 <img  src="<?php echo TBL_MEMBER_BASE_URL ?><?php echo $mandal_member_list->member_photo ?>" height="100" weight="30" alt="Mandal President">
+                                <?php } else { ?>
+                                 <img  src="../assets/images/user.jpg" height="100" weight="30" alt="District President">
+                              <?php } ?>
                         </div>                                  
                      </div>
                   </div>
@@ -610,13 +621,13 @@
                <div class="form-group col-sm-6">
                      <label >Sub Role Hierarachy</label><br>
                      <label class="radio-inline">
-                        <input type="radio" name="sub_role_hierarchy" id="subRoleSK"> SHAKTI KENDRAM
+                        <input type="radio" name="sub_role_hierarchy" id="subRoleSK" value="SK"> SHAKTI KENDRAM
                      </label>&nbsp;&nbsp;
                      <label class="radio-inline">
-                        <input type="radio" name="sub_role_hierarchy" id="subRoleW"> WARD 
+                        <input type="radio" name="sub_role_hierarchy" id="subRoleW" value="W"> WARD 
                      </label>&nbsp;&nbsp;
                      <label class="radio-inline">
-                        <input type="radio" name="sub_role_hierarchy" id="subRoleB"> BOOTH
+                        <input type="radio" name="sub_role_hierarchy" id="subRoleB" value="B"> BOOTH
                      </label>
                      <!-- <select class="form-control" name="sub_role_hierarchy" id="subRole">
                      <?php // (isset($officebearersList->sub_role_hierarchy)) ? $officebearersList->sub_role_hierarchy =$officebearersList->sub_role_hierarchy : $officebearersList->sub_role_hierarchy; ?>
@@ -881,12 +892,13 @@
             b:paramPosition,
             c:function(){},
             d:function(data){
-               if(data.trim() != '') {
+               // alert(data);
+               // if(data.trim() != '') {
                   $('#showData').html(data);
-               }  
-               if(data.trim() == '') {
-                  $('#showData').html('<option selected="true" disabled="disabled" value="">Please Select Position</option>');
-               }
+               // }  
+               // if(data.trim() == '') {
+               //    $('#showData').html('<option selected="true" disabled="disabled" value="">Please Select Position</option>');
+               // }
             }
          });
          if (mainRole == "M") {
