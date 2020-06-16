@@ -25,7 +25,7 @@
                <div class="card-body">
                <span class ="row" id="getTotalData" >
                   <input type="inputvalue" id="inputvalue" class="form-control card-margin col-sm-2" placeholder="Search District Here.." />
-                  <h5 class="col-sm-5 offset-sm-4 mytextcolor" >TOTAL ACTIVE DISTRICT : <?php
+                  <h5 class="offset-sm-6 mytextcolor" >TOTAL ACTIVE DISTRICT : <?php
                   $param = array('tableName' => TBL_BJP_DISTRICT, 'fields' => array('*'),'condition'  =>array('status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
                   $district_list = Table::getData($param);
                   echo $TotalCount = count($district_list);

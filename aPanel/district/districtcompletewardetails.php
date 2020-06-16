@@ -45,6 +45,7 @@
                     <th>Role Hierarchy</th>
                     <th>address</th>
                     <th>Verified</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,11 +57,14 @@
                     ?>
                 <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php echo $val->person_name ?> (<?php echo $val->person_name_ta ?>)</td>
+                    <td><?php echo $val->person_name; if($val->person_name_ta !=''){ ?>(<?php echo $val->person_name_ta ?>)<?php } ?></td>
                     <td><?php echo $val->mobile_number ?></td>
                     <td><?php switch($val->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?></td>
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
+                    <!-- <td><a href="javascript:void(0)" id="<?php echo $val->id ?>" onclick="removeofficbearers(this->id)"><i class="fa fa-trash"></i></a></td> -->
+                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target="#deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+
                 </tr>    
             <?php $i ++;} } ?>      
             </tbody>    
@@ -86,7 +90,7 @@
                     ?>
                 <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php echo $val->person_name ?> (<?php echo $val->person_name_ta ?>)</td>
+                    <td><?php echo $val->person_name; if($val->person_name_ta !=''){ ?>(<?php echo $val->person_name_ta ?>)<?php } ?></td>
                     <td><?php echo $val->mobile_number ?></td>
                     <td><?php switch($val->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?></td>
                     <td><?php echo $val->address ?></td>
@@ -169,6 +173,15 @@
 </tr>
 <?php } echo $table_val; ?>
 
+
+<!-- Modal -->
+        <div class="modal fade" id="deleteModel" role="dialog">
+            <div class="modal-dialog">
+                <span id="modelshow"></span>
+            </div>
+        </div>
+
+
 <script>
 $(document).ready(function() {
     $('.wardDetails').DataTable( {
@@ -177,4 +190,16 @@ $(document).ready(function() {
         "paging":         false
     } );
 } );
+function removeofficbearers(id){
+    var wardId = $('#officeBearersId').val();
+    paramData = {'ofid':id,'action':'deleteOfficeBearers','ward':wardId}
+            ajax({
+                  a:"districtmodel",
+                  b:paramData,
+                  c:function(){},
+                  d:function(data){
+                     $('#modelshow').html(data);
+                  }
+            });   
+}
 </script>

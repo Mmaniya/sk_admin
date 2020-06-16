@@ -46,8 +46,7 @@
       </span>
       <span class="col-sm-5">
       <?php $param = array('tableName'=>TBL_BJP_MEMBER,'fields'=>array('*'),'condition'=>array('id'=>$value->member_id.'-INT','status'=>'A-CHAR'),'showSql'=>'N','sortby'=>'asc');
-         $member_list = Table::getData($param);
-         
+         $member_list = Table::getData($param);         
          if($member_list->membership_number != ''){ ?>
       <label>Membership Number : <?php echo $member_list->membership_number; ?> </label><br>
       <?php } if($value->role_hierarchy != ''){ ?>
@@ -62,6 +61,15 @@
          echo $roleMembersList->role_name;
          ?></span>
       </label><br>
+         <?php // echo $value->ward_id ?>
+      <!-- <label> Role Position: <span class="mytextcolor">
+      <?php  
+         // $roleMembers = array('tableName' => TBL_BJP_ROLE, 'fields' => array('*'),'condition' => array('id' => $value->role_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
+         // $roleMembersList = Table::getData($roleMembers);
+         // echo $roleMembersList->role_name;
+         ?></span>
+      </label><br> -->
+
       <?php } ?>
       <a href="javascript:void(0)" style="float:right;color:orange"  onClick="editofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a><br>
       <a href="javascript:void(0)" style="float:right;color:red"  onClick="deleteofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
@@ -117,7 +125,7 @@
 
    function deleteofficebearers(id) {
 
-      paramData = {'id':id,'act':'delete_member'}
+      paramData = {'id':id,'act':'statusDataUpdateforOB'}
             ajax({
                   a:"districtajax",
                   b:paramData,
