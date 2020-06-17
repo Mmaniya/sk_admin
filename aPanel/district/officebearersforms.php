@@ -4,7 +4,7 @@
 
 <?php if($_POST['action'] == 'M'){ ?>
     <form action="javascript:void(0)" id="formDataddNewOb" method="POST">
-    <input type="hidden" value="addNewOfficeBearers" name="act">
+    <input type="hidden" value="addNewOfficeBearersMandal" name="act">
     <input type="hidden" value="1" name="state_id">
     <input type="hidden" value="<?php  echo $_POST['District'] ?>" name="district_id">
     <input type="hidden" value="<?php  echo $_POST['Mandal'] ?>" name="mandal_id" id="mandalID"> 
@@ -124,6 +124,42 @@
     </form>
 
 <?php } else if($_POST['action'] == 'B'){?>
+
+    <form action="javascript:void(0)" id="formDataddNewOb" method="POST">
+    <input type="hidden" value="addNewOfficeBearersBooth" name="act">
+    <input type="hidden" value="1" name="state_id">
+    <input type="hidden" value="<?php  echo $_POST['District'] ?>" name="district_id">
+    <input type="hidden" value="<?php  echo $_POST['Mandal'] ?>" name="mandal_id" id="mandalID"> 
+    <input type="hidden" value="<?php  echo $_POST['action'] ?>" name="role_hierarchy" id="roleHierarchy"> 
+    <div class="row">
+        <div class="form-group col-sm-6" id="roleHierachy">
+            <label>Role Position </label>
+            <select class="form-control showData" name="role_id" readonly></select>
+        </div>   
+        <div class="form-group col-sm-6">
+        <label>Select Ward</label><br>
+        <select class="form-control" id="selectWard" name="ward_id"></select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-lg-6">
+        <label>Select Booth</label><br>
+        <select  class="form-control" id="selectBooth" name="booth_id"></select>
+        </div>
+        <div class="col-sm-6 col-lg-6">
+            <label>Member Id </label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-id-card"  aria-hidden="true"></i></span>
+                </div>
+                <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="">                  
+            </div>
+        </div>
+    </div>
+    <span id="memberTable"></span>            
+    <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
+    </form>
+
 <?php } ?>
 <script>
 

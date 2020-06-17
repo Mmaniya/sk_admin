@@ -249,29 +249,33 @@
 
     if($_POST['act']=='findrolePosition'){
         ob_clean();
+
         $hierarchy = $_POST['position'];
         $mandalID = $_POST['mandalID'];
         $wardID = $_POST['wardID'];
         $option = explode(",", $_POST['roleoption']);   
-        $param = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('role_hierarchy'=>$hierarchy.'-CHAR'),'showSql'=>'Y','orderby'=>'position','sortby'=>'desc');
+        $param = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('role_hierarchy'=>$hierarchy.'-CHAR'),'showSql'=>'N','orderby'=>'position','sortby'=>'desc');
         $hierarchy_list = Table::getData($param);?>
-             <!-- <option value="" selected="true" disabled="disabled">Please Select Position</option> -->
          <?php
          foreach($hierarchy_list as $key=>$value) {  
-            // $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `role_hierarchy` ="'.$hierarchy.'" AND `role_id`="'.$value->id.'" AND `status`="A" AND `mandal_id`="'.$mandalID.'" OR `ward_id`="'.$wardID.'"  ORDER BY id DESC';
-            // $ob_list=dB::mExecuteSql($qry); 
             if($wardID = $_POST['wardID'] != ''){
             $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_id'=>$value->id.'-INT','role_hierarchy'=>$hierarchy.'-CHAR','mandal_id'=>$mandalID.'-INT','ward_id'=>$wardID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
             } else {
-                $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_id'=>$value->id.'-INT','role_hierarchy'=>$hierarchy.'-CHAR','mandal_id'=>$mandalID.'-INT','status'=>'A-CHAR'),'showSql'=>'Y','orderby'=>'id','sortby'=>'desc');
+                $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_id'=>$value->id.'-INT','role_hierarchy'=>$hierarchy.'-CHAR','mandal_id'=>$mandalID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
             }
+
             $ob_list = Table::getData($param);
-            // $ob_count = count($ob_list); 
-           // if($ob_count<$value->no_of_roles) {  ?>    
+            // print_r($ob_list);
+            // foreach($ob_list as $key=>$value){
+            // echo $value->role_position;}
+
+            $ob_count = count($ob_list); 
+           if($ob_count<$value->no_of_roles) {  ?>    
                 <option <?php   if(in_array($value->position, $option)) echo 'selected="selected"'; ?>  value="<?php  echo $value->id; ?>" ><?php  echo $value->role_name; ?></option>
           <?php } 
-          // }
+          }
           exit();
+
     } 
 /********* 13.GET MEMBER DETAILS**************/
 
@@ -306,84 +310,151 @@
         exit();
       }
 /********* 14.ADD OFFICE BEARERS *************/
-    /* 1. add office bearesr ward */
-    if ($_POST['act'] == 'addNewOfficeBearersWard') {
-        ob_clean();
+    /* 1. add office bearesr Mandal */
+        if ($_POST['act'] == 'addNewOfficeBearersMandal') {
+            ob_clean();
 
-        $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$_POST['ward_id'].'-INT','role_hierarchy'=>$_POST['role_hierarchy'].'-CHAR','mandal_id'=>$_POST['mandal_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
-        $ob_row = Table::getData($param);
+            $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
+            $role_list = Table::getData($query);
 
-        if($ob_row == ''){
-
-        $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
-        $role_list = Table::getData($query);
-
-        $param=array();
-         $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
-        foreach($paramsOB as $key => $Val) {
-            $param[$Val] = $$Val = check_input($_POST[$Val]);
+            $param=array();
+            $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
+            foreach($paramsOB as $key => $Val) {
+                $param[$Val] = $$Val = check_input($_POST[$Val]);
+            }
+            if ($_POST['id'] == '') {
+                $param['role_position'] =  $role_list->role_abbr;
+                $param['added_by'] = $_SESSION['user_id'];
+                $param['added_date'] = date('Y-m-d H:i:s', time());
+                $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
+                echo $result = '<p style="color:green;">New '.$role_list->role_name.' Created.</p>';
+            } else {
+                $param['role_position'] =  $role_list->role_abbr;
+                $param['updated_date'] = date('Y-m-d H:i:s', time());
+                $param['updated_by'] = $_SESSION['user_id'];
+                $where = array('id' => $_POST['id']);
+                $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
+                echo $result = '<p style="color:red;">'.$role_list->role_name.' Update</p>';
+            }
+   
+            exit();
         }
-        if ($_POST['id'] == '') {
-            $param['role_position'] =  $role_list->role_abbr;
-            $param['added_by'] = $_SESSION['user_id'];
-            $param['added_date'] = date('Y-m-d H:i:s', time());
-            $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
-            echo $result = '<p style="color:green;">New Office Bearers Created.</p>';
-        } else {
-            $param['role_position'] =  $role_list->role_abbr;
-            $param['updated_date'] = date('Y-m-d H:i:s', time());
-            $param['updated_by'] = $_SESSION['user_id'];
-            $where = array('id' => $_POST['id']);
-            $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
-            echo $result = '<p style="color:red;">Office Bearers Update</p>';
-        }
-        } else {
-            echo $result = '<p style="color:red;">Ward Incharge Allready Exist</p>';
-        }
-        exit();
-    }
 
-    /* 2 add office bearers shakti kendram */
-    if ($_POST['act'] == 'addNewOfficeBearersSK') {
-        ob_clean();
+    /* 2. add office bearesr ward */
+        if ($_POST['act'] == 'addNewOfficeBearersWard') {
+            ob_clean();
 
-        foreach ( $_POST['booth_id'] as $key => $value) {
-            $booth_id = implode(',', $_POST['booth_id']);
+            $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$_POST['ward_id'].'-INT','role_hierarchy'=>$_POST['role_hierarchy'].'-CHAR','mandal_id'=>$_POST['mandal_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
+            $ob_row = Table::getData($param);
+
+            if($ob_row == ''){
+
+            $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
+            $role_list = Table::getData($query);
+
+            $param=array();
+            $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
+            foreach($paramsOB as $key => $Val) {
+                $param[$Val] = $$Val = check_input($_POST[$Val]);
+            }
+            if ($_POST['id'] == '') {
+                $param['role_position'] =  $role_list->role_abbr;
+                $param['added_by'] = $_SESSION['user_id'];
+                $param['added_date'] = date('Y-m-d H:i:s', time());
+                $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
+                echo $result = '<p style="color:green;">New '.$role_list->role_name.' Created.</p>';
+            } else {
+                $param['role_position'] =  $role_list->role_abbr;
+                $param['updated_date'] = date('Y-m-d H:i:s', time());
+                $param['updated_by'] = $_SESSION['user_id'];
+                $where = array('id' => $_POST['id']);
+                $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
+                echo $result = '<p style="color:green;">'.$role_list->role_name.' Update</p>';
+            }
+            } else {
+                echo $result = '<p style="color:red;">'.$role_list->role_name.' Allready Exist</p>';
+            }
+            exit();
+        }
+
+    /* 3 add office bearers shakti kendram */
+        if ($_POST['act'] == 'addNewOfficeBearersSK') {
+            ob_clean();
+
+            foreach ( $_POST['booth_id'] as $key => $value) {
+                $booth_id = implode(',', $_POST['booth_id']);
+            } 
+            $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$_POST['ward_id'].'-INT','role_hierarchy'=>$_POST['role_hierarchy'].'-CHAR','mandal_id'=>$_POST['mandal_id'].'-INT','booth_id'=>$booth_id.'-STRING','status'=>'A-CHAR'),'showSql'=>'N');
+            $ob_row = Table::getData($param);
+
+            if($ob_row == ''){
+
+            $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
+            $role_list = Table::getData($query);
+
+            $param=array();
+            $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
+            foreach($paramsOB as $key => $Val) {
+                $param[$Val] = $$Val = check_input($_POST[$Val]);
+            }
+            if ($_POST['id'] == '') {
+                $param['role_position'] =  $role_list->role_abbr;
+                $param['booth_id'] = $booth_id;
+                $param['added_by'] = $_SESSION['user_id'];
+                $param['added_date'] = date('Y-m-d H:i:s', time());
+                $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
+                echo $result = '<p style="color:green;">New '.$role_list->role_name.' Created.</p>';
+            } else {
+                $param['role_position'] =  $role_list->role_abbr;
+                $param['updated_date'] = date('Y-m-d H:i:s', time());
+                $param['booth_id'] = $booth_id;
+                $param['updated_by'] = $_SESSION['user_id'];
+                $where = array('id' => $_POST['id']);
+                $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
+                echo $result = '<p style="color:green;">'.$role_list->role_name.' Update</p>';
+            }
+            } else {
+                echo $result = '<p style="color:red;">'.$role_list->role_name.' Allready Exist</p>';
+            }
+            exit();
+        }
+    /* 4 add office bearers Booth */
+        if ($_POST['act'] == 'addNewOfficeBearersBooth') {
+
+            ob_clean();
+    
+            $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$_POST['ward_id'].'-INT','role_hierarchy'=>$_POST['role_hierarchy'].'-CHAR','mandal_id'=>$_POST['mandal_id'].'-INT','booth_id'=>$_POST['booth_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
+            $ob_row = Table::getData($param);
+
+            if($ob_row == ''){
+
+            $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
+            $role_list = Table::getData($query);
+
+            $param=array();
+            $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','booth_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
+            foreach($paramsOB as $key => $Val) {
+                $param[$Val] = $$Val = check_input($_POST[$Val]);
+            }
+            if ($_POST['id'] == '') {
+                $param['role_position'] =  $role_list->role_abbr;
+                $param['added_by'] = $_SESSION['user_id'];
+                $param['added_date'] = date('Y-m-d H:i:s', time());
+                $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
+                echo $result = '<p style="color:green;">New '.$role_list->role_name.' Created.</p>';
+            } else {
+                $param['role_position'] =  $role_list->role_abbr;
+                $param['updated_date'] = date('Y-m-d H:i:s', time());
+                $param['updated_by'] = $_SESSION['user_id'];
+                $where = array('id' => $_POST['id']);
+                $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
+                echo $result = '<p style="color:green;">New '.$role_list->role_name.' Update</p>';
+            }
+            } else {
+                echo $result = '<p style="color:red;">'.$role_list->role_name.' Allready Exist</p>';
+            }
+            exit();
         } 
-        $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$_POST['ward_id'].'-INT','role_hierarchy'=>$_POST['role_hierarchy'].'-CHAR','mandal_id'=>$_POST['mandal_id'].'-INT','booth_id'=>$booth_id.'-STRING','status'=>'A-CHAR'),'showSql'=>'Y');
-        $ob_row = Table::getData($param);
-
-        if($ob_row == ''){
-
-        $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
-        $role_list = Table::getData($query);
-
-        $param=array();
-         $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
-        foreach($paramsOB as $key => $Val) {
-            $param[$Val] = $$Val = check_input($_POST[$Val]);
-        }
-        if ($_POST['id'] == '') {
-            $param['role_position'] =  $role_list->role_abbr;
-            $param['booth_id'] = $booth_id;
-            $param['added_by'] = $_SESSION['user_id'];
-            $param['added_date'] = date('Y-m-d H:i:s', time());
-            $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
-            echo $result = '<p style="color:green;">New Office Bearers Created.</p>';
-        } else {
-            $param['role_position'] =  $role_list->role_abbr;
-            $param['updated_date'] = date('Y-m-d H:i:s', time());
-            $param['booth_id'] = $booth_id;
-            $param['updated_by'] = $_SESSION['user_id'];
-            $where = array('id' => $_POST['id']);
-            $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
-            echo $result = '<p style="color:red;">Office Bearers Update</p>';
-        }
-        } else {
-            echo $result = '<p style="color:red;">Ward Incharge Allready Exist</p>';
-        }
-        exit();
-    }
 /********* 15.WARD FULL DETAILS **************/
 
     if($_POST['act'] == 'MandalWardDetails') {
@@ -482,11 +553,10 @@
     if($_POST['act']=='boothincharge'){
         ob_clean();
         $wardID = $_POST['wardID'];   
+        // $wardqry = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+        // $ward_booth_list = Table::getData($wardqry);
 
-        $wardqry = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
-        $ward_booth_list = Table::getData($wardqry);
-
-        $param = array('tableName'=>TBL_BJP_BOOTH,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+        $param = array('tableName'=>TBL_BJP_BOOTH,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-STRING','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
         $booth_list = Table::getData($param); 
         ?>
 

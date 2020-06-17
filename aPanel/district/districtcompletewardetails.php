@@ -29,7 +29,7 @@
      ?>
 <style></style>
 <div class="card">
-   <div class="card-header bg-img"> WARD (<?php echo $value->ward_number; ?>)</div>
+   <div class="card-header bg-img"> WARD (<?php echo $value->ward_number; ?>) DETAILS</div>
    <input type="hidden" value="<?php echo $value->id ?>" id="officeBearersId">
    <div class="card-body row">
    <?php  $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N','orderby' => 'role_hierarchy', 'sortby' => 'asc');
@@ -62,7 +62,6 @@
                     <td><?php switch($val->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?></td>
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
-                    <!-- <td><a href="javascript:void(0)" id="<?php echo $val->id ?>" onclick="removeofficbearers(this->id)"><i class="fa fa-trash"></i></a></td> -->
                     <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 
                 </tr>    
@@ -97,25 +96,57 @@
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
                     <td><?php 
-// select * from bjp_booth where `id` IN (1489,1398) and `status` = 'A' order by id asc
                     $getbooth = 'select * from '.TBL_BJP_BOOTH.' where  `id` IN ('.$val->booth_id.') AND `status` ="A"';
                     $getboothList=dB::mExecuteSql($getbooth); 
                         foreach($getboothList as $key=>$value){
                                echo $value->booth_number; echo '<br>';
                         }
-
-                    // $getbooth = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition' => array('id' => $val->booth_id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'Y','orderby' => 'id', 'sortby' => 'asc');
-                    // $getboothList = Table::getData($getbooth); 
                     ?></td>
                     <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                 </tr>    
             <?php $i ++;} } ?>      
             </tbody>    
         </table>
-        <br><br>
+        <table class="table table-striped table-bordered" >
+            <thead>
+            <tr><th colspan='6' style="color:#ff9933">BOOTH INCHARGE</th></tr>
+                <tr class="bg-primary text-white">
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>address</th>
+                    <th>Verified</th>
+                    <th>Booth</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php                 
+                $i = 1; 
+                foreach($officeberasList as $key =>$val) {
+                    if($val->role_hierarchy == 'B'){
+                    ?>
+                <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $val->person_name; if($val->person_name_ta !=''){ ?>(<?php echo $val->person_name_ta ?>)<?php } ?></td>
+                    <td><?php echo $val->mobile_number ?></td>
+                    <td><?php echo $val->address ?></td>
+                    <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
+                    <td><?php 
+                    $getbooth = 'select * from '.TBL_BJP_BOOTH.' where  `id` IN ('.$val->booth_id.') AND `status` ="A"';
+                    $getboothList=dB::mExecuteSql($getbooth); 
+                        foreach($getboothList as $key=>$value){
+                               echo $value->booth_number; echo '<br>';
+                        }
+                    ?></td>
+                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                </tr>    
+            <?php $i ++;} } ?>      
+            </tbody>    
+        </table>
         <table  class=" wardDetails table table-striped table-bordered" >
             <thead>
-            <tr><th colspan='5' style="color:#ff9933">BOOTH DETAILS</th></tr>
+            <tr><th colspan='7' style="color:#ff9933">BOOTH DETAILS</th></tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Booth Number</th>
@@ -127,10 +158,9 @@
             <tbody>
 
             <?php 
-             $boothquery = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N');
+             $boothquery = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition' => array('ward_id' => $_POST['wardId'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N');
              $booth_list = Table::getData($boothquery);
             $i = 1; 
-            ?><pre><?php// print_r( $booth_list) ?></pre><?php
 
             foreach($booth_list as $key =>$val) { ?>
                 <tr>
