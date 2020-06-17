@@ -21,7 +21,7 @@
       <link rel="stylesheet" href="assets/css/bootstrap.min.css"  type="text/css">
       <link rel="stylesheet" href="assets/css/icons.css"  type="text/css">
       <link rel="stylesheet" href="assets/css/custom.css"  type="text/css">
-      <link rel="stylesheet" href="assets/css/multiselectbootsrap.css"  type="text/css">
+      <link rel="stylesheet" href="assets/css/bootstrap-multiselect.css"  type="text/css">
       <link rel="stylesheet" href="assets/css/style.css"  type="text/css">
       <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
       <link rel='stylesheet' href='assets/autocomplete/jquery-ui.css'  type='text/css'>
@@ -177,7 +177,7 @@
       <script src="assets/js/wow.min.js"></script>
       <script src="assets/js/jquery.nicescroll.js"></script>
       <script src="assets/js/jquery.scrollTo.min.js"></script>
-      <script src="assets/js/multiselectdropdown.js"></script>
+      <script src="assets/js/bootstrap-multiselect.js"></script>
          <!-- Custom main Js -->
       <script src="assets/js/jquery.core.js"></script>
       <script src="assets/js/jquery.app.js"></script>  

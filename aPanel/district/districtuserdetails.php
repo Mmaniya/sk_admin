@@ -71,8 +71,8 @@
       </label><br> -->
 
       <?php } ?>
-      <a href="javascript:void(0)" style="float:right;color:orange"  onClick="editofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a><br>
-      <a href="javascript:void(0)" style="float:right;color:red"  onClick="deleteofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+      <!-- <a href="javascript:void(0)" style="float:right;color:orange"  onClick="editofficebearers(<?php // echo $value->id; ?>,<?php // echo $value->mandal_id; ?>,<?php // echo $value->district_id; ?>,<?php // echo $value->member_id ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a><br> -->
+      <a href="javascript:void(0)" style="float:right;color:red" data-toggle="modal" data-target="#deleteModel"  onClick="deleteofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
       </span>
    </div>
    <span id="editOfficeBearers_<?php echo $value->id ?>"></span>
@@ -85,6 +85,15 @@
    <td>
 </tr>
 <?php } echo $table_val; ?>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModel" role="dialog">
+            <div class="modal-dialog">
+                <span id="modelshow"></span>
+            </div>
+        </div>
+
+
 <script>
    function ShowParentCatListPagination(page,condition,value) { 
       var mandalid = $('#viewMandalID').val();
@@ -125,16 +134,27 @@
 
    function deleteofficebearers(id) {
 
-      paramData = {'id':id,'act':'statusDataUpdateforOB'}
+
+      paramData = {'ofid':id,'action':'deleteOfficeBearers','ward':null}
             ajax({
-                  a:"districtajax",
+                  a:"districtmodel",
                   b:paramData,
                   c:function(){},
                   d:function(data){
-                     $('#deleteOfficeBearers_'+id).remove();
-
+                     $('#modelshow').html(data);
                   }
-            });                     
+            });   
+            
+      // paramData = {'id':id,'act':'statusDataUpdateforOB'}
+      //       ajax({
+      //             a:"districtajax",
+      //             b:paramData,
+      //             c:function(){},
+      //             d:function(data){
+      //                $('#deleteOfficeBearers_'+id).remove();
+
+      //             }
+      //       });                     
 
    }
 

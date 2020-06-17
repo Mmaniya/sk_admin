@@ -255,7 +255,7 @@
         $option = explode(",", $_POST['roleoption']);   
         $param = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('role_hierarchy'=>$hierarchy.'-CHAR'),'showSql'=>'Y','orderby'=>'position','sortby'=>'desc');
         $hierarchy_list = Table::getData($param);?>
-             <option value="" selected="true" disabled="disabled">Please Select Position</option>
+             <!-- <option value="" selected="true" disabled="disabled">Please Select Position</option> -->
          <?php
          foreach($hierarchy_list as $key=>$value) {  
             // $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `role_hierarchy` ="'.$hierarchy.'" AND `role_id`="'.$value->id.'" AND `status`="A" AND `mandal_id`="'.$mandalID.'" OR `ward_id`="'.$wardID.'"  ORDER BY id DESC';
@@ -306,8 +306,8 @@
         exit();
       }
 /********* 14.ADD OFFICE BEARERS *************/
-
-    if ($_POST['act'] == 'addNewOfficeBearers') {
+    /* 1. add office bearesr ward */
+    if ($_POST['act'] == 'addNewOfficeBearersWard') {
         ob_clean();
 
         $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$_POST['ward_id'].'-INT','role_hierarchy'=>$_POST['role_hierarchy'].'-CHAR','mandal_id'=>$_POST['mandal_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
@@ -332,6 +332,48 @@
         } else {
             $param['role_position'] =  $role_list->role_abbr;
             $param['updated_date'] = date('Y-m-d H:i:s', time());
+            $param['updated_by'] = $_SESSION['user_id'];
+            $where = array('id' => $_POST['id']);
+            $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
+            echo $result = '<p style="color:red;">Office Bearers Update</p>';
+        }
+        } else {
+            echo $result = '<p style="color:red;">Ward Incharge Allready Exist</p>';
+        }
+        exit();
+    }
+
+    /* 2 add office bearers shakti kendram */
+    if ($_POST['act'] == 'addNewOfficeBearersSK') {
+        ob_clean();
+
+        foreach ( $_POST['booth_id'] as $key => $value) {
+            $booth_id = implode(',', $_POST['booth_id']);
+        } 
+        $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$_POST['ward_id'].'-INT','role_hierarchy'=>$_POST['role_hierarchy'].'-CHAR','mandal_id'=>$_POST['mandal_id'].'-INT','booth_id'=>$booth_id.'-STRING','status'=>'A-CHAR'),'showSql'=>'Y');
+        $ob_row = Table::getData($param);
+
+        if($ob_row == ''){
+
+        $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
+        $role_list = Table::getData($query);
+
+        $param=array();
+         $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
+        foreach($paramsOB as $key => $Val) {
+            $param[$Val] = $$Val = check_input($_POST[$Val]);
+        }
+        if ($_POST['id'] == '') {
+            $param['role_position'] =  $role_list->role_abbr;
+            $param['booth_id'] = $booth_id;
+            $param['added_by'] = $_SESSION['user_id'];
+            $param['added_date'] = date('Y-m-d H:i:s', time());
+            $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
+            echo $result = '<p style="color:green;">New Office Bearers Created.</p>';
+        } else {
+            $param['role_position'] =  $role_list->role_abbr;
+            $param['updated_date'] = date('Y-m-d H:i:s', time());
+            $param['booth_id'] = $booth_id;
             $param['updated_by'] = $_SESSION['user_id'];
             $where = array('id' => $_POST['id']);
             $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
@@ -435,6 +477,19 @@
         <?php } 
         exit();
     }
-/********* 18 STATU UPDATE FOR OB ************/
+/********* 18 SELECT FOR NEW BOOTH  **********/
+
+    if($_POST['act']=='boothincharge'){
+        ob_clean();
+        $wardID = $_POST['wardID'];   
+
+        $param = array('tableName'=>TBL_BJP_BOOTH,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+        $booth_list = Table::getData($param); ?>
+        <?php foreach($booth_list as $Key=>$value) {  
+
+        ?><option  value="<?php echo $value->id; ?>" ><?php echo $value->booth_number; ?></option>
+        <?php } 
+        exit();
+    }
 
 ?>

@@ -63,7 +63,7 @@
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
                     <!-- <td><a href="javascript:void(0)" id="<?php echo $val->id ?>" onclick="removeofficbearers(this->id)"><i class="fa fa-trash"></i></a></td> -->
-                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target="#deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 
                 </tr>    
             <?php $i ++;} } ?>      
@@ -79,6 +79,7 @@
                     <th>Role Hierarchy</th>
                     <th>address</th>
                     <th>Verified</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -95,6 +96,7 @@
                     <td><?php switch($val->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?></td>
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
+                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                 </tr>    
             <?php $i ++;} } ?>      
             </tbody>    
@@ -175,11 +177,11 @@
 
 
 <!-- Modal -->
-        <div class="modal fade" id="deleteModel" role="dialog">
-            <div class="modal-dialog">
-                <span id="modelshow"></span>
-            </div>
-        </div>
+<div class="modal fade deleteModel" role="dialog">
+    <div class="modal-dialog">
+        <span id="modelshow"></span>
+    </div>
+</div>
 
 
 <script>
