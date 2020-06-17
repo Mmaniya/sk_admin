@@ -483,10 +483,14 @@
         ob_clean();
         $wardID = $_POST['wardID'];   
 
-        $param = array('tableName'=>TBL_BJP_BOOTH,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
-        $booth_list = Table::getData($param); ?>
-        <?php foreach($booth_list as $Key=>$value) {  
+        $wardqry = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+        $ward_booth_list = Table::getData($wardqry);
 
+        $param = array('tableName'=>TBL_BJP_BOOTH,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+        $booth_list = Table::getData($param); 
+        ?>
+
+        <?php foreach($booth_list as $Key=>$value) {  
         ?><option  value="<?php echo $value->id; ?>" ><?php echo $value->booth_number; ?></option>
         <?php } 
         exit();

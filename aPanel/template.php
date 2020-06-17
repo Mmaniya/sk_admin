@@ -142,10 +142,17 @@
                             <li>
                               <a href="ward.php" class="waves-effect waves-primary">Ward</a>
                             </li>
+                            
                            <?php } ?>
                            <!-- <li> <a href="email_template.php">Email Template</a></li> -->
                            <!-- <li><a href="district/adddistrict.php">Add District</a></li> -->
                      </ul>
+                  </li>
+                  <li>
+                  <a href="member.php" class="waves-effect waves-primary">
+                     <i class="ti-settings"></i> <span> Edit Member  </span>
+                     <span class="menu-arrow"></span>
+                     </a>
                   </li>
                      <!-- <li>
                         <a href="district.php" class="waves-effect waves-primary">

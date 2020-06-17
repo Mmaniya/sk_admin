@@ -76,9 +76,9 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Mobile</th>
-                    <th>Role Hierarchy</th>
                     <th>address</th>
                     <th>Verified</th>
+                    <th>Booth</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -93,9 +93,20 @@
                     <td><?php echo $i; ?></td>
                     <td><?php echo $val->person_name; if($val->person_name_ta !=''){ ?>(<?php echo $val->person_name_ta ?>)<?php } ?></td>
                     <td><?php echo $val->mobile_number ?></td>
-                    <td><?php switch($val->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?></td>
+                    <!-- <td><?php // switch($val->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?></td> -->
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
+                    <td><?php 
+// select * from bjp_booth where `id` IN (1489,1398) and `status` = 'A' order by id asc
+                    $getbooth = 'select * from '.TBL_BJP_BOOTH.' where  `id` IN ('.$val->booth_id.') AND `status` ="A"';
+                    $getboothList=dB::mExecuteSql($getbooth); 
+                        foreach($getboothList as $key=>$value){
+                               echo $value->booth_number; echo '<br>';
+                        }
+
+                    // $getbooth = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition' => array('id' => $val->booth_id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'Y','orderby' => 'id', 'sortby' => 'asc');
+                    // $getboothList = Table::getData($getbooth); 
+                    ?></td>
                     <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                 </tr>    
             <?php $i ++;} } ?>      

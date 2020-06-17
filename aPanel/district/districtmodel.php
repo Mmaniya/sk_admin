@@ -4,8 +4,8 @@
    Update: 13/6/2020;
    Use: ADD DISTRICT
    ====================================-->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
+   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script> -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" /> -->
 
    <?php
    include 'includes.php';
@@ -1036,11 +1036,6 @@
 
    $(document).ready(function() {
       var id = $('#getMandalid').val();
-
-      $('#roleHierachy').show();
-      $('#wardroleHierachy2').hide();
-      $('#wardroleHierachy1').hide();
-
       paramData = {'act':'wardincharge','mandalID':id }; 
          ajax({
             a:"districtajax",

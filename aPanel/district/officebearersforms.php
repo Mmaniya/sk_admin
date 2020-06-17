@@ -100,13 +100,13 @@
             <select class="form-control showData" name="role_id" readonly></select>
         </div>   
         <div class="form-group col-sm-6">
-        <label>Select Ward</label>
+        <label>Select Ward</label><br>
         <select class="form-control" id="selectWard" name="ward_id"></select>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-6 col-lg-6">
-        <label>Select Booth</label>
+        <label>Select Booth</label><br>
         <select  class="form-control"  multiple  id="selectBooth" name="booth_id[]"></select>
         </div>
         <div class="col-sm-6 col-lg-6">
@@ -161,7 +161,7 @@ $(document).ready(function() {
             $('#selectWard').multiselect({
                 includeSelectAllOption: false,
                 nonSelectedText: 'Select Mandal',
-                buttonWidth:'100%',
+                buttonWidth:'400px',
                 onChange:function(option, checked)
                 {
                   $('#selectBooth').html('');
@@ -185,7 +185,7 @@ $(document).ready(function() {
             $('#selectBooth').multiselect({
                 includeSelectAllOption: true,
                 nonSelectedText: 'Select Booth',
-                buttonWidth:'100%',
+                buttonWidth:'400px',
             });
          
     /* Add new Office Berares */

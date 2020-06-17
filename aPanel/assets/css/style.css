@@ -5944,3 +5944,7 @@ File: Responsive
    font-weight: 800;
   background-image: linear-gradient(to  right, #ff9933, #098669);
  }
+
+ .btn-group{
+   width :100% !important;
+ }
