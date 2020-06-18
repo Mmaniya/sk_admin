@@ -263,17 +263,16 @@
             } else {
                 $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_id'=>$value->id.'-INT','role_hierarchy'=>$hierarchy.'-CHAR','mandal_id'=>$mandalID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
             }
-
+            if($value->role_hierarchy == 'M'){
             $ob_list = Table::getData($param);
-            // print_r($ob_list);
-            // foreach($ob_list as $key=>$value){
-            // echo $value->role_position;}
-
             $ob_count = count($ob_list); 
            if($ob_count<$value->no_of_roles) {  ?>    
                 <option <?php   if(in_array($value->position, $option)) echo 'selected="selected"'; ?>  value="<?php  echo $value->id; ?>" ><?php  echo $value->role_name; ?></option>
           <?php } 
-          }
+          } else{ ?>
+                    <option <?php   if(in_array($value->position, $option)) echo 'selected="selected"'; ?>  value="<?php  echo $value->id; ?>" ><?php  echo $value->role_name; ?></option>
+         <?php }
+        }
           exit();
 
     } 
@@ -347,10 +346,11 @@
             $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$_POST['ward_id'].'-INT','role_hierarchy'=>$_POST['role_hierarchy'].'-CHAR','mandal_id'=>$_POST['mandal_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
             $ob_row = Table::getData($param);
 
-            if($ob_row == ''){
-
+            
             $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
             $role_list = Table::getData($query);
+            
+            if($ob_row == ''){
 
             $param=array();
             $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
@@ -384,14 +384,15 @@
             foreach ( $_POST['booth_id'] as $key => $value) {
                 $booth_id = implode(',', $_POST['booth_id']);
             } 
+
             $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$_POST['ward_id'].'-INT','role_hierarchy'=>$_POST['role_hierarchy'].'-CHAR','mandal_id'=>$_POST['mandal_id'].'-INT','booth_id'=>$booth_id.'-STRING','status'=>'A-CHAR'),'showSql'=>'N');
             $ob_row = Table::getData($param);
 
-            if($ob_row == ''){
-
             $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
             $role_list = Table::getData($query);
-
+            
+            if($ob_row == ''){
+       
             $param=array();
             $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
             foreach($paramsOB as $key => $Val) {
@@ -426,11 +427,11 @@
             $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$_POST['ward_id'].'-INT','role_hierarchy'=>$_POST['role_hierarchy'].'-CHAR','mandal_id'=>$_POST['mandal_id'].'-INT','booth_id'=>$_POST['booth_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
             $ob_row = Table::getData($param);
 
-            if($ob_row == ''){
-
             $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
             $role_list = Table::getData($query);
-
+            
+            if($ob_row == ''){
+        
             $param=array();
             $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','ward_id','booth_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
             foreach($paramsOB as $key => $Val) {
@@ -553,9 +554,6 @@
     if($_POST['act']=='boothincharge'){
         ob_clean();
         $wardID = $_POST['wardID'];   
-        // $wardqry = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
-        // $ward_booth_list = Table::getData($wardqry);
-
         $param = array('tableName'=>TBL_BJP_BOOTH,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-STRING','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
         $booth_list = Table::getData($param); 
         ?>
@@ -566,4 +564,15 @@
         exit();
     }
 
+        if($_POST['action'] == 'W') { ?>
+            <label>Select Ward</label>
+            <select class="form-control" multiple id="selectWard" name="ward_id">
+                <?php  $mandalID = $_POST['mandalID'];   
+                $param = array('tableName'=>TBL_BJP_WARD,'fields'=>array('*'),'condition'=>array('mandal_id'=>$mandalID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+                $ward_list = Table::getData($param); ?>
+                <?php foreach($ward_list as $Key=>$value) {  
+                ?><option  value="<?php echo $value->id; ?>" ><?php echo $value->ward_number; ?></option>
+                <?php } ?>                
+            </select>
+        <?php } 
 ?>

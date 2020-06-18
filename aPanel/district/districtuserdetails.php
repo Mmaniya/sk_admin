@@ -72,7 +72,7 @@
 
       <?php } ?>
       <!-- <a href="javascript:void(0)" style="float:right;color:orange"  onClick="editofficebearers(<?php // echo $value->id; ?>,<?php // echo $value->mandal_id; ?>,<?php // echo $value->district_id; ?>,<?php // echo $value->member_id ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a><br> -->
-      <a href="javascript:void(0)" style="float:right;color:red" data-toggle="modal" data-target="#deleteModel"  onClick="deleteofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+      <a href="javascript:void(0)" style="float:right;color:red" data-toggle="modal" data-target=".deleteModel"  onClick="deleteofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
       </span>
    </div>
    <span id="editOfficeBearers_<?php echo $value->id ?>"></span>
@@ -87,11 +87,11 @@
 <?php } echo $table_val; ?>
 
 <!-- Modal -->
-<div class="modal fade" id="deleteModel" role="dialog">
-            <div class="modal-dialog">
-                <span id="modelshow"></span>
-            </div>
-        </div>
+<div class="modal fade deleteModel" role="dialog">
+      <div class="modal-dialog">
+            <span id="modelshow"></span>
+      </div>
+   </div>
 
 
 <script>

@@ -426,7 +426,7 @@
                   <hr>
                   <ul class="nav nav-tabs" role="tablist">
                      <li class="nav-item">
-                        <a class="nav-link" href="#ward" role="tab" onClick="wardDetailsget(<?php  echo $mandal_list->id; ?>)" data-toggle="tab">
+                        <a class="nav-link active" href="#ward" role="tab" onClick="wardDetailsget(<?php  echo $mandal_list->id; ?>)" data-toggle="tab">
                            <h5 style="color:#000">WARD</h5>
                         </a>
                      </li>
@@ -443,7 +443,7 @@
                   </ul>
                   <!-- Tab panes -->
                   <div class="tab-content">
-                     <div role="tabpanel" class="tab-pane fade in" id="ward">
+                     <div role="tabpanel " class="tab-pane fade in active show" id="ward">
                         <div id="wardDetails"></div>
                         <div id="wardFullDetails"></div>
                      </div>
@@ -559,88 +559,6 @@
       </form>
    </div>
 </div>
-<?php } else if ($modelAction == 'editOfficeBearers'){
-
-   // $ofID = $_POST['obid'];
-   // $mandalID = $_POST['mandalid'];
-   // $distID = $_POST['districtID'];
-   // $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition'=>array('id'=>$ofID.'-INT','status'=> 'A-CHAR'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
-   // $officebearersList = Table::getData($officebearers);
-   // $title = 'Edit Office Bearers';
-   ?>
-   <!-- <div class="modal-content">
-      <div class="modal-header">
-         <h5 class="modal-title"><?php echo $title ?></h5>
-         <button type="button" class="close" id="<?php echo $ofID ?>" onclick="closeMemberCard(this.id)">&times;</button>
-      </div>
-      <div class="modal-body">
-         <form action="javascript:void(0)" id="formData" method="POST">
-            <input type="hidden" value="editOfficeBearers" name="act">
-            <input type="hidden" value="1" name="state_id">
-            <input type="hidden" value="<?php // echo $distID ?>" name="district_id">
-            <input type="hidden" value="<?php // echo $mandalID ?>" name="mandal_id" id="mandalID">
-            <input type="hidden" value="<?php // echo $ofID ?>" name="id" id="getOFId">
-
-            <div class="row">
-               <div class="form-group col-sm-6">
-                     <label >Role Hierarachy</label>
-                     <select class="form-control" name="role_hierarchy" id="roleHierarchy">
-                     <?php // (isset($officebearersList->role_hierarchy)) ? $officebearersList->role_hierarchy = $officebearersList->role_hierarchy : $officebearersList->role_hierarchy; ?>
-                        <option selected="true" disabled="disabled" value="">Please Select Category</option>
-                        <option <?php // if ($officebearersList->role_hierarchy == "M" ) echo 'selected' ; ?> value="M" >Mandal</option>
-                        <option <?php // if ($officebearersList->role_hierarchy == "SK" ) echo 'selected' ; ?> value="SK" >Shakti Kendram</option>
-                        <option <?php  // if ($officebearersList->role_hierarchy == "W" ) echo 'selected' ; ?> value="W" >Ward</option>
-                        <option <?php  // if ($officebearersList->role_hierarchy == "B" ) echo 'selected' ; ?> value="B" >Booth</option>
-                     </select>
-               </div>
-
-               <div class="form-group col-sm-6">
-                     <label >Sub Role Hierarachy</label><br>
-                     <label class="radio-inline">
-                        <input type="radio" name="sub_role_hierarchy" id="subRoleSK" value="SK"> SHAKTI KENDRAM
-                     </label>&nbsp;&nbsp;
-                     <label class="radio-inline">
-                        <input type="radio" name="sub_role_hierarchy" id="subRoleW" value="W"> WARD 
-                     </label>&nbsp;&nbsp;
-                     <label class="radio-inline">
-                        <input type="radio" name="sub_role_hierarchy" id="subRoleB" value="B"> BOOTH
-                     </label>
-               </div>
-            </div>
-
-            <div class="row">
-
-               <div class="col-md-3 col-lg-3" id="wardroleHierachy1">
-                  <label>Select Ward</label>
-                  <select class="form-control" id="selectWard" name="ward_id"></select>
-               </div>
-               <div class="col-md-3 col-lg-3" id="wardroleHierachy2">
-                  <label>Role Position </label>
-                  <select class="form-control showData" name="role_id"></select>
-               </div>
-
-               <div class="col-md-6 col-lg-6" id="roleHierachy">
-                  <label>Role Position </label>
-                  <select class="form-control showData" name="role_id"></select>
-               </div>
-            
-
-               <div class="col-sm-6">
-                     <label>Member Id </label>
-                     <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                           <span class="input-group-text"><i class="fa fa-id-card"  aria-hidden="true"></i></span>
-                        </div>
-                        <input type="text" class="form-control" id="memberID" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="<?php echo $officebearersList->mobile_number ?>">                  
-                     </div>
-               </div> 
-            </div>
-            <span id="memberTable">
-            </span>
-            <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
-         </form>
-      </div>
-   </div> -->
 <?php } else if ($modelAction == 'officeBearersNew'){ ?>
    <div class="modal-content">
       <div class="modal-header">
@@ -681,7 +599,7 @@
    <form id="formOfficeBearersDelete" action="javascipt:void(0)">
       <input type="hidden" name="act" value="statusDataUpdateforOB">
       <input type="hidden" name="id" value="<?php echo $_POST['ofid']; ?>" id="officeBeraersId">
-      <input type="hidden" value="<?php echo $_POST['ward'] ?>" id="ward_Id">
+      <input type="hidden" name="" value="<?php echo $_POST['ward'] ?>" id="ward_Id">
       <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
          <input type="submit" id="submit" class="btn btn-danger"  value="Delete">
@@ -807,97 +725,8 @@
             });
          }
       });
-   // /* 5.Add new Office Berares */
-   //    $('form#formDataddNewOb').validate({
-   //       rules: {
-   //          role_hierarchy: "required",
-   //          role_id: "required",
-   //          membership_number: "required",
-   //          person_name: "required",
-   //          mobile_number: "required",
-   //          selectMem: "required"
-   //             },
-   //       messages: {
-   //          role_hierarchy: "Please Select One Role Hierarchy",
-   //          membership_number: "Please Enter Membership Number",
-   //          person_name: "Enter Person Name",
-   //          mobile_number: "Enter Mobile Number",
-   //          role_id: "Please Select Role Position",
-   //          selectMem: "Eneter MembershipId/Mobile/Name"
-   //       },
-   //       submitHandler: function(form){
-   //       var formData = $('form#formDataddNewOb').serialize();
-   //       var id = $('#mandalID').val();
-   //       var role = $('#roleHierarchy').val();
-   //          ajax({
-   //             a:"districtajax",
-   //             b:formData,
-   //             c:function(){},
-   //             d:function(data){
-   //                $('#memberTable').html(data);
-   //                $("#inputvalue" ).trigger( "keyup" );
-   //                officeBearesDetailsget(id);
-   //                $('#memberID').val('');
-   //                // getStateUsers(id,role);
-   //                   // paramData = {'act':'fetchMandalThalaivar','id':id}; 
-   //                   //    ajax({
-   //                   //       a:"districtajax",
-   //                   //       b:paramData,
-   //                   //       c:function(){},
-   //                   //       d:function(data){
-   //                   //          $('#mandalThalaivar').html(data);
-   //                   //       }
-   //                   // });
-   //                }          
-   //          });
-   //          }      
-   //    });
-
-      // $('form#formData').validate({
-      //    rules: {
-      //    role_hierarchy: "required",
-      //    membership_number: "required",
-      //    person_name: "required",
-      //    mobile_number: "required",
-      //    },
-      //    messages: {
-      //       role_hierarchy: "Please Select One Role Hierarchy",
-      //       membership_number: "Please Enter Membership Number",
-      //       person_name: "Enter Person Name",
-      //       mobile_number: "Enter Mobile Number"
-      //    },
-      //    submitHandler: function(form){
-      //    var formData = $('form#formData').serialize();
-      //    var closeId = $('#getOFId').val();
-      //    var id = $('#mandalID').val();
-      //    var role = $('#roleHierarchy').val();
-      //       ajax({
-      //          a:"districtajax",
-      //          b:formData,
-      //          c:function(){},
-      //          d:function(data){
-      //             $('#memberTable').html('<p style="color:green">Record Updated.!</p>');
-      //             $("#inputvalue" ).trigger( "keyup" );
-      //             $('#editOfficeBearers_'+closeId).remove();
-      //             officeBearesDetailsget(id);
-      //             getStateUsers(id,role);
-      //             // $(ducument).trigger("ready");
-
-      //                      paramData = {'act':'fetchMandalThalaivar','id':id}; 
-      //                         ajax({
-      //                            a:"districtajax",
-      //                            b:paramData,
-      //                            c:function(){},
-      //                            d:function(data){
-      //                               $('#mandalThalaivar').html(data);
-      //                            }
-      //                      });
-      //             }          
-      //       });
-      //    }
-      // });
-
-   /* 6. Status Update For Office Bearers*/
+   
+   /* 5. Status Update For Office Bearers*/
       $('form#formOfficeBearersDelete').validate({
          submitHandler: function(form){
             var ofId = $('#officeBeraersId').val();
@@ -909,8 +738,8 @@
                c:function(){},
                d:function(data){
                   if(ward_Id != ''){
-                  getStateWard(ward_Id); }          
-                  $('.deleteModel').modal('toggle'); 
+                  getStateWard(ward_Id); }  
+                  $('#deleteModel').modal('toggle');         
                   $('#deleteOfficeBearers_'+ofId).remove();
                }          
             });
@@ -929,6 +758,19 @@
             }
       });
    }
+
+   $(document).ready(function() {
+         var id = $('#getMandalid').val();
+         paramData = {'act':'wardDetailsGet','id':id }; 
+            ajax({
+               a:"districtajax",
+               b:paramData,
+               c:function(){},
+               d:function(data){
+                  $('#wardDetails').html(data);
+               }
+         });
+      });
 
 /**** OFFICE BEARES DETAILS GET *******/
    function officeBearesDetailsget(id){
@@ -1001,8 +843,6 @@
          });
 
       })
-
-
    
 /*********** CLOSE MEMBER EDIT CARD ***/
 
@@ -1045,6 +885,7 @@
                $('#selectWard').html(data);
             }
       });
+      
    });
 
 </script>

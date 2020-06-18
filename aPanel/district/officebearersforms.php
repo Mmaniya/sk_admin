@@ -1,8 +1,13 @@
 
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script> -->
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" /> -->
+<?php include 'includes.php';
+ if($_POST['action'] == 'M'){  
 
-<?php if($_POST['action'] == 'M'){ ?>
+    $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_hierarchy'=>$_POST['action'].'-CHAR','mandal_id'=>$_POST['Mandal'].'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');        
+    $ob_list = Table::getData($param);
+    $ob_count = count($ob_list); 
+        if($ob_count<6){
+    ?>
+    
     <form action="javascript:void(0)" id="formDataddNewOb" method="POST">
     <input type="hidden" value="addNewOfficeBearersMandal" name="act">
     <input type="hidden" value="1" name="state_id">
@@ -37,11 +42,15 @@
                 <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="">                  
             </div>
         </div>
+        <div class="col-sm-6 col-lg-6" id="subOption">
+        </div>
     </div>
     <span id="memberTable"></span>            
     <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
     </form>
-
+        <?php } else {   ?>
+            <h4 style="color:red">Maximum Reached Office Bearers List </h4>     
+       <?php  } ?>
 
 <?php } else if($_POST['action'] == 'W'){?>
 
@@ -69,7 +78,7 @@
     <div class="row">
         <div class="col-sm-6 col-lg-6">
         <label>Select Ward</label>
-        <select class="form-control" id="selectWard" name="ward_id"></select>
+            <select class="form-control" id="selectWard" name="ward_id"></select>
         </div>
         <div class="col-sm-6 col-lg-6">
             <label>Member Id </label>
@@ -265,12 +274,40 @@ $(document).ready(function() {
                      //       }
                      // });
                   }          
-            });
+                });
             }      
       });
+    /* Sub Role Hierarchy */
+
+        $('input[type=radio][name=sub_role_hierarchy]').change(function() {
+            var getValue = $(this).val();  
+            var mandalID = $('#mandalID').val();
+        
+            paramPosition = {'action':getValue,'mandalID':mandalID};
+            ajax({
+                a:"districtajax",
+                b:paramPosition,
+                c:function(){},
+                d:function(data){
+                    $('#subOption').html(data);
+                }
+            });
+
+            // paramPosition = {'act':'wardincharge', };
+            // ajax({
+            //     a:"districtajax",
+            //     b:paramPosition,
+            //     c:function(){},
+            //     d:function(data){
+            //     $('#selectWard').html(data);
+            //     $('#selectWard').multiselect('rebuild');
+
+            //     }
+            // });
+
+        })
 }); 
 /*********** SEARCH MEMBER DETAILS  ***/
-
     function searchKey(id_attr) { 
          $( "#"+id_attr).autocomplete({
          source: function( request, response ) {
@@ -285,7 +322,6 @@ $(document).ready(function() {
             search: request.term,mandal
             },
             success: function( data ) { 
-               // alert(data);
                response( data );
             }
             });
