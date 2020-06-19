@@ -30,29 +30,20 @@
                 <input type="radio" name="sub_role_hierarchy" id="subRoleB" value="B"> BOOTH
                 </label>
                 <label class="radio-inline">
-                <input type="radio" name="sub_role_hierarchy" id="noneofabove" value=""> NONE
+                <input type="radio" name="sub_role_hierarchy" id="noneofabove" value="" checked> NONE
                 </label>
             </div>
         </div>
+ 
         <div class="row">
-            <div class="col-sm-6 col-lg-6 suRoleSK">
+            <div class="col-sm-6 col-lg-6" id="suRoleWard">
                 <label>Select Ward</label>
-                <select class="form-control selectsubRoleWard" name="subroleWard"></select>
+                <select class="form-control selectsubRoleWard"  name="ward_id"></select>
             </div>
-            <div class="col-sm-6 col-lg-6 suRoleSK">
-                <label>Select Booth</label><br>
-                <select  class="form-control selectsubRoleBooth"  multiple   name="subroleBooth[]"></select>
+            <div class="col-sm-6 col-lg-6 " id="suRoleSK">
+                <label>Select Booths</label><br>
+                <select  class="form-control selectsubRoleBooth" name="booth_id[]"></select>
             </div>
-            <div class="col-sm-6 col-lg-6 suRoleB">
-                <label>Select Ward</label>
-                <select class="form-control selectsubRoleWard" name="subroleWard"></select>
-            </div>
-            <div class="col-sm-6 col-lg-6 suRoleB">
-                <label>Select Booth</label><br>
-                <select  class="form-control selectsubRoleBooth"  name="booth_id"></select>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-sm-6 col-lg-6">
                 <label>Member Id </label>
                 <div class="input-group mb-3">
@@ -62,10 +53,6 @@
                     <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="">                  
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-6" id="suRoleWard">
-                <label>Select Ward</label>
-                <select class="form-control selectsubRoleWard" multiple  name="subroleWardID[]"></select>
-            </div>  
             <div class="form-group col-sm-6" style="display:none;">
                 <label>Sub Role Position </label>
                 <select class="form-control showsubroleData" name="sub_role_id"></select>
@@ -98,23 +85,20 @@
             <input type="radio" name="sub_role_hierarchy" id="subRoleB" value="B"> BOOTH
             </label>
             <label class="radio-inline">
-            <input type="radio" name="sub_role_hierarchy" id="noneofabove" value=""> NONE
+            <input type="radio" name="sub_role_hierarchy" id="noneofabove" value="" checked> NONE
             </label>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-6 col-lg-6">
-        <label>Select Ward</label>
-            <select class="form-control selectsubRoleWard" name="ward_id"></select>
-        </div>
-        <div class="col-sm-6 col-lg-6 suRoleSK">
-            <label>Select Booth</label><br>
-            <select  class="form-control selectsubRoleBooth"  multiple   name="subroleWardBooth[]"></select>
-        </div>
-        <div class="col-sm-6 col-lg-6 suRoleB">
-                <label>Select Booth</label><br>
-                <select  class="form-control selectsubRoleBooth"  name="booth_id"></select>
-        </div>
+                <label>Select Ward</label>
+                <select class="form-control selectsubRoleWard"  name="ward_id"></select>
+            </div>
+            <div class="col-sm-6 col-lg-6 " id="suRoleSK">
+                <label>Select Booths</label><br>
+                <select  class="form-control selectsubRoleBooth" name="booth_id[]"></select>
+            </div>
+  
         <div class="col-sm-6 col-lg-6">
             <label>Member Id </label>
             <div class="input-group mb-3">
@@ -124,6 +108,10 @@
                 <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="">                  
             </div>
         </div>
+        <div class="form-group col-sm-6" style="display:none;">
+                <label>Sub Role Position </label>
+                <select class="form-control showsubroleData" name="sub_role_id"></select>
+            </div>
     </div>
     <span id="memberTable"></span>            
     <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
@@ -182,13 +170,13 @@
             </div>   
             <div class="form-group col-sm-6">
             <label>Select Ward</label><br>
-            <select class="form-control" id="selectWard" name="ward_id"></select>
+            <select class="form-control selectsubRoleWard" name="ward_id"></select>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6 col-lg-6">
             <label>Select Booth</label><br>
-            <select  class="form-control" id="selectBooth" name="booth_id[]"></select>
+            <select  class="form-control selectsubRoleBooth" name="booth_id"></select>
             </div>
             <div class="col-sm-6 col-lg-6">
                 <label>Member Id </label>
@@ -313,8 +301,8 @@ $(document).ready(function() {
       });
     /* Sub Role Hierarchy */
         $('#suRoleWard').hide();
-        $('.suRoleSK').hide();
-        $('.suRoleB').hide();
+        $('#suRoleSK').hide();
+        // $('.suRoleB').hide();
         $('input[type=radio][name=sub_role_hierarchy]').change(function() {
             var getValue = $(this).val();  
             var mandalID = $('#mandalID').val();
@@ -343,33 +331,29 @@ $(document).ready(function() {
 
             if(getValue == 'W'){
                 $('#suRoleWard').show();
-                $('.suRoleSK').hide();
-                $('.suRoleB').hide();
+                $('#suRoleSK').hide();
             }else if (getValue == 'SK'){
-                $('#suRoleWard').hide();
-                $('.suRoleSK').show();
-                $('.suRoleB').hide();
+                $('#suRoleWard').show();
+                $('#suRoleSK').show();
+                $(".selectsubRoleBooth").attr("multiple", (this.checked) ? "multiple" : "");
             } else if (getValue == 'B'){
-                $('#suRoleWard').hide();
-                $('.suRoleSK').hide();
-                $('.suRoleB').show();
+                $('#suRoleWard').show();
+                $('#suRoleSK').show();
+                $(".selectsubRoleBooth").removeAttr("multiple", (this.checked) ? "multiple" : "");
             } else {
                 $('#suRoleWard').hide();
-                $('.suRoleSK').hide();
-                $('.suRoleB').hide();
+                $('#suRoleSK').hide();                
+                    paramPosition = {'act':'wardincharge','mandalID':mandalID };
+                    ajax({
+                        a:"districtajax",
+                        b:paramPosition,
+                        c:function(){},
+                        d:function(data){
+                        $('.selectsubRoleWard').html(data);
+                        $('.selectsubRoleWard').multiselect('rebuild');
 
-                
-         paramPosition = {'act':'wardincharge','mandalID':mandalID };
-         ajax({
-            a:"districtajax",
-            b:paramPosition,
-            c:function(){},
-            d:function(data){
-               $('.selectsubRoleWard').html(data);
-               $('.selectsubRoleWard').multiselect('rebuild');
-
-            }
-         });
+                        }
+                    });
             }
 
             $('.selectsubRoleWard').multiselect({
