@@ -472,93 +472,93 @@
  $DistrictData = Table::getData($param);
 
 ?>
-<div class="modal-content">
-   <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal">&times;</button>
-      <h5 style="color:#286b28"><i class="fa fa-files-o" aria-hidden="true"></i> ADD WARD </h5>
+   <div class="modal-content">
+      <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal">&times;</button>
+         <h5 style="color:#286b28"><i class="fa fa-files-o" aria-hidden="true"></i> ADD WARD </h5>
+      </div>
+      <div class="modal-body">
+         <form action="javascript:void(0)" id="formDataWard" method="POST">
+            <input type="hidden" value="addNewWard" name="act">
+            <div class="row">
+               <div class="form-group col-sm-6">
+                  <label for="exampleInputEmail1">Name of District</label>
+                  <select class="form-control" name="district_id" required readonly>
+                     <option  value="<?php echo $DistrictData->id ?>" ><?php echo $DistrictData->district_name ?></option>
+                  </select>
+               </div>
+               <div class="form-group col-sm-6">
+                  <label >Name of Mandal</label>
+                  <select class="form-control" name="mandal_id" required readonly>
+                     <option  value="<?php echo $mandalData->id ?>" ><?php echo $mandalData->mandal_name ?></option>
+                  </select>
+               </div>
+            </div>
+            <div class="row">
+               <div class="form-group col-sm-6">
+                  <label >MP Constituency </label>
+                  <select class="form-control" name="mp_const_id" required>
+                     <?php (isset($_POST["mp_const_id"])) ? $mp_const_id = $_POST["mp_const_id"] : $mp_const_id; ?>
+                     <option selected="true" disabled="disabled" value="">Please Select MP Constituency</option>
+                     <?php $mpquery = array('tableName' => TBL_BJP_MP_CONST, 'fields' => array('*'),'condition'=>array('district_id'=>$mandalData->district_id.'-INT'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
+                        $mpConstantData = Table::getData($mpquery);
+                           foreach($mpConstantData as $Key=>$Val){ ?>
+                     <option <?php if ($mp_const_id == $Val->id ) echo 'selected' ; ?> value="<?php echo $Val->id  ?>" ><?php echo $Val->bjp_mp_const_name ?></option>
+                     <?php } ?>
+                  </select>
+               </div>
+               <div class="form-group col-sm-6">
+                  <label >LG Constituency </label>
+                  <select class="form-control" name="lg_const_id" required>
+                     <?php (isset($_POST["lg_const_id"])) ? $lg_const_id = $_POST["lg_const_id"] : $lg_const_id; ?>
+                     <option selected="true" disabled="disabled" value="">Please Select LG Constituency</option>
+                     <?php $lgquery = array('tableName' => TBL_BJP_LG_CONST, 'fields' => array('*'),'condition'=>array('district_id'=>$mandalData->district_id.'-INT'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
+                        $lgConstantData = Table::getData($lgquery);
+                           foreach($lgConstantData as $Key=>$Val){ ?>
+                     <option <?php if ($lg_const_id == $Val->id ) echo 'selected' ; ?> value="<?php echo $Val->id  ?>" ><?php echo $Val->lg_const_name ?></option>
+                     <?php } ?>
+                  </select>
+               </div>
+            </div>
+            <div class="row">
+               <div class="form-group col-sm-4">
+                  <label >Ward No</label>
+                  <input type="text" class="form-control" name="ward_number"  value="<?php echo $ward_number; ?>" placeholder="Enter Ward No.">
+               </div>
+               <div class="form-group col-sm-4">
+                  <label >Ward Old No </label>
+                  <input type="text" class="form-control" name="ward_number_old"  value="<?php echo $ward_number_old; ?>" placeholder="Enter Ward Old No.">
+               </div>
+               <div class="form-group col-sm-4">
+                  <label >Ward Zip Code </label>
+                  <input type="text" class="form-control" name="ward_zipcode"  value="<?php echo $ward_zipcode; ?>" placeholder="Enter Ward Zip Code.">
+               </div>
+            </div>
+            <div class="row">
+               <div class="form-group col-sm-6">
+                  <label >Ward Category</label>
+                  <select class="form-control" name="ward_category">
+                  <?php (isset($_POST["ward_category"])) ? $ward_category = $_POST["ward_category"] : $ward_category; ?>
+                     <option selected="true" disabled="disabled" value="">Please Select Category</option>
+                     <option <?php if ($ward_category == "P" ) echo 'selected' ; ?> value="P" >PUBLIC</option>
+                     <option <?php if ($ward_category == "W" ) echo 'selected' ; ?> value="W" >WOMEN</option>
+                     <option <?php if ($ward_category == "R" ) echo 'selected' ; ?> value="W" >RESERVED</option>
+                  </select>
+               </div>
+               <div class="form-group col-sm-6">
+                  <label >Ward Type</label>
+                  <select class="form-control" name="ward_type">
+                  <?php (isset($_POST["ward_type"])) ? $ward_type = $_POST["ward_type"] : $ward_type; ?>
+                     <option selected="true" disabled="disabled" value="">Please Select Category</option>
+                     <option <?php if ($ward_type == "R" ) echo 'selected' ; ?> value="R" >RURAL</option>
+                     <option <?php if ($ward_type == "C" ) echo 'selected' ; ?> value="C" >CITY</option>
+                  </select>
+               </div>
+            </div>
+            <input type="submit" id="submit"  class="btn btn-success" value="Submit">
+         </form>
+      </div>
    </div>
-   <div class="modal-body">
-      <form action="javascript:void(0)" id="formDataWard" method="POST">
-         <input type="hidden" value="addNewWard" name="act">
-         <div class="row">
-            <div class="form-group col-sm-6">
-               <label for="exampleInputEmail1">Name of District</label>
-               <select class="form-control" name="district_id" required readonly>
-                  <option  value="<?php echo $DistrictData->id ?>" ><?php echo $DistrictData->district_name ?></option>
-               </select>
-            </div>
-            <div class="form-group col-sm-6">
-               <label >Name of Mandal</label>
-               <select class="form-control" name="mandal_id" required readonly>
-                  <option  value="<?php echo $mandalData->id ?>" ><?php echo $mandalData->mandal_name ?></option>
-               </select>
-            </div>
-         </div>
-         <div class="row">
-            <div class="form-group col-sm-6">
-               <label >MP Constituency </label>
-               <select class="form-control" name="mp_const_id" required>
-                  <?php (isset($_POST["mp_const_id"])) ? $mp_const_id = $_POST["mp_const_id"] : $mp_const_id; ?>
-                  <option selected="true" disabled="disabled" value="">Please Select MP Constituency</option>
-                  <?php $mpquery = array('tableName' => TBL_BJP_MP_CONST, 'fields' => array('*'),'condition'=>array('district_id'=>$mandalData->district_id.'-INT'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
-                     $mpConstantData = Table::getData($mpquery);
-                        foreach($mpConstantData as $Key=>$Val){ ?>
-                  <option <?php if ($mp_const_id == $Val->id ) echo 'selected' ; ?> value="<?php echo $Val->id  ?>" ><?php echo $Val->bjp_mp_const_name ?></option>
-                  <?php } ?>
-               </select>
-            </div>
-            <div class="form-group col-sm-6">
-               <label >LG Constituency </label>
-               <select class="form-control" name="lg_const_id" required>
-                  <?php (isset($_POST["lg_const_id"])) ? $lg_const_id = $_POST["lg_const_id"] : $lg_const_id; ?>
-                  <option selected="true" disabled="disabled" value="">Please Select LG Constituency</option>
-                  <?php $lgquery = array('tableName' => TBL_BJP_LG_CONST, 'fields' => array('*'),'condition'=>array('district_id'=>$mandalData->district_id.'-INT'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
-                     $lgConstantData = Table::getData($lgquery);
-                        foreach($lgConstantData as $Key=>$Val){ ?>
-                  <option <?php if ($lg_const_id == $Val->id ) echo 'selected' ; ?> value="<?php echo $Val->id  ?>" ><?php echo $Val->lg_const_name ?></option>
-                  <?php } ?>
-               </select>
-            </div>
-         </div>
-         <div class="row">
-            <div class="form-group col-sm-4">
-               <label >Ward No</label>
-               <input type="text" class="form-control" name="ward_number"  value="<?php echo $ward_number; ?>" placeholder="Enter Ward No.">
-            </div>
-            <div class="form-group col-sm-4">
-               <label >Ward Old No </label>
-               <input type="text" class="form-control" name="ward_number_old"  value="<?php echo $ward_number_old; ?>" placeholder="Enter Ward Old No.">
-            </div>
-            <div class="form-group col-sm-4">
-               <label >Ward Zip Code </label>
-               <input type="text" class="form-control" name="ward_zipcode"  value="<?php echo $ward_zipcode; ?>" placeholder="Enter Ward Zip Code.">
-            </div>
-         </div>
-         <div class="row">
-            <div class="form-group col-sm-6">
-               <label >Ward Category</label>
-               <select class="form-control" name="ward_category">
-               <?php (isset($_POST["ward_category"])) ? $ward_category = $_POST["ward_category"] : $ward_category; ?>
-                  <option selected="true" disabled="disabled" value="">Please Select Category</option>
-                  <option <?php if ($ward_category == "P" ) echo 'selected' ; ?> value="P" >PUBLIC</option>
-                  <option <?php if ($ward_category == "W" ) echo 'selected' ; ?> value="W" >WOMEN</option>
-                  <option <?php if ($ward_category == "R" ) echo 'selected' ; ?> value="W" >RESERVED</option>
-               </select>
-            </div>
-            <div class="form-group col-sm-6">
-               <label >Ward Type</label>
-               <select class="form-control" name="ward_type">
-               <?php (isset($_POST["ward_type"])) ? $ward_type = $_POST["ward_type"] : $ward_type; ?>
-                  <option selected="true" disabled="disabled" value="">Please Select Category</option>
-                  <option <?php if ($ward_type == "R" ) echo 'selected' ; ?> value="R" >RURAL</option>
-                  <option <?php if ($ward_type == "C" ) echo 'selected' ; ?> value="C" >CITY</option>
-               </select>
-            </div>
-         </div>
-         <input type="submit" id="submit"  class="btn btn-success" value="Submit">
-      </form>
-   </div>
-</div>
 <?php } else if ($modelAction == 'officeBearersNew'){ ?>
    <div class="modal-content">
       <div class="modal-header">
@@ -606,8 +606,76 @@
       </div>
    </form>
 </div>
-<?php } ?>
+<?php } else if($modelAction == 'addNewBooth'){?>
+   <div class="modal-content">
+      <div class="modal-header">
+         <h5 class="modal-title" style="color:green"><i class="fa fa-plus" aria-hidden="true"></i> ADD NEW BOOTH</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      <div class="modal-body">
+      <form action="javascript:void(0)" id="formAddNewBooth" method="POST">
+         <input type="hidden" value="addNewBooth" name="act">
+         <div class="row">
+            <div class="form-group col-sm-6">
+               <?php $wquery = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition'=>array('id'=>$_POST['ward'].'-INT'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
+                     $wqueryList = Table::getData($wquery);?>
+                  <label >Ward Name</label>
+                  <input type="text" class="form-control" readonly value="<?php echo $wqueryList->ward_number; ?>" placeholder="Enter Ward No.">
+                  <input type="hidden" class="form-control" name="ward_id" readonly value="<?php echo $wqueryList->id; ?>">
+            </div>
+            <div class="form-group col-sm-6">
+               <label >Booth Name/No</label>
+               <input type="text" class="form-control" name="booth_number" placeholder="Enter Booth Name/No.">
+            </div>
+         </div>
+         <div class="row">
+            <div class="form-group col-sm-6">
+               <label >Booth Old Name/No </label>
+               <input type="text" class="form-control" name="old_booth_number" placeholder="Enter Booth Old Name/No.">
+            </div>
+            <div class="form-group col-sm-6">
+               <label >Total Voter's </label>  
+                  <input type="text" class="form-control" name="total_voters" placeholder="Total Voters">
+            </div>
+         </div>
+         <div class="row">
+            <div class="form-group col-sm-4">
+               <label >Male Voter's </label>  
+                  <input type="text" class="form-control" name="male_voters_count" placeholder="Total Male Voters">
+            </div>       <div class="form-group col-sm-4">
+               <label >Female Voter's </label>  
+                  <input type="text" class="form-control" name="female_voters_count" placeholder="Total Female Voters">
+            </div>
+            <div class="form-group col-sm-4">
+               <label >Other Voter's </label>  
+                  <input type="text" class="form-control" name="other_voters_count" placeholder="Total Other Voters">
+            </div>
+         </div>
 
+         <div class="row">
+            <div class="form-group col-sm-12">
+               <label >Address</label>
+                  <input type="text" class="form-control" name="booth_address" placeholder="Booth Address">
+            </div>
+         </div>
+         <div class="row">
+            <div class="form-group col-sm-6">
+               <label >Booth Zipcode </label>  
+                  <input type="text" class="form-control" name="booth_zipcode" placeholder="Booth Zipcode">
+            </div>       
+            <div class="form-group col-sm-6">
+               <label >Booth Policestation </label>  
+                  <input type="text" class="form-control" name="booth_police_station" placeholder="Booth Policestation">
+            </div>
+         </div>
+         <input type="submit" id="submit"  class="btn btn-success" value="Submit">
+      </form>
+
+      </div>
+   </div>
+<?php } ?>
 <script>
 /************* FORM SUBMIT ************/
    /* 1. Add Edit District Form */
@@ -739,12 +807,46 @@
                d:function(data){
                   if(ward_Id != ''){
                   getStateWard(ward_Id); }  
-                  $('#deleteModel').modal('toggle');         
+                  $('.deleteModel').modal('toggle');         
                   $('#deleteOfficeBearers_'+ofId).remove();
                }          
             });
          }
-      })
+      });
+
+   /* 6. Add New Booth */
+    $('form#formAddNewBooth').validate({
+         rules: {
+            ward_id: "required",
+            booth_number: "required",
+            booth_address: "required",
+         },
+         messages: {
+            booth_number: "Please Enter Booth Name/No",
+            booth_address: "Please Enter Booth Address",
+         },
+         submitHandler: function(form){
+         var formData = $('form#formAddNewBooth').serialize();
+            ajax({
+               a:"districtajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  $('.deleteModel').modal('toggle');
+                  // paramData = {'act':'getAllData','type':'all'}; 
+                  //    ajax({
+                  //          a:"districtajax",
+                  //          b:paramData,
+                  //          c:function(){},
+                  //          d:function(data){
+                  //             $('#myTable').html(data);
+                  //          }
+                  //    });
+               }          
+            });
+         }
+      });
+
 
 /*********** WRAD DETAILS GET *********/
    function wardDetailsget(id){

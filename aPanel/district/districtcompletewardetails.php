@@ -53,7 +53,7 @@
             <?php                 
                 $i = 1; 
                 foreach($officeberasList as $key =>$val) {
-                    if($val->role_hierarchy == 'W'){
+                    if($val->role_hierarchy == 'W' || $val ->sub_role_hierarchy == 'W'){
                     ?>
                 <tr>
                     <td><?php echo $i; ?></td>
@@ -86,7 +86,7 @@
             <?php                 
                 $i = 1; 
                 foreach($officeberasList as $key =>$val) {
-                    if($val->role_hierarchy == 'SK'){
+                    if($val->role_hierarchy == 'SK' || $val ->sub_role_hierarchy == 'SK'){
                     ?>
                 <tr>
                     <td><?php echo $i; ?></td>
@@ -124,7 +124,7 @@
             <?php                 
                 $i = 1; 
                 foreach($officeberasList as $key =>$val) {
-                    if($val->role_hierarchy == 'B'){
+                    if($val->role_hierarchy == 'B' || $val ->sub_role_hierarchy == 'B'){
                     ?>
                 <tr>
                     <td><?php echo $i; ?></td>
@@ -146,7 +146,7 @@
         </table>
         <table  class=" wardDetails table table-striped table-bordered" >
             <thead>
-            <tr><th colspan='7' style="color:#ff9933">BOOTH DETAILS</th></tr>
+            <tr><th colspan='4' style="color:#ff9933">BOOTH DETAILS</th><th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBooth()"><i class="fa fa-plus"></i> ADD NEW BOOTH</a></th></tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Booth Number</th>
@@ -244,5 +244,18 @@ function removeofficbearers(id){
                      $('#modelshow').html(data);
                   }
             });   
+}
+
+function addNewBooth(){
+    var wardId = $('#officeBearersId').val();
+    paramModel = {'action':'addNewBooth','ward':wardId}
+    ajax({
+            a:"districtmodel",
+            b:paramModel,
+            c:function(){},
+            d:function(data){
+                $('#modelshow').html(data);
+            }
+    });   
 }
 </script>
