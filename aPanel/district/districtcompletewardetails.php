@@ -42,7 +42,6 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Mobile</th>
-                    <th>Role Hierarchy</th>
                     <th>address</th>
                     <th>Verified</th>
                     <th>Action</th>
@@ -59,11 +58,9 @@
                     <td><?php echo $i; ?></td>
                     <td><?php echo $val->person_name; if($val->person_name_ta !=''){ ?>(<?php echo $val->person_name_ta ?>)<?php } ?></td>
                     <td><?php echo $val->mobile_number ?></td>
-                    <td><?php switch($val->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?></td>
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
-                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
-
+                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'W')" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                 </tr>    
             <?php $i ++;} } ?>      
             </tbody>    
@@ -92,7 +89,6 @@
                     <td><?php echo $i; ?></td>
                     <td><?php echo $val->person_name; if($val->person_name_ta !=''){ ?>(<?php echo $val->person_name_ta ?>)<?php } ?></td>
                     <td><?php echo $val->mobile_number ?></td>
-                    <!-- <td><?php // switch($val->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?></td> -->
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
                     <td><?php 
@@ -102,7 +98,7 @@
                                echo $value->booth_number; echo '<br>';
                         }
                     ?></td>
-                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'SK')" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                 </tr>    
             <?php $i ++;} } ?>      
             </tbody>    
@@ -139,7 +135,7 @@
                                echo $value->booth_number; echo '<br>';
                         }
                     ?></td>
-                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'B')" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                 </tr>    
             <?php $i ++;} } ?>      
             </tbody>    
@@ -172,40 +168,7 @@
                 </tr>    
             <?php $i ++;} ?>      
             </tbody>    
-        </table>
-        <!-- <br><br>
-        <table  class="wardDetails table table-striped table-bordered" >
-            <thead>
-            <tr><th colspan='5'>MEMBERS</th></tr>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Membership Number</th>
-                    <th>Mobile</th>
-                    <th>Address</th>
-                    <th>Verified</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            <?php 
-            //   $memberquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-STRING','status'=> 'A-CHAR'), 'showSql' => 'N');
-            //   $member_list = Table::getData($memberquery);
-            // $i = 1; 
-            ?><pre><?php// print_r( $booth_list) ?></pre><?php
-
-            // foreach($member_list as $key =>$val) { ?>
-                <tr>
-                    <td><?php //echo $i; ?></td>
-                    <td><?php //echo $val->member_name ?></td>
-                    <td><?php //echo $val->membership_number ?></td>
-                    <td><?php //echo $val->member_mobile ?></td>
-                    <td><?php //echo $val->member_address ?></td>
-                    <td><?php //if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
-                </tr>    
-            <?php //$i ++;} ?>      
-            </tbody>    
-        </table> -->
+        </table>  
    </div>
 </div>
 <br>
@@ -233,9 +196,9 @@ $(document).ready(function() {
         "paging":         false
     } );
 } );
-function removeofficbearers(id){
+function removeofficbearers(id,sub){
     var wardId = $('#officeBearersId').val();
-    paramData = {'ofid':id,'action':'deleteOfficeBearers','ward':wardId}
+    paramData = {'ofid':id,'action':'deleteWardMembers','ward':wardId,'subRole':sub}
             ajax({
                   a:"districtmodel",
                   b:paramData,

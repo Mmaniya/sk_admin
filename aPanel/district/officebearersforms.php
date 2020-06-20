@@ -199,7 +199,6 @@ $(document).ready(function() {
 
          var mandalID = $('#mandalID').val();
          var mainRole = $('#roleHierarchy').val();
-  
          paramPosition = {'act':'findrolePosition','position':mainRole,'mandalID':mandalID };
          ajax({
             a:"districtajax",
@@ -209,7 +208,7 @@ $(document).ready(function() {
                $('.showData').html(data);
             }
          });
-
+        
     /* Get Ward Details */
 
          paramPosition = {'act':'wardincharge','mandalID':mandalID };
@@ -274,6 +273,7 @@ $(document).ready(function() {
             selectMem: "Eneter MembershipId/Mobile/Name"
          },
          submitHandler: function(form){
+             
          var formData = $('form#formDataddNewOb').serialize();
          var id = $('#mandalID').val();
          var role = $('#roleHierarchy').val();
@@ -286,15 +286,16 @@ $(document).ready(function() {
                   $("#inputvalue" ).trigger( "keyup" );
                   officeBearesDetailsget(id);
                   $('#memberID').val('');
-                     // paramData = {'act':'fetchMandalThalaivar','id':id}; 
-                     //    ajax({
-                     //       a:"districtajax",
-                     //       b:paramData,
-                     //       c:function(){},
-                     //       d:function(data){
-                     //          $('#mandalThalaivar').html(data);
-                     //       }
-                     // });
+                  paramPosition = {'act':'findrolePosition','position':mainRole,'mandalID':mandalID };
+                    ajax({
+                        a:"districtajax",
+                        b:paramPosition,
+                        c:function(){},
+                        d:function(data){
+                        $('.showData').html(data);
+                        }
+                    });
+                    
                   }          
                 });
             }      

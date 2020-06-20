@@ -61,18 +61,8 @@
          echo $roleMembersList->role_name;
          ?></span>
       </label><br>
-         <?php // echo $value->ward_id ?>
-      <!-- <label> Role Position: <span class="mytextcolor">
-      <?php  
-         // $roleMembers = array('tableName' => TBL_BJP_ROLE, 'fields' => array('*'),'condition' => array('id' => $value->role_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
-         // $roleMembersList = Table::getData($roleMembers);
-         // echo $roleMembersList->role_name;
-         ?></span>
-      </label><br> -->
-
       <?php } ?>
-      <!-- <a href="javascript:void(0)" style="float:right;color:orange"  onClick="editofficebearers(<?php // echo $value->id; ?>,<?php // echo $value->mandal_id; ?>,<?php // echo $value->district_id; ?>,<?php // echo $value->member_id ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a><br> -->
-      <a href="javascript:void(0)" style="float:right;color:red" data-toggle="modal" data-target=".deleteModel"  onClick="deleteofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+      <a href="javascript:void(0)" style="float:right;color:red" data-toggle="modal" data-target=".uddateOB"  onClick="deleteofficebearers(<?php echo $value->id; ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
       </span>
    </div>
    <span id="editOfficeBearers_<?php echo $value->id ?>"></span>
@@ -87,9 +77,9 @@
 <?php } echo $table_val; ?>
 
 <!-- Modal -->
-<div class="modal fade deleteModel" role="dialog">
+<div class="modal fade uddateOB" role="dialog">
       <div class="modal-dialog">
-            <span id="modelshow"></span>
+            <span id="updateModel"></span>
       </div>
    </div>
 
@@ -133,28 +123,16 @@
    }
 
    function deleteofficebearers(id) {
-
-
-      paramData = {'ofid':id,'action':'deleteOfficeBearers','ward':null}
+            
+      paramData = {'ofid':id,'action':'deleteOfficeBearers','subRole':'M'}
             ajax({
                   a:"districtmodel",
                   b:paramData,
                   c:function(){},
                   d:function(data){
-                     $('#modelshow').html(data);
+                     $('#updateModel').html(data);
                   }
-            });   
-            
-      // paramData = {'id':id,'act':'statusDataUpdateforOB'}
-      //       ajax({
-      //             a:"districtajax",
-      //             b:paramData,
-      //             c:function(){},
-      //             d:function(data){
-      //                $('#deleteOfficeBearers_'+id).remove();
-
-      //             }
-      //       });                     
+            });                     
 
    }
 

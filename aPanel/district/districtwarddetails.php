@@ -53,8 +53,11 @@
                 $member_list = Table::getData($memberquery);
                 $verifiedquery = array('tableName' => TBL_BJP_MEMBER, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','is_verified'=>'Y-CHAR','status'=> 'A-CHAR'), 'showSql' => 'N');
                 $verifiedmember = Table::getData($verifiedquery); 
-                $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'n');
-                $officeberasList = Table::getData($officebearers);                 
+               //  $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'Y');
+               //  $officeberasList = Table::getData($officebearers);   
+               $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `ward_id`="'.$value->id.'" AND (`role_hierarchy` != "" AND `role_hierarchy` !="M" OR `sub_role_hierarchy` != "") AND `status`="A"';
+               $officeberasList=dB::mExecuteSql($qry); 
+                 
          	?>	
       <tr align="center">
          <td><a href="javascript:void(0);" title="click to get more information." onClick="getStateWard(<?php  echo $value->id; ?>)" ><?php  echo $value->ward_number; ?></a></td>

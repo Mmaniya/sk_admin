@@ -585,8 +585,30 @@
 
       </div>
 </div>
-<?php } else if ($modelAction == 'deleteOfficeBearers'){ ?>
+<?php } else if ($modelAction == 'deleteWardMembers'){ ?>
 <div class="modal-content">
+   <div class="modal-header">
+      <h5 class="modal-title" style="color:red"><i class="fa fa-trash" aria-hidden="true"></i>  DELETE RECORDS</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      </button>
+   </div>
+   <div class="modal-body">
+      <p>Are you sure cofirm delete this data.?</p>
+   </div>
+   <form id="deleteWardMembers" action="javascipt:void(0)">
+      <input type="hidden" name="act" value="statusDataUpdateforOB">
+      <input type="hidden" name="id" value="<?php echo $_POST['ofid']; ?>" id="officeBeraersId">
+      <input type="hidden" name="" value="<?php echo $_POST['ward'] ?>" id="ward_Id">
+      <input type="hidden" name="subRole" value="<?php echo $_POST['subRole'] ?>" id="subRole">
+      <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+         <input type="submit" id="submit" class="btn btn-danger"  value="Delete">
+      </div>
+   </form>
+</div>
+<?php } else if($modelAction == 'deleteOfficeBearers'){?>
+   <div class="modal-content">
    <div class="modal-header">
       <h5 class="modal-title" style="color:red"><i class="fa fa-trash" aria-hidden="true"></i>  DELETE RECORD</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -596,10 +618,10 @@
    <div class="modal-body">
       <p>Are you sure cofirm delete this data.?</p>
    </div>
-   <form id="formOfficeBearersDelete" action="javascipt:void(0)">
+   <form id="deleteOfficeBearers" action="javascipt:void(0)">
       <input type="hidden" name="act" value="statusDataUpdateforOB">
       <input type="hidden" name="id" value="<?php echo $_POST['ofid']; ?>" id="officeBeraersId">
-      <input type="hidden" name="" value="<?php echo $_POST['ward'] ?>" id="ward_Id">
+      <input type="hidden" name="subRole" value="<?php echo $_POST['subRole'] ?>" id="subRole">
       <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
          <input type="submit" id="submit" class="btn btn-danger"  value="Delete">
@@ -794,20 +816,39 @@
          }
       });
    
-   /* 5. Status Update For Office Bearers*/
-      $('form#formOfficeBearersDelete').validate({
+   /* 5. Status Update For Ward Members */
+      $('form#deleteWardMembers').validate({
          submitHandler: function(form){
             var ofId = $('#officeBeraersId').val();
-            var ward_Id = $('#ward_Id').val();
-            var formData = $('form#formOfficeBearersDelete').serialize();
+            var id = $('#ward_Id').val();
+            var formData = $('form#deleteWardMembers').serialize();
             ajax({
                a:"districtajax",
                b:formData,
                c:function(){},
                d:function(data){
-                  if(ward_Id != ''){
-                  getStateWard(ward_Id); }  
-                  $('.deleteModel').modal('toggle');         
+                  if($('.deleteModel').modal('toggle')){
+                        getStateWard(id);
+                  }
+                  // $("#wardFullDetails").load(location.href+" #wardFullDetails>*","");
+               }          
+            });
+         }
+      });
+
+   /* 5. Status Update For Ward Members */
+
+      $('form#deleteOfficeBearers').validate({
+         submitHandler: function(form){
+            var ofId = $('#officeBeraersId').val();
+            var ward_Id = $('#ward_Id').val();
+            var formData = $('form#deleteOfficeBearers').serialize();
+            ajax({
+               a:"districtajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  $('.uddateOB').modal('toggle');         
                   $('#deleteOfficeBearers_'+ofId).remove();
                }          
             });
@@ -861,18 +902,18 @@
       });
    }
 
-   $(document).ready(function() {
-         var id = $('#getMandalid').val();
-         paramData = {'act':'wardDetailsGet','id':id }; 
-            ajax({
-               a:"districtajax",
-               b:paramData,
-               c:function(){},
-               d:function(data){
-                  $('#wardDetails').html(data);
-               }
-         });
-      });
+   // $(document).ready(function() {
+   //       var id = $('#getMandalid').val();
+   //       paramData = {'act':'wardDetailsGet','id':id }; 
+   //          ajax({
+   //             a:"districtajax",
+   //             b:paramData,
+   //             c:function(){},
+   //             d:function(data){
+   //                $('#wardDetails').html(data);
+   //             }
+   //       });
+   //    });
 
 /**** OFFICE BEARES DETAILS GET *******/
    function officeBearesDetailsget(id){
@@ -952,27 +993,27 @@
          $('#editOfficeBearers_'+id).hide();
    }
 
-   $(function () {
-        $("#submit").click(function () {
-            $(".deleteModel").modal("hide");
-        });
-    });
+   // $(function () {
+   //      $("#submit").click(function () {
+   //          $(".deleteModel").modal("hide");
+   //      });
+   //  });
 
 /*********** GET MANDAL THALAIVAR *****/
-   $(document).ready(function() {
-      var id = $('#getMandalid').val();
-      paramData = {'act':'fetchMandalThalaivar','id':id}; 
-         ajax({
-            a:"districtajax",
-            b:paramData,
-            c:function(){},
-            d:function(data){
-               $('#mandalThalaivar').html(data);
-            }
-      });
+   // $(document).ready(function() {
+      // var id = $('#getMandalid').val();
+      // paramData = {'act':'fetchMandalThalaivar','id':id}; 
+      //    ajax({
+      //       a:"districtajax",
+      //       b:paramData,
+      //       c:function(){},
+      //       d:function(data){
+      //          $('#mandalThalaivar').html(data);
+      //       }
+      // });
 
 
-   });
+   // });
 
 /*********** GET WARD INCHARCE ********/
 
@@ -987,6 +1028,26 @@
                $('#selectWard').html(data);
             }
       });
+
+      paramData = {'act':'fetchMandalThalaivar','id':id}; 
+         ajax({
+            a:"districtajax",
+            b:paramData,
+            c:function(){},
+            d:function(data){
+               $('#mandalThalaivar').html(data);
+            }
+      });
+
+      paramData = {'act':'wardDetailsGet','id':id }; 
+            ajax({
+               a:"districtajax",
+               b:paramData,
+               c:function(){},
+               d:function(data){
+                  $('#wardDetails').html(data);
+               }
+         });
       
    });
 
