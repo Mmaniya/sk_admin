@@ -195,7 +195,7 @@
 
     if($_POST['act'] == 'MandalofficeBearers') {
         ob_clean();  
-            $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['id'].'" AND `role_hierarchy` ="'.$_POST['role'].'" AND `status`="A" ORDER BY id DESC';
+            $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['id'].'" AND (`role_hierarchy` ="'.$_POST['role'].'" OR `sub_role_hierarchy` ="'.$_POST['role'].'") AND `status`="A" ORDER BY id DESC';
             $stateMembersList=dB::mExecuteSql($qry); 
 
             if ($_POST['page'] == '') $page = 1;
@@ -211,7 +211,7 @@
     
     if($_POST['act'] == 'memberListpagination') {
         ob_clean();  
-            $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['mandalId'].'" AND `role_hierarchy` ="'.$_POST['role'].'" AND `status`="A" ORDER BY id DESC';
+            $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['mandalId'].'" AND (`role_hierarchy` ="'.$_POST['role'].'" OR `sub_role_hierarchy` ="'.$_POST['role'].'") AND `status`="A" ORDER BY id DESC';
             $stateMembersList=dB::mExecuteSql($qry);
 
             if ($_POST['page'] == '') $page = 1;
@@ -459,34 +459,7 @@
                     }
                 }
             }
-        
-            // if($_POST['sub_role_hierarchy'] == 'SK'){
 
-            //     foreach ($_POST['booth_id'] as $booth => $boothvalue){
-            //         $booth_id = implode(',',$_POST['booth_id']);
-            //     }
-            //     $subroleId = 1;
-            //     $subrolesk = "select booth_id from ".TBL_BJP_OFFICE_BEARERS." where (`sub_role_hierarchy` = 'SK' OR `role_hierarchy` = 'SK') AND `mandal_id`=".$_POST['mandal_id']." AND `ward_id`=".$_POST['ward_id']." AND `status` = 'A'";
-            //     $subroleskList=dB::mExecuteSql($subrolesk); 
-            //     $newarry = array();
-            //     foreach ($subroleskList as $SK => $SKV){
-            //         $newarry[]= $SKV->booth_id;
-            //     }
-            //     $arraymerge = implode(',',$newarry);
-            //     $totalarray = explode(',',$arraymerge);
-            //     foreach($totalarray as $subarray => $subvalue){
-            //         // print_r($subvalue);
-            //         // print_r($booth_id);
-            //     if (in_array(trim($subvalue), $_POST['booth_id'])){  
-            //             $subroleId = 1;
-            //             echo $getsk = 'select booth_number from '.TBL_BJP_BOOTH.' where `id` = "'. $subvalue.'" AND `status`="A"';
-            //             $getSkDetails=dB::mExecuteSql($getsk);
-            //             $getBoothname = array();
-            //             foreach ($getSkDetails as $Bk => $BV){
-            //                 $result = $BV->booth_number. ' Booth Incharge ';
-            //             }
-            //         }
-            //     }
             } else if($_POST['sub_role_hierarchy'] == 'B'){
                 $subroleId = 1;
                 $subroleb = "select booth_id from ".TBL_BJP_OFFICE_BEARERS." where (`sub_role_hierarchy` = 'B' OR `role_hierarchy` = 'B') AND `mandal_id`=".$_POST['mandal_id']." AND `ward_id`=".$_POST['ward_id']." AND `status` = 'A'";
@@ -714,7 +687,7 @@
         exit();
     }
 
-/********* 15.DELETE OFFICE BEARERS **********/
+/********* 16.DELETE OFFICE BEARERS **********/
     if ($_POST['act'] == 'statusDataUpdateforOB') {
         ob_clean();
 
@@ -735,6 +708,7 @@
         }
         $param['updated_date'] = date('Y-m-d H:i:s', time());
         $param['updated_by'] = $_SESSION['user_id'];
+        $param['status'] = 'I';
         $where = array('id' => $_POST['id']);
         Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
 
@@ -745,7 +719,7 @@
         // Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
         exit();
     } 
-/********* 16.FETCH MANDAL THALAIVAR *********/
+/********* 17.FETCH MANDAL THALAIVAR *********/
     if($_POST['act'] == 'fetchMandalThalaivar'){
         
         $mandal = 'select *, (select role_abbr from '.TBL_BJP_ROLE.' where id = role_id ) as position, (select role_name from '.TBL_BJP_ROLE.' where id = role_id ) as rolename from '.TBL_BJP_OFFICE_BEARERS.' where `mandal_id`="'.$_POST['id'].'" AND `role_hierarchy` ="M" AND `status`="A"';
@@ -779,7 +753,7 @@
        <?php   } } 
 
     }
-/********* 17.SELECT NEW WARD ****************/
+/********* 18.SELECT NEW WARD ****************/
 
     if($_POST['act']=='wardincharge' || $_POST['action'] == 'W' || $_POST['action'] == 'SK' || $_POST['action'] == 'B'){
         ob_clean();
@@ -795,7 +769,7 @@
         <?php } 
         exit();
     }
-/********* 18 SELECT FOR NEW BOOTH  **********/
+/********* 19 SELECT FOR NEW BOOTH  **********/
 
     if($_POST['act']=='boothincharge'){
         ob_clean();
@@ -809,7 +783,7 @@
         <?php } 
         exit();
     }
-/********* 19.ADD NEW BOOTH ******************/
+/********* 20.ADD NEW BOOTH ******************/
     if ($_POST['act'] == 'addNewBooth') {
         ob_clean();
         $params = array('ward_id','old_booth_number','booth_number','total_voters','male_voters_count','female_voters_count','other_voters_count','booth_address','booth_zipcode','booth_police_station');
@@ -828,4 +802,31 @@
         }
         exit();
     }
+/********* 21.UPDATE OFFICE BEARERS **********/
+if ($_POST['act'] == 'editOfficeBearers') {
+
+    $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
+    $role_list = Table::getData($query);
+
+    // $subquery = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['sub_role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
+    // $sub_role_list = Table::getData($subquery);
+
+
+    $paramsOB = array('role_hierarchy','sub_role_hierarchy','state_id','membership_number','district_id','mandal_id','ward_id','mobile_number','whatsapp_number','member_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
+    foreach($paramsOB as $key => $Val) {
+        $param[$Val] = $$Val = check_input($_POST[$Val]);
+    }
+    if ($_POST['id'] != '')  {
+        if($_POST['role_id'] != ''){
+            $param['role_id'] =  $_POST['role_id'];
+        }
+        $param['role_position'] =  $role_list->role_abbr;
+        $param['updated_date'] = date('Y-m-d H:i:s', time());
+        $param['updated_by'] = $_SESSION['user_id'];
+        $param['booth_id'] = $booth_id;
+        $where = array('id' => $_POST['id']);
+        $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'Y'));
+        echo $result = '<p style="color:red;">'.$role_list->role_name.' Update</p>';
+    }
+}
  ?>

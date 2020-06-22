@@ -31,7 +31,7 @@
 <input type="hidden" value="<?php echo $value->role_hierarchy; ?>" id="memberRole">
 <div class="card" id="deleteOfficeBearers_<?php echo $value->id ?>">
    <div class="card-header">
-   Office Bearers Details
+      Office Bearers Details
    </div>
    <input type="hidden" value="<?php echo $value->id ?>" id="officeBearersId">
    <div class="card-body row">
@@ -45,24 +45,58 @@
       <?php } ?>
       </span>
       <span class="col-sm-5">
-      <?php $param = array('tableName'=>TBL_BJP_MEMBER,'fields'=>array('*'),'condition'=>array('id'=>$value->member_id.'-INT','status'=>'A-CHAR'),'showSql'=>'N','sortby'=>'asc');
-         $member_list = Table::getData($param);         
-         if($member_list->membership_number != ''){ ?>
-      <label>Membership Number : <?php echo $member_list->membership_number; ?> </label><br>
-      <?php } if($value->role_hierarchy != ''){ ?>
-      <label>Role Hierarchy: <?php switch($value->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?> </label><br>
-      <?php } if($value->sub_role_hierarchy != ''){ ?>
-      <label>Sub Role Hierarchy: <?php switch($value->sub_role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?> </label><br>
-      <?php } if($value->role_id != '0'){ ?>
-      <label> Role Position: <span class="mytextcolor">
-      <?php  
-         $roleMembers = array('tableName' => TBL_BJP_ROLE, 'fields' => array('*'),'condition' => array('id' => $value->role_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
-         $roleMembersList = Table::getData($roleMembers);
-         echo $roleMembersList->role_name;
-         ?></span>
-      </label><br>
-      <?php } ?>
-      <a href="javascript:void(0)" style="float:right;color:red" data-toggle="modal" data-target=".uddateOB"  onClick="deleteofficebearers(<?php echo $value->id; ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+         <?php $param = array('tableName'=>TBL_BJP_MEMBER,'fields'=>array('*'),'condition'=>array('id'=>$value->member_id.'-INT','status'=>'A-CHAR'),'showSql'=>'N','sortby'=>'asc');
+            $member_list = Table::getData($param);         
+            if($member_list->membership_number != ''){ ?>
+         <label>Membership Number : <?php echo $member_list->membership_number; ?> </label><br>
+         <?php } if($value->role_hierarchy != ''){ ?>
+         <!-- <label>Role Hierarchy: <?php // switch($value->role_hierarchy) { case "S" : echo 'STATE'; break; case "D" : echo 'DISTRICT'; break; case "M" : echo 'MANDAL'; break; case "W" : echo 'WARD'; break; case "SK" : echo 'SHAKTI KENDRAM'; break; case "B" : echo 'BOOTH'; break; } ?> </label><br> -->
+         <?php } if($value->sub_role_hierarchy != ''){ 
+            $qry = 'select * from '.TBL_BJP_BOOTH.' where `id` IN ('.$value->booth_id.') AND `status`="A"';
+            $findsubroleSKList=dB::mExecuteSql($qry);   
+            ?>      
+         <!-- <label>Sub Role Hierarchy: <?php // switch($value->sub_role_hierarchy) { 
+            // case "S" : echo 'STATE'; 
+            // break; 
+            // case "D" : echo 'DISTRICT'; 
+            // break; 
+            // case "M" : echo 'MANDAL'; 
+            // break;   
+            // case "W" : 
+            //    $findsubrole = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('id' => $value->ward_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
+            //    $findsubroleList = Table::getData($findsubrole);
+            //    $findsubroleList->ward_number.' WARD INCHARGE';
+            // break; 
+            // case "SK" :        
+            //     foreach($findsubroleSKList as $array) { 
+            //        echo $array->booth_number.',';
+            //        } 
+            //        echo 'SHAKTI KENDRA INCHARGE';
+            // break; 
+            // case "B" : 
+            //    foreach($findsubroleSKList as $array) { 
+            //       echo $array->booth_number;
+            //       } 
+            //    echo ' BOOTH INCHARGE'; 
+            // break; } ?> 
+         </label><br> -->
+         <?php } if($value->role_id != '0'){ ?>
+         <label> Role Position: <span class="mytextcolor">
+         <?php  
+            $roleMembers = array('tableName' => TBL_BJP_ROLE, 'fields' => array('*'),'condition' => array('id' => $value->role_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
+            $roleMembersList = Table::getData($roleMembers);
+            echo $roleMembersList->role_name;
+            ?></span>
+         </label>
+         <?php } ?>
+         <span class="row" >
+         <span class="col-sm-3">
+            <a href="javascript:void(0)" style="float:right;color:orange" data-toggle="modal" data-target="#updateofficebearers"  onClick="editofficebearers(<?php echo $value->id; ?>,<?php echo $value->mandal_id; ?>,<?php echo $value->district_id; ?>,<?php echo $value->member_id; ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+         </span>
+         <span class="col-sm-3">
+            <a href="javascript:void(0)" style="float:right;color:red" data-toggle="modal" data-target=".uddateOB"  onClick="deleteofficebearers(<?php echo $value->id; ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+         </span>
+         </span>
       </span>
    </div>
    <span id="editOfficeBearers_<?php echo $value->id ?>"></span>
@@ -75,15 +109,17 @@
    <td>
 </tr>
 <?php } echo $table_val; ?>
-
 <!-- Modal -->
 <div class="modal fade uddateOB" role="dialog">
-      <div class="modal-dialog">
-            <span id="updateModel"></span>
-      </div>
+   <div class="modal-dialog">
+      <span id="updateModel"></span>
    </div>
-
-
+</div>
+<div class="modal fade" id="updateofficebearers" role="dialog">
+   <div class="modal-dialog">
+      <span id="updateOB"></span>
+   </div>
+</div>
 <script>
    function ShowParentCatListPagination(page,condition,value) { 
       var mandalid = $('#viewMandalID').val();
@@ -99,29 +135,39 @@
          });
    }
    
-   function editofficebearers(id,mandalid,districtID,member_id) {
-
-      paramData = {'obid':id,'mandalid':mandalid,'districtID':districtID,'action':'editOfficeBearers'}                     
-      ajax({
-            a:"districtmodel",
-            b:paramData,
-            c:function(){},
-            d:function(data){
-               $('#editOfficeBearers_'+id).show();
-               $('#editOfficeBearers_'+id).html(data);
-            }
-      });
-      paramMember = {'act':'memberDetails','filter_by':member_id }; 
-            ajax({
-               a:"districtajax",
-               b:paramMember,
-               c:function(){},
-               d:function(data){
-                  $('#memberTable').html(data);
-               }
-         });                     
+   function editofficebearers(id,mandalid) {
+      var role = $('#memberRole').val();
+            paramData = {'obid':id,'action':'editOfficeBearers'}                     
+               ajax({
+                     a:"districtmodel",
+                     b:paramData,
+                     c:function(){},
+                     d:function(data){
+                        $('#updateOB').html(data);
+                     }
+               });
+                        
+      // paramData = {'obid':id,'mandalid':mandalid,'districtID':districtID,'action':'editOfficeBearers'}                     
+      // ajax({
+      //       a:"districtmodel",
+      //       b:paramData,
+      //       c:function(){},
+      //       d:function(data){
+      //          $('#editOfficeBearers_'+id).show();
+      //          $('#editOfficeBearers_'+id).html(data);
+      //       }
+      // });
+      // paramMember = {'act':'memberDetails','filter_by':member_id }; 
+      //       ajax({
+      //          a:"districtajax",
+      //          b:paramMember,
+      //          c:function(){},
+      //          d:function(data){
+      //             $('#memberTable').html(data);
+      //          }
+      //    });                     
    }
-
+   
    function deleteofficebearers(id) {
             
       paramData = {'ofid':id,'action':'deleteOfficeBearers','subRole':'M'}
@@ -133,7 +179,7 @@
                      $('#updateModel').html(data);
                   }
             });                     
-
+   
    }
-
+   
 </script>

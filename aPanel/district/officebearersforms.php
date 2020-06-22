@@ -209,7 +209,7 @@ $(document).ready(function() {
             }
          });
         
-    /* Get Ward Details */
+    /* Get Main Role Ward Details */
 
          paramPosition = {'act':'wardincharge','mandalID':mandalID };
          ajax({
@@ -303,7 +303,6 @@ $(document).ready(function() {
     /* Sub Role Hierarchy */
         $('#suRoleWard').hide();
         $('#suRoleSK').hide();
-        // $('.suRoleB').hide();
         $('input[type=radio][name=sub_role_hierarchy]').change(function() {
             var getValue = $(this).val();  
             var mandalID = $('#mandalID').val();
