@@ -60,7 +60,10 @@
                     <td><?php echo $val->mobile_number ?></td>
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
-                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'W')" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td>
+                        <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'W')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".updateofficebearers"  onclick="editwardofficebearers(<?php echo $val->id ?>,'W')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                    </td>
                 </tr>    
             <?php $i ++;} } ?>      
             </tbody>    
@@ -98,7 +101,10 @@
                                echo $value->booth_number; echo '<br>';
                         }
                     ?></td>
-                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'SK')" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td>
+                        <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'SK')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".updateofficebearers"  onclick="editwardofficebearers(<?php echo $val->id ?>,'SK')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                    </td>
                 </tr>    
             <?php $i ++;} } ?>      
             </tbody>    
@@ -135,7 +141,10 @@
                                echo $value->booth_number; echo '<br>';
                         }
                     ?></td>
-                    <td><a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'B')" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td>
+                        <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'B')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".updateofficebearers"  onclick="editwardofficebearers(<?php echo $val->id ?>,'B')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                    </td>
                 </tr>    
             <?php $i ++;} } ?>      
             </tbody>    
@@ -186,7 +195,11 @@
         <span id="modelshow"></span>
     </div>
 </div>
-
+<div class="modal fade updateofficebearers" role="dialog">
+   <div class="modal-dialog">
+      <span class="showof"></span>
+   </div>
+</div>
 
 <script>
 $(document).ready(function() {
@@ -220,5 +233,17 @@ function addNewBooth(){
                 $('#modelshow').html(data);
             }
     });   
+}
+
+function editwardofficebearers(id) {
+    paramData = {'obid':id,'action':'editOfficeBearers'}                     
+    ajax({
+        a:"districtmodel",
+        b:paramData,
+        c:function(){},
+        d:function(data){
+        $('.showof').html(data);
+        }
+    });
 }
 </script>

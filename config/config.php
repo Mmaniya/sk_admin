@@ -11,9 +11,9 @@ if ($dev_server) {
 	define("BA_DBUSER", "root");
 	define("BA_DBPASSWORD", "");
 	define("BA_DBNAME", "sk_admin");
-	
+		
 	//Constants
-	define('BASE_URL', 'http://mastermindsolutionsonline.com/bjp/');
+	define('BASE_URL', 'http://192.168.0.109/bjp');
 	define('BASE_ADMIN_URL', 'http://192.168.1.126/bjp_tn/admin/');
 	define('EMAIL_TEMPLATE_DIR', '/home/user/public_html/sp/email_templates/');
 	define('ERROR_EMAIL_ADDRESSES', 'kavitharjn@gmail.com');
