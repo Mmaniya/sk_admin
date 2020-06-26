@@ -37,7 +37,8 @@
     ?>
         <table class="table table-striped table-bordered" >
             <thead>
-            <tr><th colspan='6' style="color:#ff9933">WARD INCHARGE</th></tr>
+            <!-- <tr><th colspan='6' style="color:#ff9933">WARD INCHARGE</th></tr> -->
+            <tr><th colspan='5' style="color:#ff9933">WARD INCHARGE</th><th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW WARD INCHARGE</a></th></tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Name</th>
@@ -62,7 +63,7 @@
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
                     <td>
                         <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'W')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
-                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".updateofficebearers"  onclick="editwardofficebearers(<?php echo $val->id ?>,'W')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editwardofficebearers(<?php echo $val->id ?>,'W')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                     </td>
                 </tr>    
             <?php $i ++;} } ?>      
@@ -70,7 +71,8 @@
         </table>
         <table class="table table-striped table-bordered" >
             <thead >
-            <tr><th colspan='6' style="color:#ff9933">SHAKTI KENDRAM</th></tr>
+            <!-- <tr><th colspan='6' style="color:#ff9933">SHAKTI KENDRAM</th></tr> -->
+            <tr><th colspan='6' style="color:#ff9933">SHAKTI KENDRAM</th><th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW SHAKTI KENDRAM</a></th></tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Name</th>
@@ -103,7 +105,7 @@
                     ?></td>
                     <td>
                         <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'SK')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
-                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".updateofficebearers"  onclick="editwardofficebearers(<?php echo $val->id ?>,'SK')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editwardofficebearers(<?php echo $val->id ?>,'SK')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                     </td>
                 </tr>    
             <?php $i ++;} } ?>      
@@ -111,7 +113,8 @@
         </table>
         <table class="table table-striped table-bordered" >
             <thead>
-            <tr><th colspan='6' style="color:#ff9933">BOOTH INCHARGE</th></tr>
+            <!-- <tr><th colspan='6' style="color:#ff9933">BOOTH INCHARGE</th></tr> -->
+            <tr><th colspan='6' style="color:#ff9933">BOOTH INCHARGE</th><th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW BOOTH INCHARGE</a></th></tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Name</th>
@@ -143,7 +146,7 @@
                     ?></td>
                     <td>
                         <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'B')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
-                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".updateofficebearers"  onclick="editwardofficebearers(<?php echo $val->id ?>,'B')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editwardofficebearers(<?php echo $val->id ?>,'B')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                     </td>
                 </tr>    
             <?php $i ++;} } ?>      
@@ -195,11 +198,7 @@
         <span id="modelshow"></span>
     </div>
 </div>
-<div class="modal fade updateofficebearers" role="dialog">
-   <div class="modal-dialog">
-      <span class="showof"></span>
-   </div>
-</div>
+
 
 <script>
 $(document).ready(function() {
@@ -209,6 +208,18 @@ $(document).ready(function() {
         "paging":         false
     } );
 } );
+
+function editwardofficebearers(id) {
+    paramData = {'obid':id,'action':'editOfficeBearers'}                     
+    ajax({
+        a:"districtmodel",
+        b:paramData,
+        c:function(){},
+        d:function(data){
+        $('#modelshow').html(data);
+        }
+    });
+}
 function removeofficbearers(id,sub){
     var wardId = $('#officeBearersId').val();
     paramData = {'ofid':id,'action':'deleteWardMembers','ward':wardId,'subRole':sub}
@@ -235,15 +246,18 @@ function addNewBooth(){
     });   
 }
 
-function editwardofficebearers(id) {
-    paramData = {'obid':id,'action':'editOfficeBearers'}                     
-    ajax({
-        a:"districtmodel",
-        b:paramData,
-        c:function(){},
-        d:function(data){
-        $('.showof').html(data);
-        }
-    });
-}
+
+// function addNewBoothIncharge(){
+//     var wardId = $('#officeBearersId').val();
+//     paramModel = {'action':'addNewBooth','ward':wardId}
+//     ajax({
+//             a:"districtmodel",
+//             b:paramModel,
+//             c:function(){},
+//             d:function(data){
+//                 $('#modelshow').html(data);
+//             }
+//     });   
+// }
+
 </script>

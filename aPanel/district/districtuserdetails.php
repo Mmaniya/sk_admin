@@ -168,7 +168,8 @@
    }
    
    function editofficebearers(id) {
-      paramData = {'obid':id,'action':'editOfficeBearers'}                     
+      var role = $('#selctedRole').val();
+      paramData = {'obid':id,'action':'editOfficeBearers','role':role}                     
          ajax({
                a:"districtmodel",
                b:paramData,
@@ -177,11 +178,10 @@
                   $('.viewofficebearers').html(data);
                }
          });                                   
-   }
-   
-   function deleteofficebearers(id) {
-            
-      paramData = {'ofid':id,'action':'deleteOfficeBearers','subRole':'M','status':'I'}
+   }   
+   function deleteofficebearers(id) {  
+      var role = $('#selctedRole').val();          
+      paramData = {'ofid':id,'action':'deleteOfficeBearers','role':role}
             ajax({
                   a:"districtmodel",
                   b:paramData,
@@ -189,8 +189,7 @@
                   d:function(data){
                      $('#updateModel').html(data);
                   }
-            });                     
-   
+            });                        
    }
    
 </script>

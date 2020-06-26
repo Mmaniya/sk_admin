@@ -395,7 +395,7 @@
                 
                 if($subroleId == 0){
                     $param=array();
-                    $paramsOB = array('role_hierarchy','sub_role_hierarchy','state_id','district_id','mandal_id','ward_id','member_id','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
+                    $paramsOB = array('role_hierarchy','sub_role_hierarchy','state_id','district_id','mandal_id','ward_id','member_id','membership_number','person_name','person_name_ta','mobile_number','address','email_address','is_verified');
                     foreach($paramsOB as $key => $Val) {
                         $param[$Val] = $$Val = check_input($_POST[$Val]);
                     }
@@ -709,9 +709,7 @@
         $param['updated_date'] = date('Y-m-d H:i:s', time());
         $param['updated_by'] = $_SESSION['user_id'];
         $where = array('id' => $_POST['id']);
-        if($_POST['status'] != ''){
-           $param['status'] = 'I';
-        }
+ 
         Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'Y'));      
         exit();
     } 
@@ -789,7 +787,7 @@
         if ($_POST['id'] == '') {
             $param['added_by'] = $_SESSION['user_id'];
             $param['added_date'] = date('Y-m-d H:i:s', time());
-            $rsDtls = Table::insertData(array('tableName' => TBL_BJP_BOOTH, 'fields' => $param, 'showSql' => 'N'));
+            $rsDtls = Table::insertData(array('tableName' => TBL_BJP_BOOTH, 'fields' => $param, 'showSql' => 'Y'));
         } else {
             $param['updated_date'] = date('Y-m-d H:i:s', time());
             $param['updated_by'] = $_SESSION['user_id'];
