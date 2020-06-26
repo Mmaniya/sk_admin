@@ -76,7 +76,6 @@ Use: View District Table
 </table>
 <script>	
    function alertData(){
-   // alert('Not Allowed. District Deactivated.!');
    paramData = {'action':'alertBox'}
       ajax({
             a:"districtmodel",
@@ -86,8 +85,7 @@ Use: View District Table
                $('#modelview').html(data);
             }
       });          
-
-}
+   }
    function ShowParentCatListPagination(page,condition,value) { 
       paramData = {'act':'parentListpagination','page':page,'filterby':value }; 
       ajax({

@@ -617,7 +617,26 @@
       </div>
    </form>
 </div>
-
+<script>
+   /* 1. Status Update For Ward Members */
+   $('form#deleteWardMembers').validate({
+         submitHandler: function(form){
+            var ofId = $('#officeBeraersId').val();
+            var id = $('#ward_Id').val();
+            var formData = $('form#deleteWardMembers').serialize();
+            ajax({
+               a:"districtajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  if($('.deleteModel').modal('toggle')){
+                        getStateWard(id);
+                  }
+               }          
+            });
+         }
+      });
+</script>
 <!-- 10. DELETE OFFICE BEARERS -->
 <?php } else if($modelAction == 'deleteOfficeBearers'){?>
    <div class="modal-content">
@@ -634,13 +653,30 @@
       <input type="hidden" name="act" value="statusDataUpdateforOB">
       <input type="hidden" name="id" value="<?php echo $_POST['ofid']; ?>" id="officeBeraersId">
       <input type="hidden" name="subRole" value="<?php echo $_POST['role'] ?>" id="subRole">
-      <!-- <input type="hidden" name="status" value="<?php //echo $_POST['status'] ?>"> -->
       <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
          <input type="submit" id="submit" class="btn btn-danger"  value="Delete">
       </div>
    </form>
 </div>
+<script>
+   /* 1. Status Update For Office Bearers */
+   $('form#deleteOfficeBearers').validate({
+         submitHandler: function(form){
+            var ofId = $('#officeBeraersId').val();
+            var formData = $('form#deleteOfficeBearers').serialize();
+            ajax({
+               a:"districtajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  $('.uddateOB').modal('toggle');         
+                  $('#deleteOfficeBearers_'+ofId).remove();
+               }          
+            });
+         }
+      });
+</script>
 
 <!-- 11. EDIT OFFICE BEARERS -->
 <?php } else if($modelAction == 'editOfficeBearers'){?>
@@ -660,13 +696,13 @@
                   $wqueryList = Table::getData($wquery);?>
                <input type="hidden" value="editOfficeBearers" name="act">
                <input type="hidden" value="1" name="state_id">
-               <input type="hidden" value="<?php  echo $_POST['role'] ?>" id="selectedOb">
                <input type="hidden" value="<?php  echo $wqueryList->district_id ?>" name="district_id">
                <input type="hidden" value="<?php  echo $wqueryList->mandal_id ?>" name="mandal_id" id="mandalID"> 
                <input type="hidden" value="<?php  echo $wqueryList->role_hierarchy ?>" name="role_hierarchy" id="role_hierarchy"> 
                <input type="hidden" value="<?php  echo $wqueryList->sub_role_hierarchy ?>" name="sub_role_hierarchy" id="sub_role_hierarchy"> 
                <input type="hidden" value="<?php  echo $wqueryList->ward_id ?>" name="ward_id" id="ward_id"> 
-               <input type="hidden" value="<?php  echo $wqueryList->booth_id ?>" name="booth_id" id="booth_id"> 
+               <input type="hidden" value="<?php  echo $wqueryList->booth_id ?>" name="booth_id" id="booth_id">
+               <input type="hidden" value="<?php  echo $_POST['role'] ?>" name="mainrole" id="getManiRole">
                <label >Member Name</label>
                <input type="text" class="form-control" readonly name="person_name" value="<?php echo $wqueryList->person_name; ?>" placeholder="Enter Member Name.">
                <input type="hidden" class="form-control" name="id" id="officeBearersId" readonly value="<?php echo $_POST['obid']; ?>">
@@ -725,19 +761,7 @@
                <div class="form-group col-sm-6">
                   <select class="form-control selectsubRoleBooth" multiple style="width:100%" id="multiSelectBooth" name="updateBooth[]"></select>
                </div>
-            </div>
-            <!-- <div class="row col-sm-12" id="displayBooth">
-               <div class="form-group col-sm-6">
-                  <?php  $qry = 'select * from '.TBL_BJP_WARD.' where `mandal_id` ='.$wqueryList->mandal_id.' AND id='.$wqueryList->ward_id.' AND `status`="A"';
-                     $wardFullDetails=dB::mExecuteSql($qry); ?>
-                  <input type="text" class="form-control" readonly value="<?php  foreach($wardFullDetails as $Key=>$val) { echo $val->ward_number; } ?>" >
-               </div>
-               <div class="form-group col-sm-6">
-                  <select class="form-control selectsubRoleBooth" style="width:100%" name="boothupdate"></select>
-                  <div class="displayerror"></span>
-                  </div>
-               </div>
-            </div> -->
+            </div>  
          </div>
          <div class="displayerror"></div>
          <input type="submit" id="submit" class="btn btn-success" value="Submit">
@@ -795,8 +819,9 @@
             $('#displaySKward').show();
             var ward_id = $('#ward_id').val();
             var mandalid = $('#mandalID').val();
-            var boothID = $('#booth_id').val()
-            paramPosition = {'act':'findselectedBooth','wardID':ward_id,'mandalID':mandalid,'obid':obid,'boothID':boothID };
+            var boothID = $('#booth_id').val();
+            var getRole = $('#getManiRole').val();
+            paramPosition = {'act':'findselectedBooth','wardID':ward_id,'mandalID':mandalid,'obid':obid,'boothID':boothID,'getRole':getRole };
                ajax({
                a:"districtajax",
                b:paramPosition,
@@ -1194,43 +1219,7 @@
          }
       });
    
-   /* 5. Status Update For Ward Members */
-      $('form#deleteWardMembers').validate({
-         submitHandler: function(form){
-            var ofId = $('#officeBeraersId').val();
-            var id = $('#ward_Id').val();
-            var formData = $('form#deleteWardMembers').serialize();
-            ajax({
-               a:"districtajax",
-               b:formData,
-               c:function(){},
-               d:function(data){
-                  if($('.deleteModel').modal('toggle')){
-                        getStateWard(id);
-                  }
-                  // $("#wardFullDetails").load(location.href+" #wardFullDetails>*","");
-               }          
-            });
-         }
-      });
 
-   /* 6. Status Update For Office Bearers */
-
-      $('form#deleteOfficeBearers').validate({
-         submitHandler: function(form){
-            var ofId = $('#officeBeraersId').val();
-            var formData = $('form#deleteOfficeBearers').serialize();
-            ajax({
-               a:"districtajax",
-               b:formData,
-               c:function(){},
-               d:function(data){
-                  $('.uddateOB').modal('toggle');         
-                  $('#deleteOfficeBearers_'+ofId).remove();
-               }          
-            });
-         }
-      });
 
    /* 7. Add New Booth */
       $('form#formAddNewBooth').validate({
@@ -1278,7 +1267,8 @@
          },
          submitHandler: function(form){
          var formData = $('form#formEditOfficeBearers').serialize();
-         var mandalId = $('#mandalID').val();
+         var id = $('#mandalID').val();
+         var role = $('#getManiRole').val();
             ajax({
                a:"districtajax",
                b:formData,
@@ -1286,7 +1276,8 @@
                d:function(data){
                   $('.updateofficebearers').modal('toggle'); 
                   $('.deleteModel').modal('toggle'); 
-                  officeBearesDetailsget(mandalId);          
+                  officeBearesDetailsget(id);  
+                  getStateUsers(id,role);    
                }          
             });
          }

@@ -135,7 +135,7 @@
 </div>
 <br>
 <?php   } ?>
-<?php } else{ ?>
+<?php } else { ?>
 <tr>
    <td colspan="5">No results Found
    <td>
