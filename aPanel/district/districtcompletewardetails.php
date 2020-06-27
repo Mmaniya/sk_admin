@@ -38,7 +38,9 @@
         <table class="table table-striped table-bordered" >
             <thead>
             <!-- <tr><th colspan='6' style="color:#ff9933">WARD INCHARGE</th></tr> -->
-            <tr><th colspan='5' style="color:#ff9933">WARD INCHARGE</th><th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW WARD INCHARGE</a></th></tr>
+            <tr><th colspan='6' style="color:#ff9933">WARD INCHARGE</th>
+            <!-- <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW WARD INCHARGE</a></th> -->
+            </tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Name</th>
@@ -63,7 +65,7 @@
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
                     <td>
                         <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'W')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
-                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editwardofficebearers(<?php echo $val->id ?>,'W')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        <!-- <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editwardofficebearers(<?php // echo $val->id ?>,'W')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> -->
                     </td>
                 </tr>    
             <?php $i ++;} } ?>      
@@ -72,7 +74,9 @@
         <table class="table table-striped table-bordered" >
             <thead >
             <!-- <tr><th colspan='6' style="color:#ff9933">SHAKTI KENDRAM</th></tr> -->
-            <tr><th colspan='6' style="color:#ff9933">SHAKTI KENDRAM</th><th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW SHAKTI KENDRAM</a></th></tr>
+            <tr><th colspan='7' style="color:#ff9933">SHAKTI KENDRAM</th>
+            <!-- <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW SHAKTI KENDRAM</a></th> -->
+            </tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Name</th>
@@ -114,7 +118,9 @@
         <table class="table table-striped table-bordered" >
             <thead>
             <!-- <tr><th colspan='6' style="color:#ff9933">BOOTH INCHARGE</th></tr> -->
-            <tr><th colspan='6' style="color:#ff9933">BOOTH INCHARGE</th><th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW BOOTH INCHARGE</a></th></tr>
+            <tr><th colspan='7' style="color:#ff9933">BOOTH INCHARGE</th>
+            <!-- <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW BOOTH INCHARGE</a></th> -->
+            </tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Name</th>
@@ -154,7 +160,9 @@
         </table>
         <table  class=" wardDetails table table-striped table-bordered" >
             <thead>
-            <tr><th colspan='4' style="color:#ff9933">BOOTH DETAILS</th><th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBooth()"><i class="fa fa-plus"></i> ADD NEW BOOTH</a></th></tr>
+            <tr><th colspan='4' style="color:#ff9933">BOOTH DETAILS</th>
+            <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBooth()"><i class="fa fa-plus"></i> ADD NEW BOOTH</a></th>
+            </tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
                     <th>Booth Number</th>
@@ -209,8 +217,8 @@ $(document).ready(function() {
     } );
 } );
 
-function editwardofficebearers(id) {
-    paramData = {'obid':id,'action':'editOfficeBearers'}                     
+function editwardofficebearers(id,role) {
+    paramData = {'obid':id,'action':'editwardOfficeBearers','role':role}                     
     ajax({
         a:"districtmodel",
         b:paramData,

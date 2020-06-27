@@ -54,7 +54,7 @@
             $param['updated_date'] = date('Y-m-d H:i:s', time());
             $param['updated_by'] = $_SESSION['user_id'];
             $where = array('id' => $_POST['id']);
-            Table::updateData(array('tableName' => TBL_BJP_DISTRICT, 'fields' => $param, 'where' => $where, 'showSql' => 'Y'));
+            Table::updateData(array('tableName' => TBL_BJP_DISTRICT, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
         }
         exit();
     }
@@ -693,7 +693,7 @@
         $param['updated_by'] = $_SESSION['user_id'];
         $where = array('id' => $_POST['id']);
  
-        Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'Y'));      
+        Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));      
         exit();
     } 
 /********* 17.FETCH MANDAL THALAIVAR *********/
@@ -770,7 +770,7 @@
         if ($_POST['id'] == '') {
             $param['added_by'] = $_SESSION['user_id'];
             $param['added_date'] = date('Y-m-d H:i:s', time());
-            $rsDtls = Table::insertData(array('tableName' => TBL_BJP_BOOTH, 'fields' => $param, 'showSql' => 'Y'));
+            $rsDtls = Table::insertData(array('tableName' => TBL_BJP_BOOTH, 'fields' => $param, 'showSql' => 'N'));
         } else {
             $param['updated_date'] = date('Y-m-d H:i:s', time());
             $param['updated_by'] = $_SESSION['user_id'];
@@ -806,7 +806,7 @@
             $param['updated_by'] = $_SESSION['user_id'];    
             // $param['booth_id'] = $booth_id;            
             $where = array('id' => $_POST['id']);
-            $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'Y'));
+            $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
             echo $result = '<p style="color:red;">'.$role_list->role_name.' Update</p>';
         }
     }
@@ -839,10 +839,10 @@
                     <option <?php  if(in_array("$val->id",$_POST['boothID'])){ echo 'selected="selected"'; } ?>  value="<?php  echo $val->id; ?>" ><?php  echo $val->booth_number; ?></option>
                 <?php  } 
             }else{
-                $qry1 = 'select booth_id from '.TBL_BJP_OFFICE_BEARERS.' where  `mandal_id` ='.$_POST['mandalID'].' AND `ward_id` ='.$_POST['wardID'].' AND `id` !='.$_POST['obid'].' AND `status`="A"';
+                $qry1 = 'select booth_id from '.TBL_BJP_OFFICE_BEARERS.' where  `mandal_id` ='.$_POST['mandalID'].' AND `ward_id` ='.$_POST['wardID'].' AND `id` !='.$_POST['obid'].' AND `booth_id` != "" AND `status`="A"';
                 $findbooth=dB::mExecuteSql($qry1); 
-                if(count($findbooth) == 0){
-                    $qry = 'select * from '.TBL_BJP_BOOTH.' where `ward_id` ='.$_POST['wardID'].' AND `status`="A"';
+                if(count($findbooth) == 0 || $findbooth->booth_id != ''){
+                     $qry = 'select * from '.TBL_BJP_BOOTH.' where `ward_id` ='.$_POST['wardID'].' AND `status`="A"';
                 }else{
                    $newarry = array();
                    foreach($findbooth as $array=>$keyvalue) {

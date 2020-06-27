@@ -123,9 +123,12 @@
          </label>
          <?php } ?>
          <span class="row" >
+
+         <?php  if($_POST['role'] != 'W'){ ?>
          <span class="col-sm-3">
             <a href="javascript:void(0)" style="float:right;color:orange" data-toggle="modal" data-target=".updateofficebearers"  onClick="editofficebearers(<?php echo $value->id; ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
          </span>
+         <?php } ?>
          <span class="col-sm-3">
             <a href="javascript:void(0)" style="float:right;color:red" data-toggle="modal" data-target=".uddateOB"  onClick="deleteofficebearers(<?php echo $value->id; ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
          </span>
