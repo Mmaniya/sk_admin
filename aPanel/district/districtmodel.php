@@ -188,7 +188,7 @@
          })
    </script>
 
-<!-- 3. ALERT BOX MODEL  ---->
+<!-- 4. ALERT BOX MODEL  ---->
 <?php } else if ($modelAction == 'alertBox'){ ?>
    <div class="modal-content">
       <div class="modal-header">
@@ -600,7 +600,6 @@
                });        
          };
    </script>
-
 <!-- 8. ADD NEW WARD -->
 <?php } else if ($modelAction == 'addnewWard') { 
 
@@ -756,7 +755,6 @@
             <input type="hidden" value="<?php echo $_POST['districtID']; ?>"id="District">
 
          <div id="viewoboptions"></div>  
-
       </div>
    </div>
    <script>
@@ -822,7 +820,6 @@
          });
    </script>
 <!-- 11. DELETE OFFICE BEARERS -->
-
 <?php } else if($modelAction == 'deleteOfficeBearers'){?>
 
    <div class="modal-content">
@@ -887,8 +884,9 @@
                   <input type="hidden" value="<?php  echo $wqueryList->role_hierarchy ?>" name="role_hierarchy" id="role_hierarchy"> 
                   <input type="hidden" value="<?php  echo $wqueryList->sub_role_hierarchy ?>" name="sub_role_hierarchy" id="sub_role_hierarchy"> 
                   <input type="hidden" value="<?php  echo $wqueryList->ward_id ?>" name="ward_id" id="ward_id"> 
-                  <input type="hidden" value="<?php  echo $wqueryList->booth_id ?>" name="booth_id" id="booth_id">
+                  <input type="hidden" value="<?php  echo $wqueryList->booth_id ?>" name="booth_id" id="booth_id"> 
                   <input type="hidden" value="<?php  echo $_POST['role'] ?>" name="mainrole" id="getMainRole">
+
                   <label >Member Name</label>
                   <input type="text" class="form-control" readonly name="person_name" value="<?php echo $wqueryList->person_name; ?>" placeholder="Enter Member Name.">
                   <input type="hidden" class="form-control" name="id" id="officeBearersId" readonly value="<?php echo $_POST['obid']; ?>">
@@ -914,43 +912,79 @@
                   <input type="text" class="form-control" name="address" value="<?php echo $wqueryList->address; ?>" placeholder="Booth Address">
                </div>
             </div>
+            <?php if($wqueryList->role_hierarchy == "M" && $_POST['role'] == 'M'){ ?>
+               <input type="hidden" class="form-control" id="OBID" value="<?php echo $wqueryList->id; ?>">
             <div class="row">
-               <?php if($wqueryList->role_hierarchy == "M" && $_POST['role'] == 'M'){ ?>
                <div class="form-group col-sm-7">
-                  <label > Are you sure change main role</label>
+                  <label >Are you sure change main role:</label>
                   <input type="checkbox" id="checkSubRoleob"  value="">
                   <span id="showselectBox"></span>
-               </div>
-               <?php } else if($wqueryList->role_hierarchy == "W" || $wqueryList->sub_role_hierarchy == "W" && $_POST['role'] == 'W'){?>
-               <div class="form-group col-sm-7">
+               </div> 
+               <div class="form-group col-sm-12">
+                  <label >Are you sure add new sub role:</label>
+                  <input type="radio" name="addSubRoleMandal" value="W"> <label class="radio-inline">Ward</label>
+                  <input type="radio" name="addSubRoleMandal" value="SK"> <label class="radio-inline">SK</label>
+                  <input type="radio" name="addSubRoleMandal" value="" checked> <label class="radio-inline">None</label>
+                  <span id="showError" style="color:red"></span>
+                  <div class="row">
+                     <div class="col-sm-6" id="newWard">
+                        <label>Select Ward</label>
+                           <select class="form-control newSubWard"  name="addneWard"></select>
+                     </div>
+                     <div class="col-sm-6" id="newBooth">
+                     <label>Select Booth</label>
+                           <select  class="form-control newSubBooth"  multiple  name="addNewBooth[]"></select>
+                     </div>
+                  </div>
+               </div>  
+            </div>
+            <?php } else if(($wqueryList->role_hierarchy == "W" || $wqueryList->sub_role_hierarchy == "W") && $_POST['role'] == 'W'){?>
+            <div class="row">
+               <!-- <div class="form-group col-sm-7">
                   <label> Are you sure change ward</label>
                   <input type="checkbox" id="getAvailWardOb"  value="">
-                  <span id="displayWard"></span>
+               </div> -->
+               <div class="form-group col-sm-5">
+               <label>Add New SK</label>
+                  <input type="checkbox" id="addNewSK"  value="">
                </div>
-               <?php } else if($wqueryList->role_hierarchy == "SK" || $wqueryList->sub_role_hierarchy == "SK" && $_POST['role'] == 'SK'){ ?>
+            </div>
+            <div class="row">
+               <!-- <div class="form-group col-sm-6" id="displayWard"></div> -->
+               <div class="form-group col-sm-6" id="addSKBooth">
+                     <input type="hidden" value="SK" name="sub_role_hierarchy"> 
+                     <select  class="form-control newSubBooth"  multiple  name="addNewBooth[]"></select>
+               </div>
+            </div>
+            <?php } else if(($wqueryList->role_hierarchy == "SK" || $wqueryList->sub_role_hierarchy == "SK") && $_POST['role'] == 'SK'){ ?>
+            <div class="row">
                <div class="form-group col-sm-7">
                   <label> Are you sure change sk booth</label>
                   <input type="checkbox" class="getAvailBoothOb"  value="<?php echo $_POST['obid']; ?>" >
                </div>
-               <?php } else if($wqueryList->role_hierarchy == "B" || $wqueryList->sub_role_hierarchy == "B" && $_POST['role'] == 'B'){ ?>
+            </div>
+            <?php } else if(($wqueryList->role_hierarchy == "B" || $wqueryList->sub_role_hierarchy == "B") && $_POST['role'] == 'B'){ ?>
+            <div class="row">
                <div class="form-group col-sm-7">
                   <label> Are you sure change booth</label>
                   <input type="checkbox" class="getAvailBoothOb" id="getBoothOb"  value="<?php echo $_POST['obid']; ?>">
                </div>
-               <?php } ?>
-               <div class="row col-sm-12" id="displaySKwardOb">
-                  <div class="form-group col-sm-6">
-                     <?php  $qry = 'select * from '.TBL_BJP_WARD.' where `mandal_id` ='.$wqueryList->mandal_id.' AND id='.$wqueryList->ward_id.' AND `status`="A"';
-                        $wardFullDetails=dB::mExecuteSql($qry); ?>
-                     <input type="text" class="form-control" readonly value="<?php  foreach($wardFullDetails as $Key=>$val) { echo $val->ward_number; } ?>" >
-                  </div>
-                  <div class="form-group col-sm-6">
-                     <select class="form-control selectsubRoleBooth" multiple style="width:100%" id="multiSelectBooth" name="updateBooth[]"></select>
-                  </div>
-               </div>  
+            </div>
+            <?php } ?>
+            <div class="row displaySKwardOb" id="displaySKwardOb">
+               <div class="form-group col-sm-6">
+                  <?php  $qry = 'select * from '.TBL_BJP_WARD.' where `mandal_id` ='.$wqueryList->mandal_id.' AND id='.$wqueryList->ward_id.' AND `status`="A"';
+                           $wardFullDetails=dB::mExecuteSql($qry); ?>
+                  <input type="text" class="form-control" readonly value="<?php  foreach($wardFullDetails as $Key=>$val) { echo $val->ward_number; } ?>" >
+               </div>
+               <div class="form-group col-sm-6">
+                  <select class="form-control selectsubRoleBooth" multiple style="width:100%" id="multiSelectBooth" name="updateBooth[]"></select>
+               </div>
             </div>
             <div class="displayerror"></div>
-            <input type="submit" id="submit" class="btn btn-success" value="Submit">
+            <div class="row col-sm-12">
+               <input type="submit" id="submit" class="btn btn-success" value="Submit">
+            </div>
          </form>
       </div>
    </div>
@@ -974,7 +1008,76 @@
                $('#showselectBox').hide();
             }
          });
-      // 2. Get the availabe ward 
+
+      // 2. Add New SubRole
+         $('#newWard').hide();
+         $('#newBooth').hide();
+         $('input[type=radio][name=addSubRoleMandal]').change(function() {
+               var mandalid = $('#mandalID').val();
+               var obid = $('#OBID').val();
+               var AddSubRole = $(this).val();
+               if($(this).val() != ''){
+                  param = {'act':'addNewSubRole','mandalID':mandalid,'obid':obid,'selectRole':AddSubRole};
+                  ajax({
+                     a:"districtajax",
+                     b:param,
+                     c:function(){},
+                     d:function(data){
+                        if(data == 0){                 
+                           $('#showError').html('<p>This Member Allready Handle Two Many Wards!</p>').fadeIn('fast').delay(2000).fadeOut('fast');
+                           $('#newWard').hide();
+                           $('#newBooth').hide();
+                        }else{    
+                           $('.newSubWard').html(data);
+                           $('.newSubWard').multiselect('rebuild');  
+                        }                    
+                     }
+                  });
+               }
+            if($(this).val() == 'W'){
+               $('#newWard').show();
+               $('#newBooth').hide();              
+            } else if($(this).val() == 'SK'){
+               $('#newWard').show();
+               $('#newBooth').show();
+            } else{
+               $('#newWard').hide();
+               $('#newBooth').hide();
+            }                          
+         });
+
+         $('.newSubWard').multiselect({
+                includeSelectAllOption: false,
+                nonSelectedText: 'Select Ward',
+                buttonWidth:'400px',
+                onChange:function(option, checked)
+                {
+                  $('.newSubBooth').html('');
+                  $('.newSubBooth').multiselect('rebuild');
+                  var selected = this.$select.val();
+                  if(selected.length > 0)
+                  {
+                     paramPosition = {'act':'addNewSubRoleBooth','wardID':selected };
+                     ajax({
+                     a:"districtajax",
+                     b:paramPosition,
+                     c:function(){},
+                     d:function(data){
+                           $('.newSubBooth').html(data);
+                           $('.newSubBooth').multiselect('rebuild');
+                        }
+                     });
+                  }
+                }
+            });   
+            $('.newSubBooth').multiselect({
+                includeSelectAllOption: false,
+                nonSelectedText: 'Select Booth',
+                buttonWidth:'400px',
+            });
+
+
+      // 3. Get the availabe ward 
          $('#getAvailWardOb').click(function(){
             if($(this).prop("checked") == true){
                $('#displayWard').show();
@@ -993,7 +1096,30 @@
                $('#displayWard').hide();
             }
          });
-      // 3. Get the available  for sk
+
+         // Get the availabe Booth
+         $('#addSKBooth').hide();
+         $('#addNewSK').click(function(){
+            if($(this).prop("checked") == true){
+               $('#addSKBooth').show();
+               var ward_id = $('#ward_id').val();
+               paramPosition = {'act':'addNewSubRoleBooth','wardID':ward_id };
+                  ajax({
+                  a:"districtajax",
+                  b:paramPosition,
+                  c:function(){},
+                  d:function(data){
+                        $('.newSubBooth').html(data);
+                        $('.newSubBooth').multiselect('rebuild');
+                     }
+                  });
+            } else if($(this).prop("checked") == false){
+               $('#addSKBooth').hide();
+            }
+         });
+
+
+      // 4. Get the available  for sk
          $('#displaySKwardOb').hide();
          $('#getBoothOb').click(function(){
             $(".selectsubRoleBooth").prop("multiple", (this.checked) ? "" : "");
@@ -1021,7 +1147,7 @@
             }
          });
 
-      // 4. Get the Formsubmit
+      // 5. Get the Formsubmit
          $('form#formEditOfficeBearers').validate({
             rules: {
             id: "required",
@@ -1043,7 +1169,6 @@
                   c:function(){},
                   d:function(data){
                      $('.updateofficebearers').modal('toggle'); 
-                     // $('.deleteModel').modal('toggle'); 
                      officeBearesDetailsget(id);  
                      getStateUsers(id,role);    
                   }          
@@ -1052,7 +1177,7 @@
          });
    </script>
 
-<!-- 13. DELETE OFFICE BEARERS -->
+<!-- 13. DELETE RECORDS -->
 <?php } else if ($modelAction == 'delete'){ ?>
 
    <div class="modal-content">
@@ -1127,41 +1252,59 @@
                   <input type="text" class="form-control" name="address" value="<?php echo $wqueryList->address; ?>" placeholder="Booth Address">
                </div>
             </div>
-            <div class="row">
                <?php if($wqueryList->role_hierarchy == "M" && $_POST['role'] == 'M'){ ?>
-               <div class="form-group col-sm-7">
-                  <label > Are you sure change main role</label>
-                  <input type="checkbox" id="getRole"  value="">
-                  <span id="showselectBox"></span>
-               </div>
-               <?php } else if($wqueryList->role_hierarchy == "W" || $wqueryList->sub_role_hierarchy == "W" && $_POST['role'] == 'W'){?>
-               <div class="form-group col-sm-7">
-                  <label> Are you sure change ward</label>
-                  <input type="checkbox" id="getAvailWard"  value="">
-                  <span id="displayWard"></span>
-               </div>
-               <?php } else if($wqueryList->role_hierarchy == "SK" || $wqueryList->sub_role_hierarchy == "SK" && $_POST['role'] == 'SK'){ ?>
-               <div class="form-group col-sm-7">
-                  <label> Are you sure change sk booth</label>
-                  <input type="checkbox" class="getAvailBooth"  value="<?php echo $_POST['obid']; ?>" >
-               </div>
-               <?php } else if($wqueryList->role_hierarchy == "B" || $wqueryList->sub_role_hierarchy == "B" && $_POST['role'] == 'B'){ ?>
-               <div class="form-group col-sm-7">
-                  <label> Are you sure change booth</label>
-                  <input type="checkbox" class="getAvailBooth" id="getBoothward"  value="<?php echo $_POST['obid']; ?>">
-               </div>
+                  <div class="row">
+                     <div class="form-group col-sm-7">
+                        <label > Are you sure change main role</label>
+                        <input type="checkbox" id="getRole"  value="">
+                        <span id="showselectBox"></span>
+                     </div>
+                  </div>
+               <?php } else if(($wqueryList->role_hierarchy == "W" || $wqueryList->sub_role_hierarchy == "W") && $_POST['role'] == 'W'){?>
+                  <div class="row">
+                     <!-- <div class="form-group col-sm-7">
+                        <label> Are you sure change ward</label>
+                        <input type="checkbox" id="getAvailWard"  value="">
+                     </div> -->
+                     <div class="form-group col-sm-5">
+                        <label>Add New SK</label>
+                           <input type="checkbox" id="addNewSK"  value="">
+                     </div>
+                  </div>
+                  <div class="row">
+                     <!-- <div class="form-group col-sm-6" id="displayWard"></div> -->
+                     <div class=" form-group col-sm-6" id="addSKBooth">
+                           <input type="hidden" value="SK" name="sub_role_hierarchy"> 
+                           <select  class="form-control newSubBooth"  multiple  name="addNewBooth[]"></select>
+                     </div>
+                  </div>
+               <?php } else if(($wqueryList->role_hierarchy == "SK" || $wqueryList->sub_role_hierarchy == "SK") && $_POST['role'] == 'SK'){ ?>
+                  <div class="row">
+                     <div class="form-group col-sm-7">
+                        <label> Are you sure change sk booth</label>
+                        <input type="checkbox" class="getAvailBooth"  value="<?php echo $_POST['obid']; ?>" >
+                     </div>
+                  </div>
+               <?php } else if(($wqueryList->role_hierarchy == "B" || $wqueryList->sub_role_hierarchy == "B") && $_POST['role'] == 'B'){ ?>
+                  <div class="row">
+                     <div class="form-group col-sm-7">
+                        <label> Are you sure change booth</label>
+                        <input type="checkbox" class="getAvailBooth" id="getBoothward"  value="<?php echo $_POST['obid']; ?>">
+                     </div>
+                  </div>
                <?php } ?>
-               <div class="row col-sm-12" id="displaySKward">
-                  <div class="form-group col-sm-6">
-                     <?php  $qry = 'select * from '.TBL_BJP_WARD.' where `mandal_id` ='.$wqueryList->mandal_id.' AND id='.$wqueryList->ward_id.' AND `status`="A"';
-                        $wardFullDetails=dB::mExecuteSql($qry); ?>
-                     <input type="text" class="form-control" readonly value="<?php  foreach($wardFullDetails as $Key=>$val) { echo $val->ward_number; } ?>" >
-                  </div>
-                  <div class="form-group col-sm-6">
-                     <select class="form-control selectsubRoleBooth" multiple style="width:100%" id="multiSelectBooth" name="updateBooth[]"></select>
+               <div class="row">
+                  <div class="col-sm-12" id="displaySKward">
+                     <div class="form-group col-sm-6">
+                        <?php  $qry = 'select * from '.TBL_BJP_WARD.' where `mandal_id` ='.$wqueryList->mandal_id.' AND id='.$wqueryList->ward_id.' AND `status`="A"';
+                           $wardFullDetails=dB::mExecuteSql($qry); ?>
+                        <input type="text" class="form-control" readonly value="<?php  foreach($wardFullDetails as $Key=>$val) { echo $val->ward_number; } ?>" >
+                     </div>
+                     <div class="form-group col-sm-6">
+                        <select class="form-control selectsubRoleBooth" multiple style="width:100%" id="multiSelectBooth" name="updateBooth[]"></select>
+                     </div>
                   </div>
                </div>
-            </div>
             <div class="displayerror"></div>
             <input type="submit" id="submit" class="btn btn-success" value="Submit">
          </form>
@@ -1231,6 +1374,26 @@
                   });
             } else if($(this).prop("checked") == false){
                $('#displaySKward').hide();
+            }
+         });
+
+         $('#addSKBooth').hide();
+         $('#addNewSK').click(function(){
+            if($(this).prop("checked") == true){
+               $('#addSKBooth').show();
+               var ward_id = $('#ward_id').val();
+               paramPosition = {'act':'addNewSubRoleBooth','wardID':ward_id };
+                  ajax({
+                  a:"districtajax",
+                  b:paramPosition,
+                  c:function(){},
+                  d:function(data){
+                        $('.newSubBooth').html(data);
+                        $('.newSubBooth').multiselect('rebuild');
+                     }
+                  });
+            } else if($(this).prop("checked") == false){
+               $('#addSKBooth').hide();
             }
          });
 

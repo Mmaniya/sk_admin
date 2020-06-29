@@ -682,7 +682,6 @@
             } else if($_POST['subRole'] == $ob_list->sub_role_hierarchy) {
                     $param['sub_role_hierarchy'] = '';
                     if($_POST['subRole'] == 'SK'){
-                        $param['ward_id'] = '';  
                         $param['booth_id'] = '';  
                     }           
             }
@@ -785,7 +784,7 @@
         $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
         $role_list = Table::getData($query);
 
-        $paramsOB = array('role_hierarchy','sub_role_hierarchy','state_id','membership_number','district_id','mandal_id','ward_id','mobile_number','whatsapp_number','person_name','mobile_number','address','email_address','is_verified');        
+        $paramsOB = array('role_hierarchy','sub_role_hierarchy','membership_number','district_id','mandal_id','mobile_number','whatsapp_number','person_name','mobile_number','address','email_address','is_verified');        
         foreach($paramsOB as $key => $Val) {
             $param[$Val] = $$Val = check_input($_POST[$Val]);
         }
@@ -793,20 +792,34 @@
             if($_POST['role_id'] != ''){
                 $param['role_id'] =  $_POST['role_id'];
             }
-            if($_POST['updateWard_id'] != ''){
-                $param['ward_id'] = $_POST['updateWard_id'];
-            }
+            
             if($_POST['updateBooth'] != ''){
                 foreach($_POST['updateBooth'] as $array=>$keyvalue) {
                     $param['booth_id'] = implode(',',$_POST['updateBooth']);
                 }                          
-            }              
+            }
+            if($_POST['addNewBooth'] != ''){
+                foreach($_POST['addNewBooth'] as $array=>$keyvalue) {
+                    $param['booth_id'] = implode(',',$_POST['addNewBooth']);
+                }                          
+            }
+            if($_POST['addSubRoleMandal'] != ''){
+                $param['sub_role_hierarchy'] = $_POST['addSubRoleMandal'];
+            }
+            if($_POST['addneWard'] != ''){
+                $param['ward_id'] =$_POST['addneWard'];
+            }else if($_POST['updateWard_id'] != ''){
+                $param['ward_id'] = $_POST['updateWard_id'];
+            }else{
+                $param['ward_id'] = $_POST['ward_id'];
+            }
+            if($_POST['role_id'] != ''){
             $param['role_position'] =  $role_list->role_abbr;
+            }
             $param['updated_date'] = date('Y-m-d H:i:s', time());
             $param['updated_by'] = $_SESSION['user_id'];    
-            // $param['booth_id'] = $booth_id;            
             $where = array('id' => $_POST['id']);
-            $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
+            $rsDtls = Table::updateData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'where' => $where, 'showSql' => 'Y'));
             echo $result = '<p style="color:red;">'.$role_list->role_name.' Update</p>';
         }
     }
@@ -828,7 +841,7 @@
         <?php }
 
     };
-/********* 23. GET ALL BOOTHS  ***************/
+/********* 23.GET ALL BOOTHS  ****************/
     if ($_POST['act'] == 'findselectedBooth') {
 
         $bootharray = explode(',',$_POST['boothID']);
@@ -859,6 +872,58 @@
             }  
 
     };
-/********* 24. CHECK OFFICE BEARERS **********/
+/********* 24.ADD NEW SUBROLE ****************/
+if ($_POST['act'] == 'addNewSubRole') { 
+    ob_clean();
+    $mandalID = $_POST['mandalID']; 
+    $wardID = $_POST['wardID']; 
 
- ?>
+    $query = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('id'=>$_POST['obid'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
+    $findMember = Table::getData($query);
+    if($findMember->role_hierarchy !='' && $findMember->sub_role_hierarchy !=""){
+       $rsult = $findMember->person_name.'-'.$findMember->mobile_number.' This Memmber Allready Handle Two Many Wards!';
+        echo $checkMember = '0';
+    } else {
+        $qry = 'select * from '.TBL_BJP_WARD.' where `id` NOT IN (select ward_id from '.TBL_BJP_OFFICE_BEARERS.' where (`role_hierarchy`="W" OR `sub_role_hierarchy`="W") AND `status`="A" AND  `mandal_id`="'.$_POST['mandalID'].'") AND `mandal_id` ="'.$_POST['mandalID'].'" AND `status`="A"';
+        $wardFullDetails=dB::mExecuteSql($qry);    
+        foreach($wardFullDetails as $Key=>$val) {  
+            ?><option  value="<?php echo $val->id; ?>" ><?php echo $val->ward_number; ?></option>
+        <?php }        
+    }
+    if($wardID != ''){
+        $param = array('tableName'=>TBL_BJP_BOOTH,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-STRING','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
+        $booth_list = Table::getData($param); 
+      
+        ?>
+        <?php foreach($booth_list as $Key=>$value) {  
+        ?><option  value="<?php echo $value->id; ?>" ><?php echo $value->booth_number; ?></option>
+        <?php }      
+    }
+    exit();
+}
+
+
+if ($_POST['act'] == 'addNewSubRoleBooth') { 
+    ob_clean();
+    $wardID = $_POST['wardID']; 
+    if($wardID != ''){
+       
+        $query = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-STRING','status'=>'A-CHAR'),'showSql'=>'N');
+        $findbooth = Table::getData($query);
+        foreach($findbooth as $array=>$keyvalue) {
+            $newarry[] = $keyvalue->booth_id;                     
+        }
+        $fillterarray = array_filter($newarry);
+        $formatarray = implode(',',$fillterarray); 
+        if($formatarray != ''){
+        echo $qry = 'select * from '.TBL_BJP_BOOTH.' where `ward_id` ="'.$_POST['wardID'].'" AND `id` NOT IN ('.$formatarray.') AND `status`="A"';
+        }else{
+            $qry = 'select * from '.TBL_BJP_BOOTH.' where `ward_id` ="'.$_POST['wardID'].'" AND `status`="A"';
+        }
+        $booth_list=dB::mExecuteSql($qry); 
+         foreach($booth_list as $k=>$va) {  
+        ?><option  value="<?php echo $va->id; ?>" ><?php echo $va->booth_number; ?></option>
+        <?php } 
+        }
+    exit();
+}

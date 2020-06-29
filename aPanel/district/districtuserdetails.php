@@ -58,9 +58,9 @@
          <?php } if($value->role_hierarchy != ''){ ?>
          <?php  switch($value->role_hierarchy) {      
                   case "W" : 
-                  $findsubrole = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('id' => $value->ward_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
-                  $findsubroleList = Table::getData($findsubrole);
-                  echo '<span class="mytextcolor">'.$findsubroleList->ward_number.' WARD INCHARGE</span>';
+                        $findsubrole = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('id' => $value->ward_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
+                        $findsubroleList = Table::getData($findsubrole);
+                        echo '<span class="mytextcolor">'.$findsubroleList->ward_number.' WARD INCHARGE</span>';
                   break; 
                   case "SK" :     
                      $findsubrole = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('id' => $value->ward_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
@@ -89,15 +89,17 @@
                $findsubroleList = Table::getData($findsubrole);
                echo '<span class="mytextcolor">'.$findsubroleList->ward_number.' WARD INCHARGE</span>';
                break; 
-               case "SK" :     
-                  $findsubrole = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('id' => $value->ward_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
-                  $findsubroleList = Table::getData($findsubrole);
-                  echo 'WARD&nbsp;<span class="mytextcolor">'.$findsubroleList->ward_number.'</span><br>'; 
-                  echo 'SHAKTI KENDRA INCHARGE&nbsp;'; 
-                foreach($findsubroleSKList as $array) { 
-                   echo '<span class="mytextcolor">'.$array->booth_number.'&nbsp; </span>';
-                   } 
-               break; 
+                  case "SK" :  
+                        $findsubrole = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('id' => $value->ward_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
+                        $findsubroleList = Table::getData($findsubrole);
+                        if($value->role_hierarchy != 'W'){
+                              echo 'WARD&nbsp;<span class="mytextcolor">'.$findsubroleList->ward_number.'</span>'; 
+                        }
+                           echo '<br>SHAKTI KENDRA INCHARGE&nbsp;'; 
+                           foreach($findsubroleSKList as $array) { 
+                                 echo '<span class="mytextcolor">'.$array->booth_number.'&nbsp; </span>';
+                           }  
+                  break; 
                case "B" :
                   $findsubrole = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('id' => $value->ward_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
                   $findsubroleList = Table::getData($findsubrole);
@@ -124,14 +126,15 @@
          <?php } ?>
          <span class="row" >
 
-         <?php  if($_POST['role'] != 'W'){ ?>
+         <?php // if($_POST['role'] != 'W'){ ?>
          <span class="col-sm-3">
             <a href="javascript:void(0)" style="float:right;color:orange" data-toggle="modal" data-target=".updateofficebearers"  onClick="editofficebearers(<?php echo $value->id; ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
          </span>
-         <?php } ?>
+         <?php // } ?>
          <span class="col-sm-3">
             <a href="javascript:void(0)" style="float:right;color:red" data-toggle="modal" data-target=".uddateOB"  onClick="deleteofficebearers(<?php echo $value->id; ?>)" ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
          </span>
+
          </span>
       </span>
    </div>
@@ -168,8 +171,7 @@
                $('#mandalofficeBeares').html(data);
             } 
          });
-   }
-   
+   }   
    function editofficebearers(id) {
       var role = $('#selctedRole').val();
       paramData = {'obid':id,'action':'editOfficeBearers','role':role}                     
@@ -194,5 +196,6 @@
                   }
             });                        
    }
+
    
 </script>
