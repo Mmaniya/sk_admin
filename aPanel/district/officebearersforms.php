@@ -92,7 +92,7 @@
     <div class="row">
         <div class="col-sm-6 col-lg-6">
                 <label>Select Ward</label>
-                <select class="form-control selectsubRoleWard"  name="ward_id"></select>
+                <select class="form-control selectsubRoleWard" name="ward_id"></select>
             </div>
             <div class="col-sm-6 col-lg-6 " id="suRoleSK">
                 <label>Select Booths</label><br>
@@ -170,7 +170,7 @@
             </div>   
             <div class="form-group col-sm-6">
             <label>Select Ward</label><br>
-            <select class="form-control selectsubRoleWard" name="ward_id"></select>
+            <select class="form-control selectsubRoleWard required" name="ward_id"></select>
             </div>
         </div>
         <div class="row">
@@ -196,6 +196,7 @@
 
 $(document).ready(function() {
     /* Get Main role Hierarchy */
+    $('#submit').prop('disabled', true);
 
          var mandalID = $('#mandalID').val();
          var mainRole = $('#roleHierarchy').val();
@@ -249,10 +250,11 @@ $(document).ready(function() {
                 }
             });   
             $('.selectsubRoleBooth').multiselect({
-                includeSelectAllOption: true,
+                includeSelectAllOption: false,
                 nonSelectedText: 'Select Booth',
                 buttonWidth:'400px',
             });
+         
          
     /* Add new Office Berares */
       $('form#formDataddNewOb').validate({
@@ -262,7 +264,9 @@ $(document).ready(function() {
             membership_number: "required",
             person_name: "required",
             mobile_number: "required",
-            selectMem: "required"
+            selectMem: "required",
+            ward_id: { required:true,
+                       min :1 }
                },
          messages: {
             role_hierarchy: "Please Select One Role Hierarchy",
@@ -270,35 +274,43 @@ $(document).ready(function() {
             person_name: "Enter Person Name",
             mobile_number: "Enter Mobile Number",
             role_id: "Please Select Role Position",
-            selectMem: "Eneter MembershipId/Mobile/Name"
+            selectMem: "Eneter MembershipId/Mobile/Name",
+            ward_id:{ required : "Plese select one Ward"}
          },
+
+       
          submitHandler: function(form){
-             
-         var formData = $('form#formDataddNewOb').serialize();
-         var id = $('#mandalID').val();
-         var role = $('#roleHierarchy').val();
-            ajax({
-               a:"districtajax",
-               b:formData,
-               c:function(){},
-               d:function(data){
-                  $('#memberTable').html(data);
-                  $("#inputvalue" ).trigger( "keyup" );
-                  officeBearesDetailsget(id);
-                  $('#memberID').val('');
-                  paramPosition = {'act':'findrolePosition','position':mainRole,'mandalID':mandalID };
-                    ajax({
-                        a:"districtajax",
-                        b:paramPosition,
-                        c:function(){},
-                        d:function(data){
-                        $('.showData').html(data);
-                        }
+        var data = $('.selectsubRoleWard').val();
+        var databooth = $('.selectsubRoleBooth').val();
+        if(data == null || databooth == ''){
+            alert("You haven't selected any ward or booth!");
+        }else{
+            var formData = $('form#formDataddNewOb').serialize();
+            var id = $('#mandalID').val();
+            var role = $('#roleHierarchy').val();
+                ajax({
+                a:"districtajax",
+                b:formData,
+                c:function(){},
+                d:function(data){
+                    $('#memberTable').html(data);
+                    $("#inputvalue" ).trigger( "keyup" );
+                    officeBearesDetailsget(id);
+                    $('#memberID').val('');
+                    paramPosition = {'act':'findrolePosition','position':mainRole,'mandalID':mandalID };
+                        ajax({
+                            a:"districtajax",
+                            b:paramPosition,
+                            c:function(){},
+                            d:function(data){
+                            $('.showData').html(data);
+                            }
+                        });
+                        
+                    }          
                     });
-                    
-                  }          
-                });
-            }      
+            }
+        }      
       });
     /* Sub Role Hierarchy */
         $('#suRoleWard').hide();
@@ -381,7 +393,7 @@ $(document).ready(function() {
                 }
             });   
             $('.selectsubRoleBooth').multiselect({
-                includeSelectAllOption: true,
+                includeSelectAllOption: false,
                 nonSelectedText: 'Select Booth',
                 buttonWidth:'400px',
             });
@@ -408,6 +420,7 @@ $(document).ready(function() {
             });
          },
          select: function (event, ui) {
+            $('#submit').prop('disabled', false);
             $('#'+id_attr).val(ui.item.label); 
             $('.'+id_attr).val(ui.item.value);      
             paramMember = {'act':'memberDetails','filter_by':ui.item.value }; 

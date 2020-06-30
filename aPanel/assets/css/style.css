@@ -5948,3 +5948,7 @@ File: Responsive
  .btn-group{
    width :100% !important;
  }
+
+ .multiselect {
+   width: 100% !important;
+ }

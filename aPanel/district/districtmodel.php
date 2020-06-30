@@ -1611,12 +1611,14 @@
                      </div>
                   <?php } ?>
                </div>    
-               <div id="members"></div>         
+               <div id="members"></div>
             <input type="submit" id="submit"  class="btn btn-success" value="Submit">
+            <span id="errormsg"></span>      
          </form>
       </div>
    </div>
    <script>
+   $('#submit').prop('disabled', true);
     function searchKey(id_attr) { 
       var mandalID = $('#mandal_id').val();
          var mainRole = $('#mainrole').val();
@@ -1641,17 +1643,16 @@
             a:"districtajax",
             b:paramBooth,
             c:function(){},
-            d:function(data){
+            d:function(data){          
                   $('.newSubBooth').html(data);
                   $('.newSubBooth').multiselect('rebuild');
                }
             });
 
-
          $( "#"+id_attr).autocomplete({
          source: function( request, response ) {
-               $('#update_response_'+id_attr).html('processing...'); 
-               var mandal = $('#getMandalid').val();
+            $('#update_response_'+id_attr).html('processing...'); 
+            var mandal = $('#getMandalid').val();
             // Fetch data
             $.ajax({
             url: "districtajax.php",
@@ -1667,6 +1668,7 @@
          },
          appendTo: $('#datashow'),
          select: function (event, ui) {
+            $('#submit').prop('disabled', false);
             $('#'+id_attr).val(ui.item.label); 
             $('.'+id_attr).val(ui.item.value);      
             paramMember = {'act':'memberDetails','filter_by':ui.item.value }; 
@@ -1682,6 +1684,7 @@
          }
          });
     }
+
 
     $('form#formAddNewIncharge').validate({
          rules: {
@@ -1702,7 +1705,8 @@
             "booth_id[]":  "please Select One Booth",
          },
          submitHandler: function(form){
-             
+
+     if($('.newSubBooth').val() != ''){
          var formData = $('form#formAddNewIncharge').serialize();
          var id = $('#mandalID').val();
          var role = $('#roleHierarchy').val();
@@ -1724,7 +1728,10 @@
                      });              
                   }          
                 });
-            }      
+            }else{
+               $('#errormsg').html('<h6 style="color:red">please select at least one ward</h6>')
+            }
+         }      
       });
 
  </script>

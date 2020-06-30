@@ -394,7 +394,7 @@
                 
                 if($subroleId == 0){
                     $param=array();
-                    $paramsOB = array('role_hierarchy','sub_role_hierarchy','state_id','district_id','mandal_id','ward_id','member_id','membership_number','person_name','person_name_ta','mobile_number','address','email_address','whatsapp_number','is_verified');
+                    $paramsOB = array('role_hierarchy','sub_role_hierarchy','state_id','district_id','mandal_id','ward_id','member_id','membership_number','person_name','person_name_ta','mobile_number','address','email_address','whatsapp_number');
                     foreach($paramsOB as $key => $Val) {
                         $param[$Val] = $$Val = check_input($_POST[$Val]);
                     }
@@ -503,7 +503,7 @@
             if($subroleId == 0){
 
             $param=array();
-            $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','membership_number','ward_id','person_name','person_name_ta','mobile_number','address','email_address','whatsapp_number','is_verified');
+            $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','membership_number','ward_id','person_name','person_name_ta','mobile_number','address','email_address','whatsapp_number');
             foreach($paramsOB as $key => $Val) {
                 $param[$Val] = $$Val = check_input($_POST[$Val]);
             }
@@ -568,7 +568,7 @@
             if($subroleId == 0){
        
             $param=array();
-            $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','membership_number','ward_id','person_name','person_name_ta','mobile_number','address','email_address','whatsapp_number','is_verified');
+            $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','membership_number','ward_id','person_name','person_name_ta','mobile_number','address','email_address','whatsapp_number');
                 foreach($paramsOB as $key => $Val) {
                     $param[$Val] = $$Val = check_input($_POST[$Val]);
                 }
@@ -617,7 +617,7 @@
     
             if($subroleId == 0){        
                 $param=array();
-                $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','membership_number','ward_id','booth_id','person_name','person_name_ta','mobile_number','address','email_address','whatsapp_number','is_verified');
+                $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','membership_number','ward_id','booth_id','person_name','person_name_ta','mobile_number','address','email_address','whatsapp_number');
                 foreach($paramsOB as $key => $Val) {
                     $param[$Val] = $$Val = check_input($_POST[$Val]);
                 }
@@ -738,7 +738,7 @@
         $param = array('tableName'=>TBL_BJP_WARD,'fields'=>array('*'),'condition'=>array('mandal_id'=>$mandalID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
         $ward_list = Table::getData($param);
         if(($_POST['act']=='wardincharge') != '') {?>        
-        <option value="" selected="false" disabled="disabled">Please Select Ward</option>
+        <option value="" selected="fasle" disabled="disabled">Please Select Ward</option>
         <?php } foreach($ward_list as $Key=>$value) {  
 
         ?><option  value="<?php echo $value->id; ?>" ><?php echo $value->ward_number; ?></option>
@@ -784,7 +784,7 @@
         $query = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('id'=>$_POST['role_id'].'-INT','status'=>'A-CHAR'),'showSql'=>'N');
         $role_list = Table::getData($query);
 
-        $paramsOB = array('role_hierarchy','sub_role_hierarchy','membership_number','district_id','mandal_id','mobile_number','whatsapp_number','person_name','mobile_number','address','email_address','is_verified');        
+        $paramsOB = array('role_hierarchy','sub_role_hierarchy','membership_number','district_id','mandal_id','mobile_number','whatsapp_number','person_name','mobile_number','address','email_address');        
         foreach($paramsOB as $key => $Val) {
             $param[$Val] = $$Val = check_input($_POST[$Val]);
         }
@@ -825,14 +825,7 @@
     }
 /********* 22.CHECK AVILABLE WARDS ***********/
     if ($_POST['act'] == 'findavailableWard') {
-        
-        // $param = "select * from ".TBL_BJP_OFFICE_BEARERS." where (`role_hierarchy`='".$_POST['position']."' OR `sub_role_hierarchy`='".$_POST['position']."') AND `mandal_id`='".$_POST['mandalID']."' AND `status`='A'";
-        // $oflist = dB::mExecuteSql($param);
-        // foreach($oflist as $keyvalue=>$value){ 
-        //     $wardArry[] = $value->ward_id;
-        // }
-        // $wardArry1 = implode(',',$wardArry);
-
+    
         $qry = 'select * from '.TBL_BJP_WARD.' where `id` NOT IN (select ward_id from '.TBL_BJP_OFFICE_BEARERS.' where (`role_hierarchy`="W" OR `sub_role_hierarchy`="W") AND `status`="A" AND  `mandal_id`="'.$_POST['mandalID'].'") AND `mandal_id` ="'.$_POST['mandalID'].'" AND `status`="A"';
         $wardFullDetails=dB::mExecuteSql($qry);
         
@@ -892,8 +885,7 @@
             $wardFullDetails=dB::mExecuteSql($qry);    
             foreach($wardFullDetails as $Key=>$val) {  
                 ?><option  value="<?php echo $val->id; ?>" ><?php echo $val->ward_number; ?></option>
-            <?php } 
-              
+            <?php }               
         }
         if($wardID != ''){
             $param = array('tableName'=>TBL_BJP_BOOTH,'fields'=>array('*'),'condition'=>array('ward_id'=>$wardID.'-STRING','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
@@ -921,7 +913,7 @@
             $fillterarray = array_filter($newarry);
             $formatarray = implode(',',$fillterarray); 
             if($formatarray != ''){
-            echo $qry = 'select * from '.TBL_BJP_BOOTH.' where `ward_id` ="'.$_POST['wardID'].'" AND `id` NOT IN ('.$formatarray.') AND `status`="A"';
+                $qry = 'select * from '.TBL_BJP_BOOTH.' where `ward_id` ="'.$_POST['wardID'].'" AND `id` NOT IN ('.$formatarray.') AND `status`="A"';
             }else{
                 $qry = 'select * from '.TBL_BJP_BOOTH.' where `ward_id` ="'.$_POST['wardID'].'" AND `status`="A"';
             }
