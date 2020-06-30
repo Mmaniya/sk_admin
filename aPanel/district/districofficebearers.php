@@ -1,7 +1,7 @@
 <!--==============================
    Name: Manikandan;
    Create: 5/6/2020;
-   Update:12/6/2020;
+   Update:30/6/2020;
    Use: View Ward Details Table 
    ================================-->
 <?php

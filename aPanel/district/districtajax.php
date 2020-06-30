@@ -760,7 +760,7 @@
         exit();
     }
 /********* 20.ADD EDIT NEW BOOTH *************/
-    if ($_POST['act'] == 'addNewBooth') {
+    if ($_POST['act'] == 'addEditBooth') {
         ob_clean();
         $params = array('ward_id','old_booth_number','booth_number','total_voters','male_voters_count','female_voters_count','other_voters_count','booth_address','booth_zipcode','booth_police_station');
         foreach($params as $K => $V) {

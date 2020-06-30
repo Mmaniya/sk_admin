@@ -170,7 +170,7 @@
         <table  class=" wardDetails table table-striped table-bordered" >
             <thead>
             <tr><th colspan='6' style="color:#ff9933">BOOTH DETAILS</th>
-            <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBooth()"><i class="fa fa-plus"></i> ADD NEW BOOTH</a></th>
+            <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="createNewBooth()"><i class="fa fa-plus"></i> ADD NEW BOOTH</a></th>
             </tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
@@ -258,9 +258,9 @@ function removeofficbearers(id,sub){
     });   
 }
 
-function addNewBooth(){
+function createNewBooth(){
     var wardId = $('#wradId').val();
-    paramModel = {'action':'addNewBooth','ward':wardId}
+    paramModel = {'action':'addEditNewBooth','ward':wardId}
     ajax({
         a:"districtmodel",
         b:paramModel,
@@ -273,7 +273,7 @@ function addNewBooth(){
 
 function editBooth(id){
     var wardId = $('#wradId').val();
-    paramModel = {'action':'editBooth','ward':wardId,'boothid':id}
+    paramModel = {'action':'addEditNewBooth','ward':wardId,'boothid':id}
     ajax({
         a:"districtmodel",
         b:paramModel,

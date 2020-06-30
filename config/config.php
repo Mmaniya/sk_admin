@@ -10,7 +10,7 @@ if ($dev_server) {
 	define("BA_DBHOST", "localhost");
 	define("BA_DBUSER", "root");
 	define("BA_DBPASSWORD", "");
-	define("BA_DBNAME", "sk_admin");
+	define("BA_DBNAME", "covai_bjp");
 		
 	//Constants
 	define('BASE_URL', 'http://192.168.0.109/bjp');
