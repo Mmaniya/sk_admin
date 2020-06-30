@@ -55,7 +55,6 @@
       <div id="wrapper" class="forced enlarged">
       <!-- Top Bar Start -->
       <div class="topbar">
-         <!-- LOGO -->
          <div class="topbar-left">
             <div class="text-center">
             <!-- <a href="dashboard.php" class="logo"><img src="https://www.bjp.org/logo/bjp-end-logo.png" width="240" height="60"></a> -->
@@ -91,7 +90,7 @@
             <ul class="list-inline menu-left mb-0">
                <li class="float-left">
                   <button class="button-menu-mobile open-left waves-light waves-effect">
-                  <i class="mdi mdi-menu"></i>
+                     <i class="mdi mdi-menu"></i>
                   </button>
                </li>
             </ul>

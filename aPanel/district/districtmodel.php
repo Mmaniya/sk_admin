@@ -5,20 +5,20 @@
    Use: ADD DISTRICT
    ====================================-->
 
-   <?php
+<?php
    include 'includes.php';
-    $modelId = $_POST['dist_ID'];
-    $modelAction = $_POST['action'];
-    $subAction = $_POST['subaction'];
-    $joined_date ='';
-    if($modelId>0) { 
-         $param = array('tableName'=>TBL_BJP_DISTRICT,'fields'=>array('*'),'condition'=>array('id'=>$modelId.'-INT'),'showSql'=>'N',);
-         $roleData = Table::getData($param);
-        foreach($roleData as $K=>$V)  $$K=$V;
-        $title = 'EDIT';
-        $joined_date = date('m/d/Y',strtotime($joined_date));
-    }
-   ?>
+   $modelId = $_POST['dist_ID'];
+   $modelAction = $_POST['action'];
+   $subAction = $_POST['subaction'];
+   $joined_date ='';
+   if($modelId>0) { 
+      $param = array('tableName'=>TBL_BJP_DISTRICT,'fields'=>array('*'),'condition'=>array('id'=>$modelId.'-INT'),'showSql'=>'N',);
+      $roleData = Table::getData($param);
+      foreach($roleData as $K=>$V)  $$K=$V;
+      $title = 'EDIT';
+      $joined_date = date('m/d/Y',strtotime($joined_date));
+   }
+?>
 <!-- 1. EDIT MODEL DATA FOR DISTRICT  -->
 <?php if($modelAction =='edit'){ ?>
 
@@ -909,7 +909,7 @@
             <div class="row">
                <div class="form-group col-sm-12">
                   <label >Address</label>
-                  <input type="text" class="form-control" name="address" value="<?php echo $wqueryList->address; ?>" placeholder="Booth Address">
+                  <input type="text" class="form-control" name="address" value="<?php echo $wqueryList->address; ?>" placeholder="Enter Address">
                </div>
             </div>
             <?php if($wqueryList->role_hierarchy == "M" && $_POST['role'] == 'M'){ ?>
@@ -1249,7 +1249,7 @@
             <div class="row">
                <div class="form-group col-sm-12">
                   <label >Address</label>
-                  <input type="text" class="form-control" name="address" value="<?php echo $wqueryList->address; ?>" placeholder="Booth Address">
+                  <input type="text" class="form-control" name="address" value="<?php echo $wqueryList->address; ?>" placeholder="Enter Address">
                </div>
             </div>
                <?php if($wqueryList->role_hierarchy == "M" && $_POST['role'] == 'M'){ ?>
@@ -1444,7 +1444,7 @@
                      $wqueryList = Table::getData($wquery);?>
                   <label >Ward Name</label>
                   <input type="text" class="form-control" readonly value="<?php echo $wqueryList->ward_number; ?>" placeholder="Enter Ward No.">
-                  <input type="hidden" class="form-control" name="ward_id" readonly value="<?php echo $wqueryList->id; ?>">
+                  <input type="hidden" class="form-control" name="ward_id" id="ward_id" readonly value="<?php echo $wqueryList->id; ?>">
             </div>
             <div class="form-group col-sm-6">
                <label >Booth Name/No</label>
@@ -1514,21 +1514,326 @@
                b:formData,
                c:function(){},
                d:function(data){
-                  $('.deleteModel').modal('toggle');
-                  // paramData = {'act':'getAllData','type':'all'}; 
-                  //    ajax({
-                  //          a:"districtajax",
-                  //          b:paramData,
-                  //          c:function(){},
-                  //          d:function(data){
-                  //             $('#myTable').html(data);
-                  //          }
-                  //    });
+                  var id = $('#ward_id').val();
+                  ajax({
+                     a:"districtajax",
+                     b:formData,
+                     c:function(){},
+                     d:function(data){
+                        $('.deleteModel').modal('toggle'); 
+                        getStateWard(id);
+                     }          
+                  });
                }          
             });
          }
       });
    </script>
+<!-- 16. EDIT BOOTH -->
+<?php } else if($modelAction == 'editBooth'){
+   $bqry = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition'=>array('id'=>$_POST['boothid'].'-INT'),'showSql' => 'N','sortby' => 'asc');
+   $bqryList = Table::getData($bqry);?>
+   <div class="modal-content">
+      <div class="modal-header">
+         <h5 class="modal-title" style="color:green"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> EDIT BOOTH</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      <div class="modal-body">
+      <form action="javascript:void(0)" id="formAddNewBooth" method="POST">
+         <input type="hidden" value="addNewBooth" name="act">
+         <div class="row">
+            <div class="form-group col-sm-6">
+               <?php $wquery = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition'=>array('id'=>$_POST['ward'].'-INT'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
+                     $wqueryList = Table::getData($wquery);?>
+                  <label >Ward Name</label>
+                  <input type="text" class="form-control" readonly value="<?php echo $wqueryList->ward_number; ?>" placeholder="Enter Ward No.">
+                  <input type="hidden" class="form-control" name="ward_id" id="ward_id" readonly value="<?php echo $wqueryList->id; ?>">
+                  <input type="hidden" class="form-control" name="id"  readonly value="<?php echo $bqryList->id; ?>">
+            </div>
+            <div class="form-group col-sm-6">
+               <label >Booth Name/No</label>
+               <input type="text" class="form-control" name="booth_number" value="<?php echo $bqryList->booth_number ?>" placeholder="Enter Booth Name/No.">
+            </div>
+         </div>
+         <div class="row">
+            <div class="form-group col-sm-6">
+               <label >Booth Old Name/No </label>
+               <input type="text" class="form-control" name="old_booth_number" value="<?php echo $bqryList->old_booth_number ?>" placeholder="Enter Booth Old Name/No.">
+            </div>
+            <div class="form-group col-sm-6">
+               <label >Total Voter's </label>  
+                  <input type="text" class="form-control" name="total_voters" value="<?php echo $bqryList->total_voters ?>" placeholder="Total Voters">
+            </div>
+         </div>
+         <div class="row">
+            <div class="form-group col-sm-4">
+               <label >Male Voter's </label>  
+                  <input type="text" class="form-control" name="male_voters_count" value="<?php echo $bqryList->male_voters_count ?>" placeholder="Total Male Voters">
+            </div>       <div class="form-group col-sm-4">
+               <label >Female Voter's </label>  
+                  <input type="text" class="form-control" name="female_voters_count" value="<?php echo $bqryList->female_voters_count ?>" placeholder="Total Female Voters">
+            </div>
+            <div class="form-group col-sm-4">
+               <label >Other Voter's </label>  
+                  <input type="text" class="form-control" name="other_voters_count" value="<?php echo $bqryList->other_voters_count ?>" placeholder="Total Other Voters">
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="form-group col-sm-12">
+               <label >Address</label>
+                  <input type="text" class="form-control" name="booth_address" value="<?php echo $bqryList->booth_address ?>" placeholder="Booth Address">
+            </div>
+         </div>
+         <div class="row">
+            <div class="form-group col-sm-6">
+               <label >Booth Zipcode </label>  
+                  <input type="text" class="form-control" name="booth_zipcode" value="<?php echo $bqryList->booth_zipcode ?>" placeholder="Booth Zipcode">
+            </div>       
+            <div class="form-group col-sm-6">
+               <label >Booth Policestation </label>  
+                  <input type="text" class="form-control" name="booth_police_station" value="<?php echo $bqryList->booth_police_station ?>" placeholder="Booth Policestation">
+            </div>
+         </div>
+         <input type="submit" id="submit"  class="btn btn-success" value="Submit">
+      </form>
+
+      </div>
+   </div>
+   <script>
+        $('form#formAddNewBooth').validate({
+         rules: {
+            ward_id: "required",
+            booth_number: "required",
+            booth_address: "required",
+         },
+         messages: {
+            booth_number: "Please Enter Booth Name/No",
+            booth_address: "Please Enter Booth Address",
+         },
+         submitHandler: function(form){
+         var formData = $('form#formAddNewBooth').serialize();
+            ajax({
+               a:"districtajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  var id = $('#ward_id').val();
+                     ajax({
+                        a:"districtajax",
+                        b:formData,
+                        c:function(){},
+                        d:function(data){
+                           $('.deleteModel').modal('toggle'); 
+                           getStateWard(id);
+                        }          
+                     });
+               }          
+            });
+         }
+      });
+   </script>
+<!-- 17. DELETE BOOTH -->
+<?php } else if($modelAction == 'deleteBooth'){?>
+   <div class="modal-content">
+      <div class="modal-header">
+         <h5 class="modal-title" style="color:red"><i class="fa fa-trash" aria-hidden="true"></i>  DELETE RECORD</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      <div class="modal-body">
+         <p>Are you sure cofirm delete this data.?</p>
+      </div>
+      <form id="formBoothDelete" action="javascipt:void(0)">
+         <input type="hidden" name="act" value="statusDataUpdateforBooth">
+         <input type="hidden" name="id" value="<?php echo $_POST['boothid']; ?>">
+         <input type="hidden" id="ward_id" name="wardId" value="<?php echo $_POST['wardId']; ?>">
+         <input type="hidden" value="I" name="status">
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <input type="submit" id="submit" class="btn btn-danger" value="Delete">
+         </div>
+      </form>
+   </div>
+   <script>
+      $('form#formBoothDelete').validate({
+            submitHandler: function(form){
+            var formData = $('form#formBoothDelete').serialize();
+               ajax({
+                  a:"districtajax",
+                  b:formData,
+                  c:function(){},
+                  d:function(data){
+                     var id = $('#ward_id').val();
+                        ajax({
+                           a:"districtajax",
+                           b:formData,
+                           c:function(){},
+                           d:function(data){
+                              $('.deleteModel').modal('toggle'); 
+                              getStateWard(id);
+                           }          
+                        });                     
+                  }          
+               });
+            }
+         })
+   </script>
+<!-- 18. ADD NEW INCAHRGE -->
+<?php } else if($modelAction == 'addNewIncharge'){ ?>
+   <div class="modal-content">
+      <div class="modal-header">
+         <h5 class="modal-title" style="color:green"><i class="fa fa-plus" aria-hidden="true"></i> ADD NEW INCHRGE</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      <div class="modal-body">
+         <form action="javascript:void(0)" id="formAddNewIncharge" method="POST">
+            <input type="hidden" name="state_id" value="1" id="state_id">
+            <input type="hidden" name="ward_id" value="<?php echo $_POST['wradId'] ?>" id="wradId">
+            <input type="hidden" name="district_id" value="<?php echo $_POST['districtID'] ?>" id="districtID">
+            <input type="hidden" name="mandal_id" value="<?php echo $_POST['mandal_id'] ?>" id="mandal_id">
+            <input type="hidden" name="role_hierarchy" value="<?php echo $_POST['role'] ?>" id="mainrole">
+            <select class="form-control showData" style="display:none" name="role_id" readonly></select>
+               <div class="row">
+                  <div class="form-group col-sm-12">         
+                     <label >Member Name/Number/Mobile</label>
+                     <input type="text" class="form-control" id="getPersonName" onkeypress="searchKey(this.id)" placeholder="Enter Member Name/Number/Mobile">
+                     <span id="datashow"></span>
+                  </div>  
+                  <?php if($_POST['role'] == 'SK') { ?>
+                     <input type="hidden" value="addNewOfficeBearersSK" name="act">
+                  <div class="form-group col-sm-12">
+                     <select  class="form-control newSubBooth"  multiple  name="booth_id[]"></select>
+                  </div>
+                  <?php } else if($_POST['role'] == 'W'){?>      
+                     <input type="hidden" value="addNewOfficeBearersWard" name="act">
+                  <?php } else if($_POST['role'] == 'B'){ ?>
+                     <input type="hidden" value="addNewOfficeBearersBooth" name="act">
+                     <div class="form-group col-sm-12">
+                           <select  class="form-control newSubBooth"  name="booth_id"></select>
+                     </div>
+                  <?php } ?>
+               </div>    
+               <div id="members"></div>         
+            <input type="submit" id="submit"  class="btn btn-success" value="Submit">
+         </form>
+      </div>
+   </div>
+   <script>
+    function searchKey(id_attr) { 
+      var mandalID = $('#mandal_id').val();
+         var mainRole = $('#mainrole').val();
+         paramPosition = {'act':'findrolePosition','position':mainRole,'mandalID':mandalID };
+         ajax({
+            a:"districtajax",
+            b:paramPosition,
+            c:function(){},
+            d:function(data){
+               $('.showData').html(data);
+            }
+         });
+         var wradId = $('#wradId').val();
+         if(mainRole == 'SK'){
+               paramBooth = {'act':'addNewSubRoleBooth','wardID':wradId };
+         }else if(mainRole == 'B'){
+               paramBooth = {'act':'boothincharge','wardID':wradId };
+         }
+            ajax({
+            a:"districtajax",
+            b:paramBooth,
+            c:function(){},
+            d:function(data){
+                  $('.newSubBooth').html(data);
+                  $('.newSubBooth').multiselect('rebuild');
+               }
+            });
+
+
+         $( "#"+id_attr).autocomplete({
+         source: function( request, response ) {
+               $('#update_response_'+id_attr).html('processing...'); 
+               var mandal = $('#getMandalid').val();
+            // Fetch data
+            $.ajax({
+            url: "districtajax.php",
+            type: 'post',
+            dataType: "json",
+            data: {
+            search: request.term,mandal
+            },
+            success: function( data ) { 
+               response( data );
+            }
+            });
+         },
+         appendTo: $('#datashow'),
+         select: function (event, ui) {
+            $('#'+id_attr).val(ui.item.label); 
+            $('.'+id_attr).val(ui.item.value);      
+            paramMember = {'act':'memberDetails','filter_by':ui.item.value }; 
+                  ajax({
+                     a: "districtajax",
+                     b: paramMember,
+                     c:function(){},
+                     d:function(data){
+                        $('#members').html(data);
+                     }
+               });   
+            return false;
+         }
+         });
+    }
+
+    $('form#formAddNewIncharge').validate({
+         rules: {
+            role_hierarchy: "required",
+            role_id: "required",
+            membership_number: "required",
+            person_name: "required",
+            mobile_number: "required",
+            selectMem: "required"
+               },
+         messages: {
+            role_hierarchy: "Please Select One Role Hierarchy",
+            membership_number: "Please Enter Membership Number",
+            person_name: "Enter Person Name",
+            mobile_number: "Enter Mobile Number",
+            role_id: "Please Select Role Position",
+            selectMem: "Eneter MembershipId/Mobile/Name"
+         },
+         submitHandler: function(form){
+             
+         var formData = $('form#formAddNewIncharge').serialize();
+         var id = $('#mandalID').val();
+         var role = $('#roleHierarchy').val();
+            ajax({
+               a:"districtajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  var id = $('#wradId').val();
+                  var role = $('#roleHierarchy').val();
+                     ajax({
+                        a:"districtajax",
+                        b:formData,
+                        c:function(){},
+                        d:function(data){
+                           $('.deleteModel').modal('toggle'); 
+                           getStateWard(id);
+                        }          
+                     });              
+                  }          
+                });
+            }      
+      });
+
+ </script>
+
 <?php } ?>
 <script>
 /**** OFFICE BEARES DETAILS GET *******/
@@ -1545,7 +1850,6 @@
    }
    
 /*********** GET WARD INCHARCE ********/
-
    $(document).ready(function() {
       var id = $('#getMandalid').val();
       paramData = {'act':'wardincharge','mandalID':id }; 

@@ -30,16 +30,25 @@
 <style></style>
 <div class="card">
    <div class="card-header bg-img"> WARD (<?php echo $value->ward_number; ?>) DETAILS</div>
-   <input type="hidden" value="<?php echo $value->id ?>" id="officeBearersId">
+   <input type="hidden" value="<?php echo $value->id ?>" id="wradId">
+   <input type="hidden" value="<?php echo $value->district_id ?>" id="districtID">
+   <input type="hidden" value="<?php echo $value->mandal_id ?>" id="mandal_id">
+
    <div class="card-body row">
    <?php  $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N','orderby' => 'role_hierarchy', 'sortby' => 'asc');
           $officeberasList = Table::getData($officebearers); 
     ?>
         <table class="table table-striped table-bordered" >
             <thead>
-            <!-- <tr><th colspan='6' style="color:#ff9933">WARD INCHARGE</th></tr> -->
-            <tr><th colspan='6' style="color:#ff9933">WARD INCHARGE</th>
-            <!-- <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW WARD INCHARGE</a></th> -->
+            <tr><th colspan='6' style="color:#ff9933">WARD INCHARGE
+                <?php                 
+                $qry = 'select * from '.TBL_BJP_OFFICE_BEARERS.' where (`role_hierarchy` ="W" OR `sub_role_hierarchy` ="W") AND `ward_id`='.$value->id.' AND `mandal_id`='.$value->mandal_id.' AND`status`="A"';
+                $wardList=dB::mExecuteSql($qry); 
+                if(count($wardList)<=0){
+                ?>                                        
+                <a href="javascript:void(0);" style="float:right" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge('W')"><i class="fa fa-plus"></i> ADD NEW WARD INCHARGE</a>
+                <?php } ?>
+            </th>
             </tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
@@ -64,8 +73,8 @@
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
                     <td>
+                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editwardofficebearers(<?php  echo $val->id ?>,'W')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                         <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'W')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
-                        <!-- <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editwardofficebearers(<?php // echo $val->id ?>,'W')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a> -->
                     </td>
                 </tr>    
             <?php $i ++;} } ?>      
@@ -73,9 +82,9 @@
         </table>
         <table class="table table-striped table-bordered" >
             <thead >
-            <!-- <tr><th colspan='6' style="color:#ff9933">SHAKTI KENDRAM</th></tr> -->
-            <tr><th colspan='7' style="color:#ff9933">SHAKTI KENDRAM</th>
-            <!-- <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW SHAKTI KENDRAM</a></th> -->
+            <tr><th colspan='7' style="color:#ff9933">SHAKTI KENDRAM                                                
+                <a href="javascript:void(0);" style="float:right" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge('SK')"><i class="fa fa-plus"></i> ADD NEW SHAKTI KENDR INCHARGE</a>
+            </th>
             </tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
@@ -108,8 +117,8 @@
                         }
                     ?></td>
                     <td>
-                        <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'SK')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
                         <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editwardofficebearers(<?php echo $val->id ?>,'SK')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'SK')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
                     </td>
                 </tr>    
             <?php $i ++;} } ?>      
@@ -117,9 +126,9 @@
         </table>
         <table class="table table-striped table-bordered" >
             <thead>
-            <!-- <tr><th colspan='6' style="color:#ff9933">BOOTH INCHARGE</th></tr> -->
-            <tr><th colspan='7' style="color:#ff9933">BOOTH INCHARGE</th>
-            <!-- <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge()"><i class="fa fa-plus"></i> ADD NEW BOOTH INCHARGE</a></th> -->
+            <tr><th colspan='7' style="color:#ff9933">BOOTH INCHARGE
+            <a href="javascript:void(0);" style="float:right" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge('B')"><i class="fa fa-plus"></i> ADD NEW BOOTH INCHARGE</a>
+            </th>
             </tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
@@ -151,8 +160,8 @@
                         }
                     ?></td>
                     <td>
-                        <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'B')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
                         <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editwardofficebearers(<?php echo $val->id ?>,'B')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeofficbearers(<?php echo $val->id ?>,'B')" ><i class="fa fa-trash" aria-hidden="true"></i></a>
                     </td>
                 </tr>    
             <?php $i ++;} } ?>      
@@ -160,7 +169,7 @@
         </table>
         <table  class=" wardDetails table table-striped table-bordered" >
             <thead>
-            <tr><th colspan='4' style="color:#ff9933">BOOTH DETAILS</th>
+            <tr><th colspan='6' style="color:#ff9933">BOOTH DETAILS</th>
             <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBooth()"><i class="fa fa-plus"></i> ADD NEW BOOTH</a></th>
             </tr>
                 <tr class="bg-primary text-white">
@@ -169,6 +178,8 @@
                     <th>Total Voters</th>
                     <th>Male Voters</th>
                     <th>Female Voters</th>
+                    <th>Others</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -185,6 +196,12 @@
                     <td><?php echo $val->total_voters ?></td>
                     <td><?php echo $val->male_voters_count ?></td>
                     <td><?php echo $val->female_voters_count ?></td>
+                    <td><?php echo $val->other_voters_count ?></td>
+                    <td>
+                        <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editBooth(<?php echo $val->id ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeBooth(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a>
+                    </td>
+
                 </tr>    
             <?php $i ++;} ?>      
             </tbody>    
@@ -229,24 +246,11 @@ function editwardofficebearers(id,role) {
     });
 }
 function removeofficbearers(id,sub){
-    var wardId = $('#officeBearersId').val();
+    var wardId = $('#wradId').val();
     paramData = {'ofid':id,'action':'deleteWardMembers','ward':wardId,'subRole':sub}
-            ajax({
-                  a:"districtmodel",
-                  b:paramData,
-                  c:function(){},
-                  d:function(data){
-                     $('#modelshow').html(data);
-                  }
-            });   
-}
-
-function addNewBooth(){
-    var wardId = $('#officeBearersId').val();
-    paramModel = {'action':'addNewBooth','ward':wardId}
     ajax({
             a:"districtmodel",
-            b:paramModel,
+            b:paramData,
             c:function(){},
             d:function(data){
                 $('#modelshow').html(data);
@@ -254,18 +258,60 @@ function addNewBooth(){
     });   
 }
 
+function addNewBooth(){
+    var wardId = $('#wradId').val();
+    paramModel = {'action':'addNewBooth','ward':wardId}
+    ajax({
+        a:"districtmodel",
+        b:paramModel,
+        c:function(){},
+        d:function(data){
+            $('#modelshow').html(data);
+        }
+    });   
+}
 
-// function addNewBoothIncharge(){
-//     var wardId = $('#officeBearersId').val();
-//     paramModel = {'action':'addNewBooth','ward':wardId}
-//     ajax({
-//             a:"districtmodel",
-//             b:paramModel,
-//             c:function(){},
-//             d:function(data){
-//                 $('#modelshow').html(data);
-//             }
-//     });   
-// }
+function editBooth(id){
+    var wardId = $('#wradId').val();
+    paramModel = {'action':'editBooth','ward':wardId,'boothid':id}
+    ajax({
+        a:"districtmodel",
+        b:paramModel,
+        c:function(){},
+        d:function(data){
+            $('#modelshow').html(data);
+        }
+    });   
+}
+
+function removeBooth(id){
+    var wardId = $('#wradId').val();
+    paramData = {'boothid':id,'action':'deleteBooth','wardId':wardId}
+    ajax({
+        a:"districtmodel",
+        b:paramData,
+        c:function(){},
+        d:function(data){
+            $('#modelshow').html(data);
+        }
+    });   
+}
+
+
+function addNewBoothIncharge(role){
+    var wradId = $('#wradId').val();
+    var districtID = $('#districtID').val();
+    var mandal_id = $('#mandal_id').val();
+
+    model = {'action':'addNewIncharge','role':role,'wradId':wradId,'districtID':districtID,'mandal_id':mandal_id}
+    ajax({
+            a:"districtmodel",
+            b:model,
+            c:function(){},
+            d:function(data){
+                $('#modelshow').html(data);
+            }
+    });   
+}
 
 </script>
