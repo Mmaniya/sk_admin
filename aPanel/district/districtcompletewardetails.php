@@ -110,7 +110,7 @@
                     <td><?php echo $val->address ?></td>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
                     <td><?php 
-                    $getbooth = 'select * from '.TBL_BJP_BOOTH.' where  `id` IN ('.$val->booth_id.') AND `status` ="A"';
+                    $getbooth = 'select * from '.TBL_BJP_BOOTH.' where  `id` IN ('.$val->booth_id.') AND `status` ="A" ORDER BY id';
                     $getboothList=dB::mExecuteSql($getbooth); 
                         foreach($getboothList as $key=>$value){
                                echo $value->booth_number; echo '<br>';
@@ -201,7 +201,6 @@
                         <a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".deleteModel"  onclick="editBooth(<?php echo $val->id ?>)" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                         <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".deleteModel"  onclick="removeBooth(<?php echo $val->id ?>)" ><i class="fa fa-trash" aria-hidden="true"></i></a>
                     </td>
-
                 </tr>    
             <?php $i ++;} ?>      
             </tbody>    
@@ -215,7 +214,6 @@
    <td colspan="5">No results Found<td>
 </tr>
 <?php } echo $table_val; ?>
-
 
 <!-- Modal -->
 <div class="modal fade deleteModel" role="dialog">

@@ -29,7 +29,7 @@
      ?>
 <input type="hidden" value="<?php echo $value->mandal_id; ?>" id="viewMandalID">
 <input type="hidden" value="<?php echo $value->role_hierarchy; ?>" id="memberRole">
-<input type="hidden" value="<?php echo $_POST['role']; ?>" id="selctedRole">
+<input type="hidden" value="<?php echo $_POST['role']; ?>" id="selectedRole">
 <div class="card" id="deleteOfficeBearers_<?php echo $value->id ?>">
    <div class="card-header">
       Office Bearers Details
@@ -161,7 +161,7 @@
 <script>
    function ShowParentCatListPagination(page,condition,value) { 
       var mandalid = $('#viewMandalID').val();
-      var value = $('#memberRole').val();
+      var value = $('#selectedRole').val();
          paramData = {'act':'memberListpagination','page':page,'role':value,'mandalId':mandalid}; 
          ajax({
          a:"districtajax",
@@ -173,7 +173,7 @@
          });
    }   
    function editofficebearers(id) {
-      var role = $('#selctedRole').val();
+      var role = $('#selectedRole').val();
       paramData = {'obid':id,'action':'editOfficeBearers','role':role}                     
          ajax({
                a:"districtmodel",
@@ -185,7 +185,7 @@
          });                                   
    }   
    function deleteofficebearers(id) {  
-      var role = $('#selctedRole').val();          
+      var role = $('#selectedRole').val();          
       paramData = {'ofid':id,'action':'deleteOfficeBearers','role':role}
             ajax({
                   a:"districtmodel",

@@ -839,13 +839,13 @@
 
         $bootharray = explode(',',$_POST['boothID']);
             if($_POST['getRole'] == 'B'){
-                $qry = 'select * from '.TBL_BJP_BOOTH.' where `ward_id` ='.$_POST['wardID'].' AND `status`="A"';
+                echo $qry = 'select * from '.TBL_BJP_BOOTH.' where `ward_id` ='.$_POST['wardID'].' AND `status`="A"';
                 $wardFullDetails=dB::mExecuteSql($qry);       
-                foreach($wardFullDetails as $Key=>$val) {  ?>
-                    <option <?php  if(in_array("$val->id",$_POST['boothID'])){ echo 'selected="selected"'; } ?>  value="<?php  echo $val->id; ?>" ><?php  echo $val->booth_number; ?></option>
+                foreach($wardFullDetails as $Key=>$val) {   ?>
+                    <option <?php  if($val->id == $_POST['boothID']){ echo 'selected="selected"'; } ?>  value="<?php  echo $val->id; ?>" ><?php  echo $val->booth_number; ?></option> 
                 <?php  } 
             }else{
-                $qry1 = 'select booth_id from '.TBL_BJP_OFFICE_BEARERS.' where  `mandal_id` ='.$_POST['mandalID'].' AND `ward_id` ='.$_POST['wardID'].' AND `id` !='.$_POST['obid'].' AND `booth_id` != "" AND `status`="A"';
+                echo $qry1 = 'select booth_id from '.TBL_BJP_OFFICE_BEARERS.' where  (`role_hierarchy` ="SK" OR `sub_role_hierarchy` ="SK") AND `mandal_id` ='.$_POST['mandalID'].' AND `ward_id` ='.$_POST['wardID'].' AND `id` !='.$_POST['obid'].' AND `booth_id` != "" AND `status`="A"';
                 $findbooth=dB::mExecuteSql($qry1); 
                 if(count($findbooth) == 0 || $findbooth->booth_id != ''){
                      $qry = 'select * from '.TBL_BJP_BOOTH.' where `ward_id` ='.$_POST['wardID'].' AND `status`="A"';

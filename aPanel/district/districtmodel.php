@@ -958,15 +958,15 @@
             </div>
             <?php } else if(($wqueryList->role_hierarchy == "SK" || $wqueryList->sub_role_hierarchy == "SK") && $_POST['role'] == 'SK'){ ?>
             <div class="row">
-               <div class="form-group col-sm-7">
-                  <label> Are you sure change sk booth</label>
+               <div class="form-group col-sm-10">
+                  <label> please check if you want change sk booth</label>
                   <input type="checkbox" class="getAvailBoothOb"  value="<?php echo $_POST['obid']; ?>" >
                </div>
             </div>
             <?php } else if(($wqueryList->role_hierarchy == "B" || $wqueryList->sub_role_hierarchy == "B") && $_POST['role'] == 'B'){ ?>
             <div class="row">
-               <div class="form-group col-sm-7">
-                  <label> Are you sure change booth</label>
+               <div class="form-group col-sm-10">
+                  <label> please check if you want change booth</label>
                   <input type="checkbox" class="getAvailBoothOb" id="getBoothOb"  value="<?php echo $_POST['obid']; ?>">
                </div>
             </div>
@@ -1280,21 +1280,20 @@
                   </div>
                <?php } else if(($wqueryList->role_hierarchy == "SK" || $wqueryList->sub_role_hierarchy == "SK") && $_POST['role'] == 'SK'){ ?>
                   <div class="row">
-                     <div class="form-group col-sm-7">
-                        <label> Are you sure change sk booth</label>
+                     <div class="form-group col-sm-10">
+                        <label>please check if you want change sk booth</label>
                         <input type="checkbox" class="getAvailBooth"  value="<?php echo $_POST['obid']; ?>" >
                      </div>
                   </div>
                <?php } else if(($wqueryList->role_hierarchy == "B" || $wqueryList->sub_role_hierarchy == "B") && $_POST['role'] == 'B'){ ?>
                   <div class="row">
-                     <div class="form-group col-sm-7">
-                        <label> Are you sure change booth</label>
+                     <div class="form-group col-sm-10">
+                        <label> please check if you want change booth</label>
                         <input type="checkbox" class="getAvailBooth" id="getBoothward"  value="<?php echo $_POST['obid']; ?>">
                      </div>
                   </div>
                <?php } ?>
-               <div class="row">
-                  <div class="col-sm-12" id="displaySKward">
+                  <div class="row col-sm-12" id="displaySKward">
                      <div class="form-group col-sm-6">
                         <?php  $qry = 'select * from '.TBL_BJP_WARD.' where `mandal_id` ='.$wqueryList->mandal_id.' AND id='.$wqueryList->ward_id.' AND `status`="A"';
                            $wardFullDetails=dB::mExecuteSql($qry); ?>
@@ -1304,7 +1303,6 @@
                         <select class="form-control selectsubRoleBooth" multiple style="width:100%" id="multiSelectBooth" name="updateBooth[]"></select>
                      </div>
                   </div>
-               </div>
             <div class="displayerror"></div>
             <input type="submit" id="submit" class="btn btn-success" value="Submit">
          </form>
