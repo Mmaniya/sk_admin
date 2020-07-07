@@ -5923,14 +5923,6 @@ File: Responsive
    font-family: 'Poppins', sans-serif;
  };
 
-
- .valueCounter {
-  /* background: linear-gradient(to right, #30CFD0 0%, #330867 100%); */
-  /* -webkit-text-fill-color: transparent; */
-  font-size: 2.3vw;
- /* font-family: 'Poppins', sans-serif; */
- }
- 
  .card-ward {
    /* background-color: #60bbf5; */
    color: #ffffff;
@@ -5951,4 +5943,8 @@ File: Responsive
 
  .multiselect {
    width: 100% !important;
+ }
+
+ table.dataTable thead .sorting:before, table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:before, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:before, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:before, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:before, table.dataTable thead .sorting_desc_disabled:after{
+  display: none !important;
  }

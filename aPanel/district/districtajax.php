@@ -431,6 +431,23 @@
                 }
                 
                 if($subroleId == 0){
+
+                    if($_POST['sub_role_hierarchy'] == 'SK'){
+                        $paramSK = array('sk_name','mandal_id','ward_id','is_verified');
+                        foreach($paramSK as $k => $v) {
+                            $params[$v] = $$v = check_input($_POST[$v]);                
+                        }
+                        if ($_POST['id'] == '') {
+                            $params['booth_id'] = $booth_id;
+                            $params['added_by'] = $_SESSION['user_id'];
+                            $params['added_date'] = date('Y-m-d H:i:s', time());
+                            $resultData = Table::insertData(array('tableName' => TBL_BJP_SK, 'fields' => $params, 'showSql' => 'N'));
+                            $insertId = explode('::',$resultData);
+                            $sk_id =  trim($insertId[2]);                    
+                        }
+                    }  
+
+
                     $param=array();
                     $paramsOB = array('role_hierarchy','sub_role_hierarchy','state_id','district_id','mandal_id','ward_id','member_id','membership_number','person_name','person_name_ta','mobile_number','address','email_address','whatsapp_number');
                     foreach($paramsOB as $key => $Val) {
@@ -441,6 +458,7 @@
                         // $param['role_position'] =   $role_list->role_abbr.','.$sub_role_list->role_abbr;
                         $param['role_id'] =  $role_list->id.','.$sub_role_list->id;
                         $param['booth_id'] = $booth_id;
+                        $param['sk_id'] = $sk_id;
                         $param['added_by'] = $_SESSION['user_id'];
                         $param['added_date'] = date('Y-m-d H:i:s', time());
                         $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
@@ -541,6 +559,7 @@
             
             if($subroleId == 0){
 
+            if($_POST['sub_role_hierarchy'] == 'SK' || $_POST['role_hierarchy'] == 'SK'){
                 $paramSK = array('sk_name','mandal_id','ward_id','is_verified');
                 foreach($paramSK as $k => $v) {
                     $params[$v] = $$v = check_input($_POST[$v]);                
@@ -552,7 +571,9 @@
                     $resultData = Table::insertData(array('tableName' => TBL_BJP_SK, 'fields' => $params, 'showSql' => 'N'));
                     $insertId = explode('::',$resultData);
                     $sk_id =  trim($insertId[2]);                    
-                }                
+                }
+            }  
+
             $param=array();
             $paramsOB = array('role_hierarchy','sub_role_hierarchy','role_id','state_id','district_id','mandal_id','member_id','membership_number','ward_id','person_name','person_name_ta','mobile_number','address','email_address','whatsapp_number');
             foreach($paramsOB as $key => $Val) {
@@ -588,6 +609,7 @@
             foreach ($subroleskList as $SK => $SKV){
                 $newarry[]= $SKV->booth_id;
             }
+
             $arraymerge = implode(',',$newarry);
             $totalarray = explode(',',$arraymerge);
             foreach($totalarray as $subarray => $subvalue){
@@ -764,6 +786,7 @@
             $qry = 'UPDATE '.TBL_BJP_SK.' SET `status`="I" where `id`="'.$ob_list->sk_id.'"';
             $sk_list=dB::mExecuteSql($qry); 
         }
+        echo '<p style="color:green">Record Deleted Successfully..!</p>';
         exit();
     } 
 /********* 17.FETCH MANDAL THALAIVAR *********/
@@ -808,10 +831,11 @@
 
         $param = array('tableName'=>TBL_BJP_WARD,'fields'=>array('*'),'condition'=>array('mandal_id'=>$mandalID.'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');
         $ward_list = Table::getData($param);
-        if(($_POST['act']=='wardincharge') != '') {?>        
+        // if(($_POST['act']=='wardincharge') != '') {
+            ?>        
         <option value="" selected="fasle" disabled="disabled">Please Select Ward</option>
-        <?php } foreach($ward_list as $Key=>$value) {  
-
+        <?php // } 
+        foreach($ward_list as $Key=>$value) {  
         ?><option  value="<?php echo $value->id; ?>" ><?php echo $value->ward_number; ?></option>
         <?php } 
         exit();

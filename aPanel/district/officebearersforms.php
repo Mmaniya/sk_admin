@@ -44,13 +44,17 @@
                 <label>Select Booths</label><br>
                 <select  class="form-control selectsubRoleBooth" name="booth_id[]"></select>
             </div>
+            <div class="col-sm-6 col-lg-6" id="suRoleSKname">
+                <label >Enter Shakti Kendram Name</label>
+                <input type="text" class="form-control" name="sk_name" placeholder="Please Enter Shakti Kendram Name">
+            </div>
             <div class="col-sm-6 col-lg-6">
-                <label>Member Id </label>
+                <label>Member Number/Name/Mobile</label>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa fa-id-card"  aria-hidden="true"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="">                  
+                    <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter Your Member Number/Name/Mobile" value="">                  
                 </div>
             </div>
             <div class="form-group col-sm-6" style="display:none;">
@@ -101,12 +105,12 @@
             </div>
   
         <div class="col-sm-6 col-lg-6">
-            <label>Member Id </label>
+        <label>Member Number/Name/Mobile</label>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-id-card"  aria-hidden="true"></i></span>
                 </div>
-                <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="">                  
+                <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter Your Member Number/Name/Mobile" value="">                  
             </div>
         </div>
         <div class="form-group col-sm-6" style="display:none;">
@@ -142,14 +146,21 @@
             <div class="col-sm-6 col-lg-6">
             <label>Select Booth</label><br>
             <select  class="form-control selectsubRoleBooth"  multiple  name="booth_id[]"></select>
-            </div>
+            </div>  
             <div class="col-sm-6 col-lg-6">
-                <label>Member Id </label>
+                <label >Enter Shakti Kendram Name</label>
+                <input type="text" class="form-control" name="sk_name" placeholder="Please Enter Shakti Kendram Name">
+            </div>  
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-6 col-lg-6">
+                <label>Member Number/Name/Mobile</label>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa fa-id-card"  aria-hidden="true"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="">                  
+                    <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter Your Member Number/Name/Mobile" value="">                  
                 </div>
             </div>
         </div>
@@ -182,12 +193,12 @@
             <select  class="form-control selectsubRoleBooth" name="booth_id"></select>
             </div>
             <div class="col-sm-6 col-lg-6">
-                <label>Member Id </label>
+            <label>Member Number/Name/Mobile</label>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa fa-id-card"  aria-hidden="true"></i></span>
                     </div>
-                    <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter You Member ID" value="">                  
+                    <input type="text" class="form-control" id="memberID" name="selectMem" onkeypress="searchKey(this.id)"  placeholder="Enter Your Member Number/Name/Mobile" value="">                  
                 </div>
             </div>
         </div>
@@ -269,9 +280,7 @@ $(document).ready(function() {
             membership_number: "required",
             person_name: "required",
             mobile_number: "required",
-            selectMem: "required",
-            ward_id: { required:true,
-                       min :1 }
+            selectMem: "required",   
                },
          messages: {
             role_hierarchy: "Please Select One Role Hierarchy",
@@ -280,7 +289,6 @@ $(document).ready(function() {
             mobile_number: "Enter Mobile Number",
             role_id: "Please Select Role Position",
             selectMem: "Eneter MembershipId/Mobile/Name",
-            ward_id:{ required : "Plese select one Ward"}
          },
 
        
@@ -330,6 +338,7 @@ $(document).ready(function() {
     /* Sub Role Hierarchy */
         $('#suRoleWard').hide();
         $('#suRoleSK').hide();
+        $('#suRoleSKname').hide();
         $('input[type=radio][name=sub_role_hierarchy]').change(function() {
             var getValue = $(this).val();  
             var mandalID = $('#mandalID').val();
@@ -359,17 +368,21 @@ $(document).ready(function() {
             if(getValue == 'W'){
                 $('#suRoleWard').show();
                 $('#suRoleSK').hide();
+                $('#suRoleSKname').hide();
             }else if (getValue == 'SK'){
                 $('#suRoleWard').show();
                 $('#suRoleSK').show();
+                $('#suRoleSKname').show();
                 $(".selectsubRoleBooth").attr("multiple", (this.checked) ? "multiple" : "");
             } else if (getValue == 'B'){
                 $('#suRoleWard').show();
                 $('#suRoleSK').show();
+                $('#suRoleSKname').hide();
                 $(".selectsubRoleBooth").removeAttr("multiple", (this.checked) ? "multiple" : "");
             } else {
                 $('#suRoleWard').hide();
-                $('#suRoleSK').hide();                
+                $('#suRoleSK').hide();
+                $('#suRoleSKname').hide();                
                     paramPosition = {'act':'wardincharge','mandalID':mandalID };
                     ajax({
                         a:"districtajax",

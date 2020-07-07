@@ -1,6 +1,9 @@
+      
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
         <table class="table table-striped table-bordered" id="obtabel">
             <thead>
-            <tr><th colspan='7' style="color:#ff9933">
+            <tr><th colspan='8' style="color:#ff9933">
                 <?php 
                        switch($_POST['role']) { 
                         case "M" :                    
@@ -32,11 +35,11 @@
             </thead>
             <tbody>
             <input type="text" style="display:none" value="<?php echo $_POST['role']; ?>" id="selectedRole">
+            
             <?php                 
                 $i = 1; 
                 foreach($stateMembersList as $key=>$value) {
                     ?>
-                    <input type="hidden" value="<?php echo $value->mandal_id; ?>" id="viewMandalID">
                     <input type="hidden" value="<?php echo $value->role_hierarchy; ?>" id="memberRole">
                     <input type="hidden" value="<?php echo $value->id ?>" id="officeBearersId">
                 <tr>
@@ -45,24 +48,24 @@
                     <td><?php echo $value->mobile_number ?></td>
                     <td>
                     <?php
-                        if($value->role_hierarchy != ''){                   
+                        // if($value->role_hierarchy != ''){                   
                             $roleMembers = array('tableName' => TBL_BJP_ROLE, 'fields' => array('*'),'condition' => array('id' => $value->role_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');
                             $roleMembersList = Table::getData($roleMembers);
-                            echo '<span  style="font-size:15px; text-transform:uppercase">'.$roleMembersList->role_name.'</span>';
-                        }
+                            echo '<span  style="font-size:14px; text-transform:uppercase;font-weight: bold;">'.$roleMembersList->role_name.'</span>';
+                        // }
                     ?>
                     </td>
                     <td>
                     <?php
                         switch($value->sub_role_hierarchy) {      
                         case "W" :                    
-                                echo '<span style="font-size:15px;">WARD INCHARGE</span>';
+                                echo '<span style="font-size:14px;font-weight: bold;">WARD INCHARGE</span>';
                         break; 
                         case "SK" :  
-                            echo '<span style="font-size:15px;">SHAKTI KENDRAM</span>';   
+                            echo '<span style="font-size:14px;font-weight: bold;">SHAKTI KENDRAM</span>';   
                         break; 
                         case "B" :             
-                            echo '<span  style="font-size:15px;">BOOTH INCHARGE</span>';   
+                            echo '<span  style="font-size:14px;font-weight: bold;">BOOTH INCHARGE</span>';   
                         break; 
                         case "" :
                             echo '--';
@@ -82,7 +85,10 @@
                           $findsubroleSKList=dB::mExecuteSql($qry);                                 
                             foreach($findsubroleSKList as $array) {
                             echo $array->booth_number.'<br>';
-                            } 
+                            }
+                            if($array->booth_number == ''){
+                                echo '--';
+                            }
                         ?>
                     </td>
                     <td>
@@ -91,19 +97,21 @@
                     </td>           
                 </tr>    
             <?php $i ++; } ?>      
-            </tbody>    
+            </tbody>  
+            <input type="hidden" value="<?php echo $value->mandal_id; ?>" id="viewMandalID">
+  
         </table>
 
         <div class="modal fade uddateOB" role="dialog">
-   <div class="modal-dialog">
-      <span id="updateModel"></span>
-   </div>
-</div>
-<div class="modal fade updateofficebearers" role="dialog">
-   <div class="modal-dialog">
-      <span class="viewofficebearers"></span>
-   </div>
-</div>
+            <div class="modal-dialog">
+                <span id="updateModel"></span>
+            </div>
+        </div>
+        <div class="modal fade updateofficebearers" role="dialog">
+            <div class="modal-dialog">
+                <span class="viewofficebearers"></span>
+            </div>
+        </div>
 <script>
     // $('#officebearers').DataTable();
     $(document).ready(function() {
@@ -123,8 +131,9 @@
          });                                   
    }   
    function deleteofficebearers(id) {  
-      var role = $('#selectedRole').val();          
-      paramData = {'ofid':id,'action':'deleteOfficeBearers','role':role}
+      var role = $('#selectedRole').val();   
+      var mandalId = $('#viewMandalID').val();     
+      paramData = {'ofid':id,'action':'deleteOfficeBearers','role':role,'mandalId':mandalId}
             ajax({
                   a:"districtmodel",
                   b:paramData,

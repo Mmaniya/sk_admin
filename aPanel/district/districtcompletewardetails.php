@@ -81,7 +81,7 @@
         </table>
         <table class="table table-striped table-bordered" >
             <thead >
-            <tr><th colspan='7' style="color:#ff9933">SHAKTI KENDRAM                                                
+            <tr><th colspan='8' style="color:#ff9933">SHAKTI KENDRAM                                                
                 <a href="javascript:void(0);" style="float:right" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge('SK')"><i class="fa fa-plus"></i> ADD NEW SHAKTI KENDR INCHARGE</a>
             </th>
             </tr>
@@ -90,6 +90,7 @@
                     <th>Name</th>
                     <th>Mobile</th>
                     <th>address</th>
+                    <th>SK Name </th>
                     <th>Verified</th>
                     <th>Booth</th>
                     <th>Action</th>
@@ -107,6 +108,15 @@
                     <td><?php echo $val->person_name; if($val->person_name_ta !=''){ ?>(<?php echo $val->person_name_ta ?>)<?php } ?></td>
                     <td><?php echo $val->mobile_number ?></td>
                     <td><?php echo $val->address ?></td>
+                    <th>
+                    <?php
+                    $skname = 'select * from '.TBL_BJP_SK.' where  `id` = '.$val->sk_id.' AND `status` ="A" ORDER BY id';
+                    $sknameList=dB::mExecuteSql($skname); 
+                    foreach($sknameList as $key=>$value){
+                    echo $value->sk_name;
+                    }
+                    ?>
+                    </th>
                     <td><?php if($val->is_verified == 'N'){ echo '<p style="color:red;font-weight:700">NO</p>'; } else { echo '<p style="color:green;font-weight:700">YES</p>'; } ?></td>
                     <td><?php 
                     $getbooth = 'select * from '.TBL_BJP_BOOTH.' where  `id` IN ('.$val->booth_id.') AND `status` ="A" ORDER BY id';

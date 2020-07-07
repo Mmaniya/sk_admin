@@ -484,24 +484,24 @@
       </div>
    </div>
 
-<div class="modal fade distrcit" tabindex="-1" role="dialog"  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-      <dic class ="dist_model"></div>
-  </div>
-</div>
-<script>
-function addnewdistrictincharge(distId,func){
-   paramPosition = {'act':func,'id':distId };
-   ajax({
-      a:"districtinchargeform",
-      b:paramPosition,
-      c:function(){},
-      d:function(data){
-         $('.dist_model').html(data);
+   <div class="modal fade distrcit" tabindex="-1" role="dialog"  aria-hidden="true">
+   <div class="modal-dialog" role="document">
+         <dic class ="dist_model"></div>
+   </div>
+   </div>
+   <script>
+      function addnewdistrictincharge(distId,func){
+         paramPosition = {'act':func,'id':distId };
+         ajax({
+            a:"districtinchargeform",
+            b:paramPosition,
+            c:function(){},
+            d:function(data){
+               $('.dist_model').html(data);
+            }
+         });
       }
-   });
-}
-</script>
+   </script>
 <!-- 7. MANDAL DETAILS SHOW -->
 <?php } else if ($modelAction == 'mandalCard'){?>
 
@@ -933,10 +933,12 @@ function addnewdistrictincharge(distId,func){
          <input type="hidden" name="act" value="statusDataUpdateforOB">
          <input type="hidden" name="id" value="<?php echo $_POST['ofid']; ?>" id="officeBeraersId">
          <input type="hidden" name="subRole" value="<?php echo $_POST['role'] ?>" id="subRole">
+         <input type="hidden" value="<?php echo $_POST['mandalId'] ?>" id="mandalId">
          <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             <input type="submit" id="submit" class="btn btn-danger"  value="Delete">
          </div>
+         <span id="showresult"></span>
       </form>
    </div>
    <script>
@@ -944,14 +946,19 @@ function addnewdistrictincharge(distId,func){
       $('form#deleteOfficeBearers').validate({
             submitHandler: function(form){
                var ofId = $('#officeBeraersId').val();
+               var id = $('#mandalId').val();
+               var role = $('#subRole').val();
                var formData = $('form#deleteOfficeBearers').serialize();
                ajax({
                   a:"districtajax",
                   b:formData,
                   c:function(){},
                   d:function(data){
-                     $('.uddateOB').modal('toggle');         
-                     $('#deleteOfficeBearers_'+ofId).remove();
+                     $('#showresult').html(data);
+                     setTimeout(function(){ 
+                        $('.uddateOB').modal('toggle');  
+                        getStateUsers(id,role);    
+                     }, 1500);
                   }          
                });
             }
@@ -1017,11 +1024,12 @@ function addnewdistrictincharge(distId,func){
                   <input type="checkbox" id="checkSubRoleob"  value="">
                   <span id="showselectBox"></span>
                </div> 
+               <?php if($wqueryList->sub_role_hierarchy == ''){ ?>
                <div class="form-group col-sm-12">
                   <label >Are you sure add new sub role:</label>
-                  <input type="radio" name="sub_role_hierarchy" <?php if($wqueryList->sub_role_hierarchy == 'W'){ ?>  checked <?php } ?> value="W" > <label class="radio-inline">Ward</label>
-                  <input type="radio" name="sub_role_hierarchy" <?php if($wqueryList->sub_role_hierarchy == 'SK'){ ?>  checked <?php } ?>  value="SK"> <label class="radio-inline">SK</label>
-                  <input type="radio" name="sub_role_hierarchy" <?php if($wqueryList->sub_role_hierarchy == ''){ ?>  checked <?php } ?> value=""> <label class="radio-inline">None</label>
+                  <input type="radio" name="sub_role_hierarchy"  value="W" > <label class="radio-inline">Ward</label>
+                  <input type="radio" name="sub_role_hierarchy"  value="SK"> <label class="radio-inline">SK</label>
+                  <input type="radio" name="sub_role_hierarchy"   checked  value=""> <label class="radio-inline">None</label>
                   <span id="showError" style="color:red"></span>
                   <div class="row">
                      <div class="col-sm-6" id="newWard">
@@ -1034,6 +1042,7 @@ function addnewdistrictincharge(distId,func){
                      </div>
                   </div>
                </div>  
+               <?php }else { ?><input type="hidden" name="sub_role_hierarchy" value="<?php echo $wqueryList->sub_role_hierarchy ?>"> <?php } ?>
             </div>
             <?php } else if(($wqueryList->role_hierarchy == "W" || $wqueryList->sub_role_hierarchy == "W") && $_POST['role'] == 'W'){?>
             <!-- <div class="row"> -->

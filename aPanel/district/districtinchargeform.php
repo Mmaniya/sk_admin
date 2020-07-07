@@ -106,8 +106,6 @@
             });
         }
 
-
-
            // 2. Add New SubRole
          $('#newMandal').hide();
          $('#newWard').hide();
