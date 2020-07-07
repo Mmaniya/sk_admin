@@ -55,7 +55,6 @@
 <input type="hidden" id="getDistrictid" value="<?php echo $_REQUEST['dist']; ?>">
 <script type="text/javascript">
    $(document).ready(function(){
-
     var getDistrictid = $('#getDistrictid').val();
     paramData = {'act':'getMandalData','filter_by': getDistrictid}; 
     ajax({
@@ -68,7 +67,6 @@
     });
    
      var id = $('#getDistrictid').val();
-
       paramData = {'dist_ID':id,'action':'districtCard'}; 
       ajax({
             a:"districtmodel",
@@ -79,18 +77,6 @@
             }
       });
 
-      // $('#backToDist').click(function (){
-      //    paramData = {'dist_ID':id,'action':'districtCard'}; 
-      //    ajax({
-      //          a:"districtmodel",
-      //          b:paramData,
-      //          c:function(){},
-      //          d:function(data){
-      //             $('#mandaldetails').html(data);
-      //          }
-      //    });
-      // });
-   
     $('#inputvalue').keyup(function() {
            var filter_by = $(this).val();
            var getDistrictid = $('#getDistrictid').val();

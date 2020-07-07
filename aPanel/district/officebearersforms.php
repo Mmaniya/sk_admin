@@ -60,6 +60,7 @@
         </div>
         <span id="memberTable"></span>            
         <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
+        <span id="errormsg"></span>
     </form><?php 
     } else {  ?><h4 style="color:red">Maximum Reached Office Bearers List </h4>     <?php  } ?>
 
@@ -115,6 +116,7 @@
     </div>
     <span id="memberTable"></span>            
     <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
+    <span id="errormsg" style="color:red">Please Select One Ward.!</span>
     </form>
 
 
@@ -153,6 +155,7 @@
         </div>
         <span id="memberTable"></span>            
         <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
+        <span id="errormsg" style="color:red">Please Select One Ward And Booth.!</span>
     </form>
 
 <?php } else if($_POST['action'] == 'B'){?>
@@ -190,6 +193,7 @@
         </div>
         <span id="memberTable"></span>            
         <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
+        <span id="errormsg"></span>
     </form>
 <?php } ?>
 <script>
@@ -197,6 +201,7 @@
 $(document).ready(function() {
     /* Get Main role Hierarchy */
     $('#submit').prop('disabled', true);
+    $('#errormsg').hide();
 
          var mandalID = $('#mandalID').val();
          var mainRole = $('#roleHierarchy').val();
@@ -279,15 +284,25 @@ $(document).ready(function() {
          },
 
        
-         submitHandler: function(form){
-        var data = $('.selectsubRoleWard').val();
-        var databooth = $('.selectsubRoleBooth').val();
-        if(data == null || databooth == ''){
-            alert("You haven't selected any ward or booth!");
-        }else{
+         submitHandler: function(form){     
             var formData = $('form#formDataddNewOb').serialize();
             var id = $('#mandalID').val();
             var role = $('#roleHierarchy').val();
+            var dataward = $('.selectsubRoleWard').val();
+            var databooth = $('.selectsubRoleBooth').val();
+            if(role == 'W' && dataward == null ){  
+                $('#errormsg').show();
+                setTimeout(function(){
+                    $('#errormsg').hide();
+                }, 2000);
+
+            }else if(role == 'SK' && databooth == '' ){ 
+                $('#errormsg').show();
+                setTimeout(function(){
+                    $('#errormsg').hide();
+                }, 2000);
+
+            }else{
                 ajax({
                 a:"districtajax",
                 b:formData,
@@ -308,9 +323,9 @@ $(document).ready(function() {
                         });
                         
                     }          
-                    });
-            }
-        }      
+                });
+            }   
+        }   
       });
     /* Sub Role Hierarchy */
         $('#suRoleWard').hide();
@@ -406,13 +421,14 @@ $(document).ready(function() {
          source: function( request, response ) {
                $('#update_response_'+id_attr).html('processing...'); 
                var mandal = $('#getMandalid').val();
+               var wardId = $('.selectsubRoleWard').val();
             // Fetch data
             $.ajax({
             url: "districtajax.php",
             type: 'post',
             dataType: "json",
             data: {
-            search: request.term,mandal
+            search: request.term,mandal,wardId
             },
             success: function( data ) { 
                response( data );

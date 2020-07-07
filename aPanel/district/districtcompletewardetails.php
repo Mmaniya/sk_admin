@@ -27,7 +27,6 @@
    foreach($ListingParentCatListArr as $key=>$value) {
    
      ?>
-<style></style>
 <div class="card">
    <div class="card-header bg-img"> WARD (<?php echo $value->ward_number; ?>) DETAILS</div>
    <input type="hidden" value="<?php echo $value->id ?>" id="wradId">
