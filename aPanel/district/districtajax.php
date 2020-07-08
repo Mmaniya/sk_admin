@@ -105,39 +105,43 @@
         exit();
     }
 
-    if ($_POST['act'] == 'searchMandal') {
+    if (isset($_POST['searchMandal'])) {
         ob_clean();
-        $searchText = $_POST['filter_by'];
+        $searchText = $_POST['searchMandal'];
         $distID = $_POST['district_id'];
-
         $query = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('mandal_name' => $searchText.'-STRING','district_id'=> $distID. '-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
         $mandal_list = Table::getData($query);
-        if ($_POST['page'] == '') $page = 1;
-        else $page = $_POST['page'];
-        $TotalCount = count($mandal_list);
-        $totalPages = ceil(($TotalCount) / (PAGE_LIMIT));
-        if ($totalPages == 0) $totalPages = PAGE_LIMIT;
-        $StartIndex = ($page - 1) * PAGE_LIMIT;
-        if (count($mandal_list) > 0) $ListingParentCatListArr = array_slice($mandal_list, $StartIndex, PAGE_LIMIT, true);
-        include 'districtviewtable.php';
+        foreach($mandal_list as $key=>$value) {
+        $response[] = array("value"=>$value->id,"label"=>$value->mandal_name.' Mandal');             
+        }
+        echo json_encode($response);
+
+        // if ($_POST['page'] == '') $page = 1;
+        // else $page = $_POST['page'];
+        // $TotalCount = count($mandal_list);
+        // $totalPages = ceil(($TotalCount) / (PAGE_LIMIT));
+        // if ($totalPages == 0) $totalPages = PAGE_LIMIT;
+        // $StartIndex = ($page - 1) * PAGE_LIMIT;
+        // if (count($mandal_list) > 0) $ListingParentCatListArr = array_slice($mandal_list, $StartIndex, PAGE_LIMIT, true);
+        // include 'districtviewtable.php';
         exit();
     }
     
-    if ($_POST['act'] == 'childListpagination') {
-        ob_clean();
-        $distID = $_POST['districtID'];
-        $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('district_id'=> $distID. '-INT'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
-        $mandal_list = Table::getData($param);
-        if ($_POST['page'] == '') $page = 1;
-        else $page = $_POST['page'];
-        $TotalCount = count($mandal_list);
-        $totalPages = ceil(($TotalCount) / (PAGE_LIMIT));
-        if ($totalPages == 0) $totalPages = PAGE_LIMIT;
-        $StartIndex = ($page - 1) * PAGE_LIMIT;
-        if (count($mandal_list) > 0) $ListingParentCatListArr = array_slice($mandal_list, $StartIndex, PAGE_LIMIT, true);
-        include 'districtviewtable.php';
-        exit();
-    }
+    // if ($_POST['act'] == 'childListpagination') {
+    //     ob_clean();
+    //     $distID = $_POST['districtID'];
+    //     $param = array('tableName' => TBL_BJP_MANDAL, 'fields' => array('*'),'condition' => array('district_id'=> $distID. '-INT'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
+    //     $mandal_list = Table::getData($param);
+    //     if ($_POST['page'] == '') $page = 1;
+    //     else $page = $_POST['page'];
+    //     $TotalCount = count($mandal_list);
+    //     $totalPages = ceil(($TotalCount) / (PAGE_LIMIT));
+    //     if ($totalPages == 0) $totalPages = PAGE_LIMIT;
+    //     $StartIndex = ($page - 1) * PAGE_LIMIT;
+    //     if (count($mandal_list) > 0) $ListingParentCatListArr = array_slice($mandal_list, $StartIndex, PAGE_LIMIT, true);
+    //     include 'districtviewtable.php';
+    //     exit();
+    // }
 /********* 7. WARD DETAILS VIEW **************/
     if ($_POST['act'] == 'wardDetailsGet') {
         ob_clean();

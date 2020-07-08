@@ -635,7 +635,7 @@
                               <h5 style="color:#000">OFFICE BEARERS</h5>
                            </a>
                         </li>
-                        <li class="nav-item" style="margin-left: 42%;margin-top: 0.5%">
+                        <li class="nav-item ml-auto" style="margin-top: 0.5%">
                            <a class="nav-link" href="#newofficebearers" role="tab" onClick="addofficebearers(<?php echo $mandal_list->id; ?>,<?php echo $mandal_list->district_id; ?>)" data-toggle="tab">
                                  <i class="fa fa-plus" aria-hidden="true"></i> ADD OFFICE BEARERS
                               </a>   

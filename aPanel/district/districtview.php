@@ -34,11 +34,14 @@
                </div>
                <div class="card-body">
                   <div class="row">
-                     <div class="col-md-2">
-                        <input type="inputvalue" style="margin-bottom: 10px;" id="inputvalue" class="form-control card-margin" placeholder="Search Here.." />
+                     <!-- <div class="col-md-2">
+                        <input type="inputvalue" style="margin-bottom: 10px;" id="inputvalue" class="form-control card-margin" onkeypress="searchKey(this.id)" placeholder="Search Here.." />
                         <span id="mandaltable"></span>
-                     </div>
-                     <div class="col-md-10" id="mandaldetails">
+                     </div> -->
+                     <div class="col-md-12 ">
+                        <input type="inputvalue" style="margin-bottom: 10px;" id="inputvalue" class="form-control card-margin form-control-lg" onkeypress="searchMandal(this.id)" placeholder="Search Mandal Here..!" />
+                        <br>
+                        <div id="mandaldetails"></div>
                      </div>
                   </div>
                </div>
@@ -77,19 +80,19 @@
             }
       });
 
-    $('#inputvalue').keyup(function() {
-           var filter_by = $(this).val();
-           var getDistrictid = $('#getDistrictid').val();
-             paramData = {'act':'searchMandal','filter_by':filter_by,'district_id':getDistrictid }; 
-               ajax({
-                  a:"districtajax",
-                  b:paramData,
-                  c:function(){},
-                  d:function(data){
-                     $('#mandaltable').html(data);
-                 }
-            });
-      });
+   //  $('#inputvalue').keyup(function() {
+   //         var filter_by = $(this).val();
+   //         var getDistrictid = $('#getDistrictid').val();
+   //           paramData = {'act':'searchMandal','filter_by':filter_by,'district_id':getDistrictid }; 
+   //             ajax({
+   //                a:"districtajax",
+   //                b:paramData,
+   //                c:function(){},
+   //                d:function(data){
+   //                   $('#mandaltable').html(data);
+   //               }
+   //          });
+   //    });
    
       $('#getvalue').click(function() {
          var id = $('#getDistrictid').val();
@@ -104,5 +107,44 @@
             });        
       });
    });
+
+   function searchMandal(id_attr) { 
+         $( "#"+id_attr).autocomplete({
+         source: function( request, response ) {
+            $('#update_response_'+id_attr).html('processing...'); 
+            var district_id = $('#getDistrictid').val();
+            // Fetch data
+            $.ajax({
+            url: "districtajax.php",
+            type: 'post',
+            dataType: "json",
+            data: {
+               searchMandal: request.term,district_id,
+
+            },
+            success: function( data ) { 
+               response( data );
+            }
+            });
+         },
+         select: function (event, ui) {
+            $('#submit').prop('disabled', false);
+            $('#'+id_attr).val(ui.item.label); 
+            $('.'+id_attr).val(ui.item.value);      
+            paramData = {'action':'mandalCard','mandal_ID':ui.item.value }; 
+                  ajax({
+                     a: "districtmodel",
+                     b: paramData,
+                     c:function(){},
+                     d:function(data){
+                        $('#mandaldetails').html(data);
+                     }
+               });
+            return false;
+         }
+         });
+    }
+
+
 </script>
 <?php } include "template.php"; ?>
