@@ -5,7 +5,7 @@
     $param = array('tableName'=>TBL_BJP_OFFICE_BEARERS,'fields'=>array('*'),'condition'=>array('role_hierarchy'=>$_POST['action'].'-CHAR','mandal_id'=>$_POST['Mandal'].'-INT','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'id','sortby'=>'desc');        
     $ob_list = Table::getData($param);
     $ob_count = count($ob_list); 
-    if($ob_count<6){
+    if($ob_count){
         ?>    
     <form action="javascript:void(0)" id="formDataddNewOb" method="POST">
         <input type="hidden" value="addNewOfficeBearersMandal" name="act">

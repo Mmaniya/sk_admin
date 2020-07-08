@@ -28,6 +28,9 @@
                     <th>Mobile</th>
                     <th>Role</th>
                     <th>SubRole</th>
+                    <?php if($_POST['role'] == 'SK'){ ?> 
+                    <th>SK Name</th>
+                    <?php } ?>
                     <th>Ward</th>
                     <th>Booth</th>
                     <th>Action</th>
@@ -73,6 +76,14 @@
                         } 
                     ?>
                     </td>
+                    <?php if($_POST['role'] == 'SK'){ ?><td> <?php 
+                        $skname = 'select * from '.TBL_BJP_SK.' where  `id` = '.$value->sk_id.' AND `status` ="A" ORDER BY id';
+                        $sknameList=dB::mExecuteSql($skname); 
+                        foreach($sknameList as $k=>$v){
+                        echo $v->sk_name;
+                        }
+                        ?></td> <?php } ?>
+                   
                     <td>
                         <?php
                         $findsubrole = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition' => array('id' => $value->ward_id.'-INT'),'orderby' => 'id', 'showSql' => 'N');

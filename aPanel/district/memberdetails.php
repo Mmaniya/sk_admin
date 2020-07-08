@@ -52,8 +52,8 @@
                           <textarea class="form-control" name="address" placeholder="Your Mobile Number">'.$member_list->member_address.'</textarea>
                           <input type="hidden" class="form-control" name="is_verified"  value="'.$member_list->is_verified.'">
                           <input type="hidden" class="form-control" name="member_id"  value="'.$member_list->id.'">
-                          <input type="hidden" class="form-control"   value="'.$member_list->ward_id.'">
-                          <input type="hidden" class="form-control"   value="'.$member_list->booth_id.'">
+                          <input type="hidden" class="form-control" name="ward_id" value="'.$member_list->ward_id.'">
+                          <input type="hidden" class="form-control" value="'.$member_list->booth_id.'">
                       </div>
                   </div>
               </div>';
