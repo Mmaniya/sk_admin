@@ -126,8 +126,8 @@
 <script>
     // $('#officebearers').DataTable();
     $(document).ready(function() {
-    $('#obtabel').DataTable();
-} );
+        $('#obtabel').DataTable();
+    });
  
    function editofficebearers(id) {
       var role = $('#selectedRole').val();

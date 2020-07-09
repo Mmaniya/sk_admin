@@ -21,16 +21,16 @@
             <div class="form-group col-sm-6">
                 <label >Sub Role Hierarachy</label><br>
                 <label class="radio-inline">
-                <input type="radio" name="sub_role_hierarchy" id="subRoleW" value="W"> WARD 
+                <input type="radio" name="sub_role_hierarchy" value="W"> WARD 
                 </label>&nbsp;&nbsp;
                 <label class="radio-inline">
-                <input type="radio" name="sub_role_hierarchy" id="subRoleSK" value="SK"> SHAKTI KENDRAM
+                <input type="radio" name="sub_role_hierarchy" value="SK"> SHAKTI KENDRAM
                 </label>&nbsp;&nbsp;            
                 <label class="radio-inline">
-                <input type="radio" name="sub_role_hierarchy" id="subRoleB" value="B"> BOOTH
+                <input type="radio" name="sub_role_hierarchy" value="B"> BOOTH
                 </label>
                 <label class="radio-inline">
-                <input type="radio" name="sub_role_hierarchy" id="noneofabove" value="" checked> NONE
+                <input type="radio" name="sub_role_hierarchy" value="" checked> NONE
                 </label>
             </div>
         </div>
@@ -64,7 +64,8 @@
         </div>
         <span id="memberTable"></span>            
         <input type="submit" id="submit" class="btn btn-success" data-dismiss="modal"  value="Submit">
-        <span id="errormsg"></span>
+        <span id="errormsg" style="color:red">Please Select One Ward.!</span>
+        <span id="errorsubbooth" style="color:red">Please Select Ward & One Booth.!</span>
     </form><?php 
     } else {  ?><h4 style="color:red">Maximum Reached Office Bearers List </h4>     <?php  } ?>
 
@@ -84,13 +85,13 @@
         <div class="form-group col-sm-6">
             <label >Sub Role Hierarachy</label><br>
             <label class="radio-inline">
-            <input type="radio" name="sub_role_hierarchy" id="subRoleSK" value="SK"> SHAKTI KENDRAM
+            <input type="radio" name="sub_role_hierarchy" value="SK"> SHAKTI KENDRAM
             </label>&nbsp;&nbsp;          
             <label class="radio-inline">
-            <input type="radio" name="sub_role_hierarchy" id="subRoleB" value="B"> BOOTH
+            <input type="radio" name="sub_role_hierarchy" value="B"> BOOTH
             </label>
             <label class="radio-inline">
-            <input type="radio" name="sub_role_hierarchy" id="noneofabove" value="" checked> NONE
+            <input type="radio" name="sub_role_hierarchy" value="" checked> NONE
             </label>
         </div>
     </div>
@@ -213,7 +214,7 @@ $(document).ready(function() {
     /* Get Main role Hierarchy */
     $('#submit').prop('disabled', true);
     $('#errormsg').hide();
-
+    $('#errorsubbooth').hide();
          var mandalID = $('#mandalID').val();
          var mainRole = $('#roleHierarchy').val();
          paramPosition = {'act':'findrolePosition','position':mainRole,'mandalID':mandalID };
@@ -222,7 +223,11 @@ $(document).ready(function() {
             b:paramPosition,
             c:function(){},
             d:function(data){
-               $('.showData').html(data);
+                if($.trim(data) == ''){
+                    $('.showData').html('<option disabled selected>Role Not Available</option>');
+                }else{
+                    $('.showData').html(data);
+                }
             }
          });
         
@@ -247,6 +252,8 @@ $(document).ready(function() {
                 buttonWidth:'400px',
                 onChange:function(option, checked)
                 {
+                $('#memberID').val('');        
+                $('#memberTable').empty();     
                   $('.selectsubRoleBooth').html('');
                   $('.selectsubRoleBooth').multiselect('rebuild');
                   var selected = this.$select.val();
@@ -298,19 +305,28 @@ $(document).ready(function() {
             var role = $('#roleHierarchy').val();
             var dataward = $('.selectsubRoleWard').val();
             var databooth = $('.selectsubRoleBooth').val();
+            var subrole = $('input[type=radio][name=sub_role_hierarchy]:checked').val();
             if(role == 'W' && dataward == null ){  
                 $('#errormsg').show();
                 setTimeout(function(){
                     $('#errormsg').hide();
                 }, 2000);
-
             }else if(role == 'SK' && databooth == '' ){ 
                 $('#errormsg').show();
                 setTimeout(function(){
                     $('#errormsg').hide();
                 }, 2000);
-
-            }else{
+            } else if(role =='M' &&  subrole == 'W' && dataward == null){
+                $('#errormsg').show();
+                setTimeout(function(){
+                    $('#errormsg').hide();
+                }, 2000);
+            } else if(role =='M' &&  subrole == 'SK' && databooth == ''){
+                $('#errorsubbooth').show();
+                setTimeout(function(){
+                    $('#errorsubbooth').hide();
+                }, 2000);
+            } else {
                 ajax({
                 a:"districtajax",
                 b:formData,
@@ -326,7 +342,11 @@ $(document).ready(function() {
                             b:paramPosition,
                             c:function(){},
                             d:function(data){
-                            $('.showData').html(data);
+                                if($.trim(data) == ''){
+                                    $('.showData').html('<option disabled selected>Role Not Available</option>');
+                                }else{
+                                    $('.showData').html(data);
+                                }
                             }
                         });
                         
@@ -352,18 +372,16 @@ $(document).ready(function() {
                     $('.selectsubRoleWard').html(data);
                     $('.selectsubRoleWard').multiselect('rebuild');                }
             });
-
-        
-  
-         paramPosition = {'act':'findrolePosition','position':getValue,'mandalID':mandalID };
-         ajax({
-            a:"districtajax",
-            b:paramPosition,
-            c:function(){},
-            d:function(data){
-               $('.showsubroleData').html(data);
-            }
-         });
+      
+            paramPosition = {'act':'findrolePosition','position':getValue,'mandalID':mandalID };
+            ajax({
+                a:"districtajax",
+                b:paramPosition,
+                c:function(){},
+                d:function(data){
+                   $('.showsubroleData').html(data);
+                }
+            });
 
             if(getValue == 'W'){
                 $('#suRoleWard').show();
@@ -391,7 +409,6 @@ $(document).ready(function() {
                         d:function(data){
                         $('.selectsubRoleWard').html(data);
                         $('.selectsubRoleWard').multiselect('rebuild');
-
                         }
                     });
             }
@@ -401,12 +418,14 @@ $(document).ready(function() {
                 nonSelectedText: 'Select Ward',
                 buttonWidth:'400px',
                 onChange:function(option, checked)
-                {
+                {                
                   $('.selectsubRoleBooth').html('');
                   $('.selectsubRoleBooth').multiselect('rebuild');
                   var selected = this.$select.val();
                   if(selected.length > 0)
                   {
+                    $('#memberID').val('');        
+                    $('#memberTable').empty();   
                      paramPosition = {'act':'boothincharge','wardID':selected };
                      ajax({
                      a:"districtajax",
@@ -414,7 +433,7 @@ $(document).ready(function() {
                      c:function(){},
                      d:function(data){
                            $('.selectsubRoleBooth').html(data);
-                           $('.selectsubRoleBooth').multiselect('rebuild');
+                           $('.selectsubRoleBooth').multiselect('rebuild');                 
                         }
                      });
                   }
@@ -425,7 +444,8 @@ $(document).ready(function() {
                 nonSelectedText: 'Select Booth',
                 buttonWidth:'400px',
             });
-         
+            $('#memberID').val('');        
+            $('#memberTable').empty();        
         });
 }); 
 /*********** SEARCH MEMBER DETAILS  ***/

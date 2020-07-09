@@ -270,7 +270,7 @@
         $mandalID = $_POST['mandalID'];
         $wardID = $_POST['wardID'];
         $option = explode(",", $_POST['roleoption']);   
-        $param = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('role_hierarchy'=>$hierarchy.'-CHAR'),'showSql'=>'N','orderby'=>'position','sortby'=>'desc');
+        $param = array('tableName'=>TBL_BJP_ROLE,'fields'=>array('*'),'condition'=>array('role_hierarchy'=>$hierarchy.'-CHAR','status'=>'A-CHAR'),'showSql'=>'N','orderby'=>'position','sortby'=>'desc');
         $hierarchy_list = Table::getData($param);
 
          foreach($hierarchy_list as $key=>$value) {  
@@ -445,7 +445,7 @@
                             $params['booth_id'] = $booth_id;
                             $params['added_by'] = $_SESSION['user_id'];
                             $params['added_date'] = date('Y-m-d H:i:s', time());
-                            $resultData = Table::insertData(array('tableName' => TBL_BJP_SK, 'fields' => $params, 'showSql' => 'N'));
+                            // $resultData = Table::insertData(array('tableName' => TBL_BJP_SK, 'fields' => $params, 'showSql' => 'N'));
                             $insertId = explode('::',$resultData);
                             $sk_id =  trim($insertId[2]);                    
                         }
@@ -459,13 +459,16 @@
                     }
                     if ($_POST['id'] == '') {
                         $param['role_position'] =   $role_list->role_abbr;
+                        if($_POST['ward_id'] == ''){
+                            $param['ward_id'] = $_POST['member_ward'];
+                        }
                         // $param['role_position'] =   $role_list->role_abbr.','.$sub_role_list->role_abbr;
-                        $param['role_id'] =  $role_list->id.','.$sub_role_list->id;
-                        $param['booth_id'] = $booth_id;
-                        $param['sk_id'] = $sk_id;
-                        $param['added_by'] = $_SESSION['user_id'];
+                        $param['role_id']    =  $role_list->id.','.$sub_role_list->id;
+                        $param['booth_id']   = $booth_id;
+                        $param['sk_id']      = $sk_id;
+                        $param['added_by']   = $_SESSION['user_id'];
                         $param['added_date'] = date('Y-m-d H:i:s', time());
-                        $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
+                        // $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
                         echo '<p style="color:green;">New '.$role_list->role_name.' Created.</p>';
                     } 
                 } else {

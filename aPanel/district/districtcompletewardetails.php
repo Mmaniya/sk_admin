@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 <?php 
    $prev=$next=$last=$first='&nbsp;';
    if($page > 1)
@@ -22,8 +23,7 @@
     $table_val = "<table  width='100%' cellpadding='5' cellspacing='0' border='0' style='border:0;'><tr><td align='center' style='border:1; font-size:14px; vertical-align:middle; color:#000; padding:10px;'></td><td align='right' style='padding-bottom:0px'><table align='right' cellpadding='0' cellspacing='1'><tr><td style='padding:0 2px;'>$first</td><td style='padding:0 2px;'> $prev </td>$pagebox<td style='padding:0 2px;'>$next </td><td style='padding:0 2px;'>$last</td></tr></table></td></tr></table>";
    }
    
-   if( count($ListingParentCatListArr)>0) {
-     $i = 1;
+
    foreach($ListingParentCatListArr as $key=>$value) {
    
      ?>
@@ -34,9 +34,11 @@
    <input type="hidden" value="<?php echo $value->mandal_id ?>" id="mandal_id">
 
    <div class="card-body row">
+   
    <?php  $officebearers = array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => array('*'),'condition' => array('ward_id' => $value->id.'-INT','status'=> 'A-CHAR'), 'showSql' => 'N','orderby' => 'role_hierarchy', 'sortby' => 'asc');
           $officeberasList = Table::getData($officebearers); 
     ?>
+    
         <table class="table table-striped table-bordered" >
             <thead>
             <tr><th colspan='6' style="color:#ff9933">WARD INCHARGE
@@ -79,9 +81,10 @@
             <?php $i ++;} } ?>      
             </tbody>    
         </table>
+
         <table class="table table-striped table-bordered" >
             <thead >
-            <tr><th colspan='8' style="color:#ff9933">SHAKTI KENDRAM                                                
+            <tr><th colspan='8' style="color:#ff9933">SHAKTI KENDRA INCHARGE                                              
                 <a href="javascript:void(0);" style="float:right" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="addNewBoothIncharge('SK')"><i class="fa fa-plus"></i> ADD NEW SHAKTI KENDR INCHARGE</a>
             </th>
             </tr>
@@ -112,8 +115,8 @@
                     <?php
                     $skname = 'select * from '.TBL_BJP_SK.' where  `id` = '.$val->sk_id.' AND `status` ="A" ORDER BY id';
                     $sknameList=dB::mExecuteSql($skname); 
-                    foreach($sknameList as $key=>$value){
-                    echo $value->sk_name;
+                    foreach($sknameList as $key=>$va){
+                    echo $va->sk_name;
                     }
                     ?>
                     </th>
@@ -121,8 +124,8 @@
                     <td><?php 
                     $getbooth = 'select * from '.TBL_BJP_BOOTH.' where  `id` IN ('.$val->booth_id.') AND `status` ="A" ORDER BY id';
                     $getboothList=dB::mExecuteSql($getbooth); 
-                        foreach($getboothList as $key=>$value){
-                               echo $value->booth_number; echo '<br>';
+                        foreach($getboothList as $key=>$v){
+                               echo $v->booth_number; echo '<br>';
                         }
                     ?></td>
                     <td>
@@ -133,6 +136,7 @@
             <?php $i ++;} } ?>      
             </tbody>    
         </table>
+
         <table class="table table-striped table-bordered" >
             <thead>
             <tr><th colspan='7' style="color:#ff9933">BOOTH INCHARGE
@@ -176,7 +180,8 @@
             <?php $i ++;} } ?>      
             </tbody>    
         </table>
-        <table  class=" wardDetails table table-striped table-bordered" >
+
+        <table  class="wardDetails table table-striped table-bordered" >
             <thead>
             <tr><th colspan='6' style="color:#ff9933">BOOTH DETAILS</th>
             <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="createNewBooth()"><i class="fa fa-plus"></i> ADD NEW BOOTH</a></th>
@@ -213,16 +218,42 @@
                 </tr>    
             <?php $i ++;} ?>      
             </tbody>    
-        </table>  
+        </table>
+
+        <table class="table table-striped table-bordered" id="membersTable">
+            <thead>
+                <tr><th colspan='6' style="color:#ff9933">MEMBERS TABLE</th>
+                <!-- <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="createNewBooth()"><i class="fa fa-plus"></i> ADD NEW BOOTH</a></th> -->
+                </tr>
+                <tr class="bg-primary text-white">
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Membership No</th>
+                    <th>Verified</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $getmember = 'select * from '.TBL_BJP_MEMBER.' where `ward_id`='.$value->id.' AND `status` ="A"  ORDER BY `member_name` ASC';
+                      $getmemberList=dB::mExecuteSql($getmember);
+                          $i = 1; 
+                          foreach($getmemberList as $key=>$val){ ?>
+                          <tr>
+                          <td><?php echo $i; ?></td>
+                          <td><?php echo $val->member_name; ?></td>
+                          <td><?php echo $val->member_mobile; ?></td>
+                          <td><?php echo $val->membership_number; ?></td>
+                          <td><?php echo $val->is_verified; ?></td>
+                          <td></td>
+                          </tr>
+                <?php $i ++; } ?>
+            </tbody>
+        </table>
    </div>
 </div>
 <br>
 <?php   } ?>
-<?php } else{ ?>
-<tr>
-   <td colspan="5">No results Found<td>
-</tr>
-<?php } echo $table_val; ?>
 
 <!-- Modal -->
 <div class="modal fade deleteModel" role="dialog">
@@ -231,7 +262,6 @@
     </div>
 </div>
 
-
 <script>
 $(document).ready(function() {
     $('.wardDetails').DataTable( {
@@ -239,6 +269,7 @@ $(document).ready(function() {
         "scrollCollapse": true,
         "paging":         false
     } );
+    $('#membersTable').DataTable();
 } );
 
 function editwardofficebearers(id,role) {
