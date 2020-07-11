@@ -66,7 +66,7 @@
         $param['updated_date'] = date('Y-m-d H:i:s', time());
         $param['updated_by'] = $_SESSION['user_id'];
         $where = array('id' => $_POST['id']);
-        echo Table::updateData(array('tableName' => TBL_BJP_DISTRICT, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
+        Table::updateData(array('tableName' => TBL_BJP_DISTRICT, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
         exit();
     }
 
@@ -195,7 +195,7 @@
         }
         exit();
     }
-/********* 10.PAGINATION FOR MEMBER DETAILS **/
+/********* 10.OFFICE BEARES FULL DETAILS *****/
 
        if($_POST['act'] ==  'MandalofficeBearers'){
             ob_clean();  
@@ -445,7 +445,7 @@
                             $params['booth_id'] = $booth_id;
                             $params['added_by'] = $_SESSION['user_id'];
                             $params['added_date'] = date('Y-m-d H:i:s', time());
-                            // $resultData = Table::insertData(array('tableName' => TBL_BJP_SK, 'fields' => $params, 'showSql' => 'N'));
+                            $resultData = Table::insertData(array('tableName' => TBL_BJP_SK, 'fields' => $params, 'showSql' => 'N'));
                             $insertId = explode('::',$resultData);
                             $sk_id =  trim($insertId[2]);                    
                         }
@@ -468,7 +468,7 @@
                         $param['sk_id']      = $sk_id;
                         $param['added_by']   = $_SESSION['user_id'];
                         $param['added_date'] = date('Y-m-d H:i:s', time());
-                        // $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
+                        $rsDtls = Table::insertData(array('tableName' => TBL_BJP_OFFICE_BEARERS, 'fields' => $param, 'showSql' => 'N'));
                         echo '<p style="color:green;">New '.$role_list->role_name.' Created.</p>';
                     } 
                 } else {
@@ -1048,3 +1048,17 @@
         echo Table::updateData(array('tableName' => TBL_BJP_BOOTH, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
         exit();
     }
+/********* 27.Find Booth Branch **************/
+
+if ($_POST['act'] == 'findBoothBranch') {
+    ob_clean();
+
+    $param = array('tableName'=>TBL_BJP_BOOTH_BRANCH,'fields'=>array('*'),'condition'=>array('booth_id'=>$_POST['boothId'].'-INT'),'showSql'=>'N','status'=>'A','sortby'=>'desc');
+    $findbooth = Table::getData($param); ?>
+     <label >Select Booth Branch</label>
+    <select class="form-control" name="booth_branch_name" value="" id="booth_branch_name">
+    <?php foreach($findbooth as $k=>$val) {  ?>
+        <option  value="<?php echo $val->id; ?>" ><?php echo $val->booth_branch_name; ?></option>
+   <?php } ?></select><?php
+    exit();
+}

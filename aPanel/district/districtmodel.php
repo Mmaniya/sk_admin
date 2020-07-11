@@ -1896,7 +1896,148 @@
       });
 
  </script>
+<!-- 19. ADD NEW MEMBER -->
+<?php } else if($modelAction == 'addEditMember'){
+      // $bqry = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition'=>array('id'=>$_POST['boothid'].'-INT'),'showSql' => 'N','sortby' => 'asc');
+      // $bqryList = Table::getData($bqry);
+      ?>
+   <div class="modal-content">
+      <div class="modal-header">
+         <h5 class="modal-title" style="color:green"><i class="fa fa-plus" aria-hidden="true"></i> ADD NEW MEMBER</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      <div class="modal-body">
+      <form action="javascript:void(0)" id="formAddNewBooth" method="POST">
+         <input type="hidden" value="addEditMember" name="act">
+         <input type="hidden" class="form-control" name="id"  readonly value="<?php echo $bqryList->id; ?>">
 
+         <div class="row">  
+            <div class="form-group col-sm-4">
+               <?php $wquery = array('tableName' => TBL_BJP_WARD, 'fields' => array('*'),'condition'=>array('id'=>$_POST['ward'].'-INT'),'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'asc');
+                     $wqueryList = Table::getData($wquery);?>
+                  <label >Ward Name</label>  
+                  <input type="text" class="form-control" value="<?php echo $wqueryList->ward_number; ?>" readonly >
+                  <input type="hidden" class="form-control" name="ward_id" id="ward_id" readonly value="<?php echo $wqueryList->id ?>">
+                  <input type="hidden" class="form-control" name="state_id" id="state_id" readonly value="1">
+                  <input type="hidden" class="form-control" name="district_id" id="district_id" readonly value="<?php echo $wqueryList->district_id; ?>">
+                  <input type="hidden" class="form-control" name="mp_const_id" id="mp_const_id" readonly value="<?php echo $wqueryList->mp_const_id; ?>">
+                  <input type="hidden" class="form-control" name="lg_const_id" id="lg_const_id" readonly value="<?php echo $wqueryList->lg_const_id; ?>">
+                  <input type="hidden" class="form-control" name="mandal_id" id="mandal_id" readonly value="<?php echo $wqueryList->mandal_id; ?>">
+            </div>
+            <div class="form-group col-sm-4">
+               <label >Select Booth Name/No</label>
+               <select class="form-control" name="booth_number" id="selectBooth" value="">
+               <?php
+                  $bqry = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition'=>array('ward_id'=>$_POST['ward'].'-INT'),'showSql' => 'N','sortby' => 'asc');
+                  $bqryList = Table::getData($bqry);?>
+                  <option value="">-- Select Booth--</option>
+                  <?php foreach($bqryList as $key=>$val){ ?>
+                        <option value="<?php echo $val->id ?>"><?php echo $val->booth_number ?></option>
+                <?php  }
+               ?>
+               </select>
+            </div>
+            <div class="form-group col-sm-4" id="boothbranch"></div>
+         </div>
+         <div class="row">       
+            <div class="form-group col-sm-4">
+               <label >Member Name</label>  
+                  <input type="text" class="form-control" name="member_name" value="<?php echo $bqryList->member_name ?>" placeholder="Enter Member Name">
+            </div>
+            <div class="form-group col-sm-4">
+               <label >Member Name Tamil</label>  
+                  <input type="text" class="form-control" name="member_name_ta" value="<?php echo $bqryList->member_name_ta ?>" placeholder="Enter Member Name in Tamil">
+            </div>
+            <div class="form-group col-sm-4">
+               <label >Membership Number</label>  
+                  <input type="text" class="form-control" name="membership_number" value="<?php echo $bqryList->membership_number ?>" placeholder="Enter Membership Number">
+            </div>
+         </div>
+         <div class="row">           
+            <div class="form-group col-sm-4">
+               <label >Member Mobile </label>  
+                  <input type="text" class="form-control" name="member_mobile" value="<?php echo $bqryList->member_mobile ?>" placeholder="Total Member Mobile Number">
+            </div>
+            <div class="form-group col-sm-4">
+                  <label class="checkbox-inline">Same Number in Whatsapp</label>  <br>
+                     <input type="radio" checked name="is_whatsapp" value="Y"> Yes
+                     <input type="radio" name="is_whatsapp" value="N"> No
+            </div>
+            <div class="form-group col-sm-4">
+               <label >Member Alternative Mobile </label>  
+                  <input type="text" class="form-control" name="member_another_mobile" value="<?php echo $bqryList->member_another_mobile ?>" placeholder="Total Member Mobile Number(optinal)">
+            </div>
+         </div>
+
+         <div class="row">           
+            <div class="form-group col-sm-4">
+               <label >Member E-Mail </label>  
+                  <input type="email" class="form-control" name="member_email_address" value="<?php echo $bqryList->member_email_address ?>" placeholder="Total Member E-Mail">
+            </div>
+            <div class="form-group col-sm-4">
+               <label >Member DOB</label>  
+                  <input type="date" class="form-control" name="member_DOB" value="<?php echo $bqryList->member_DOB ?>" placeholder="Enter Member DOB">
+            </div>       
+            <div class="form-group col-sm-2">
+               <label >Member Age </label>  
+                  <input type="text" class="form-control" name="member_age" value="<?php echo $bqryList->member_age ?>" placeholder="Age">
+            </div>
+            <div class="form-group col-sm-2">
+               <label >Gender </label>  
+                  <select class="form-control" name="member_gender" value="<?php echo $bqryList->member_gender ?>">
+                  <option value="" selected disabel>Gender</option>
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
+                  <option value="O">Others</option>
+                  </select>
+            </div>
+         </div>
+
+
+
+         <div class="row">
+            <div class="form-group col-sm-12">
+               <label >Address</label>
+                  <input type="text" class="form-control" name="booth_address" value="<?php echo $bqryList->booth_address ?>" placeholder="Booth Address">
+            </div>
+         </div>
+         <div class="row">
+            <div class="form-group col-sm-6">
+               <label >Booth Zipcode </label>  
+                  <input type="text" class="form-control" name="booth_zipcode" value="<?php echo $bqryList->booth_zipcode ?>" placeholder="Booth Zipcode">
+            </div>       
+            <div class="form-group col-sm-6">
+               <label >Booth Policestation </label>  
+                  <input type="text" class="form-control" name="booth_police_station" value="<?php echo $bqryList->booth_police_station ?>" placeholder="Booth Policestation">
+            </div>
+         </div>
+         <div class="row">
+            <div class="form-group col-sm-12">
+               <label >Whatsapp Group Link</label>
+                  <input type="text" class="form-control" name="booth_whatsapp_group_link" value="<?php echo $bqryList->booth_whatsapp_group_link ?>" placeholder="Whatsapp Group Link">
+            </div>
+         </div>
+         <input type="submit" id="submit"  class="btn btn-success" value="Submit">
+      </form>
+
+      </div>
+   </div>
+<script>
+   $('#selectBooth').change(function(){
+      var boothId = $(this).val();
+      paramPosition = {'act':'findBoothBranch','boothId':boothId };
+         ajax({
+         a:"districtajax",
+         b:paramPosition,
+         c:function(){},
+         d:function(data){
+               $('#boothbranch').html(data);
+            }
+         });
+   });
+</script>
 <?php } ?>
 <script>
 /**** OFFICE BEARES DETAILS GET *******/

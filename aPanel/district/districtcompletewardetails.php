@@ -24,12 +24,10 @@
    }
    
 
-   foreach($ListingParentCatListArr as $key=>$value) {
-   
-     ?>
+foreach($ListingParentCatListArr as $key=>$value) { ?>
 <div class="card">
    <div class="card-header bg-img"> WARD (<?php echo $value->ward_number; ?>) DETAILS</div>
-   <input type="hidden" value="<?php echo $value->id ?>" id="wradId">
+   <input type="hidden" value="<?php echo $value->id ?>" id="wardId">
    <input type="hidden" value="<?php echo $value->district_id ?>" id="districtID">
    <input type="hidden" value="<?php echo $value->mandal_id ?>" id="mandal_id">
 
@@ -199,9 +197,9 @@
             <tbody>
 
             <?php 
-             $boothquery = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition' => array('ward_id' => $_POST['wardId'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N');
+             $boothquery = array('tableName' => TBL_BJP_BOOTH, 'fields' => array('*'),'condition' => array('ward_id' => $_POST['wardId'].'-INT','status'=> 'A-CHAR'), 'showSql' => 'N', 'orderby' => 'booth_number');
              $booth_list = Table::getData($boothquery);
-            $i = 1; 
+             $i = 1; 
 
             foreach($booth_list as $key =>$val) { ?>
                 <tr>
@@ -220,10 +218,10 @@
             </tbody>    
         </table>
 
-        <table class="table table-striped table-bordered" id="membersTable">
+        <!-- <table class="table table-striped table-bordered" id="membersTable">
             <thead>
                 <tr><th colspan='6' style="color:#ff9933">MEMBERS TABLE</th>
-                <!-- <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="createNewBooth()"><i class="fa fa-plus"></i> ADD NEW BOOTH</a></th> -->
+                <th style="float:right"><a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="createNewBooth()"><i class="fa fa-plus"></i> ADD NEW BOOTH</a></th>
                 </tr>
                 <tr class="bg-primary text-white">
                     <th>#</th>
@@ -235,21 +233,57 @@
                 </tr>
             </thead>
             <tbody>
-                <?php  $getmember = 'select * from '.TBL_BJP_MEMBER.' where `ward_id`='.$value->id.' AND `status` ="A"  ORDER BY `member_name` ASC';
-                      $getmemberList=dB::mExecuteSql($getmember);
-                          $i = 1; 
-                          foreach($getmemberList as $key=>$val){ ?>
+                <?php // $getmember = 'select * from '.TBL_BJP_MEMBER.' where `ward_id`='.$value->id.' AND `status` ="A"  ORDER BY `member_name` ASC';
+                    //  $getmemberList=dB::mExecuteSql($getmember);
+                       //   $i = 1; 
+                       //   foreach($getmemberList as $key=>$val){ ?>
                           <tr>
-                          <td><?php echo $i; ?></td>
-                          <td><?php echo $val->member_name; ?></td>
-                          <td><?php echo $val->member_mobile; ?></td>
-                          <td><?php echo $val->membership_number; ?></td>
-                          <td><?php echo $val->is_verified; ?></td>
+                          <td><?php //echo $i; ?></td>
+                          <td><?php// echo $val->member_name; ?></td>
+                          <td><?php //echo $val->member_mobile; ?></td>
+                          <td><?php //echo $val->membership_number; ?></td>
+                          <td><?php //echo $val->is_verified; ?></td>
                           <td></td>
                           </tr>
-                <?php $i ++; } ?>
+                <?php // $i ++; } ?>
             </tbody>
-        </table>
+        </table> -->
+
+   <!-- Table -->
+   <div class="row offset-sm-8 col-sm-12">
+        <div class="col-sm-2">
+            <select id='searchByVerifyed' class="form-control">
+                <option value=''>-- Verifyed Member --</option>
+                <option value='Y'>YES</option>
+                <option value='N'>NO</option>
+            </select>    
+        </div>
+        <div class="col-sm-2">
+            <select id='searchByBooth' class="form-control">
+                <option value=''>-- Select Booth --</option>
+                <?php  foreach($booth_list as $key =>$val) { ?> 
+                <option value="<?php echo $val->id ?>"><?php echo $val->booth_number ?></option>
+                <?php } ?>
+            </select>    
+        </div>
+    </div>
+    <table id='membersTable' class='display dataTable table table-striped table-bordered'>  
+        <thead>
+        <tr>
+            <th colspan='6' style="color:#ff9933">MEMBERS TABLE
+            <a href="javascript:void(0);" data-toggle="modal" class="btn btn-warning btn-sm float-right" style="color:#FFF" data-target=".deleteModel" onclick="createNewMember()"><i class="fa fa-plus"></i> ADD NEW MEMBER</a>
+            </th>
+        </tr>
+        
+        <tr>
+            <th>Name</th>
+            <th>Mobile</th>
+            <th>Membership No</th>
+            <th>Verified</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+    </table>
    </div>
 </div>
 <br>
@@ -257,7 +291,7 @@
 
 <!-- Modal -->
 <div class="modal fade deleteModel" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <span id="modelshow"></span>
     </div>
 </div>
@@ -269,8 +303,49 @@ $(document).ready(function() {
         "scrollCollapse": true,
         "paging":         false
     } );
-    $('#membersTable').DataTable();
-} );
+    // $('#membersTable').DataTable();
+
+    var dataTable = $('#membersTable').DataTable({
+    'processing': true,
+    'serverSide': true,
+    'serverMethod': 'post',
+    // 'searching': false, // Remove default Search Control
+    'ajax': {
+       'url':'membertable.php',
+       'data': function(data){
+          // Read values
+          var wardId = $('#wardId').val();
+          var gender = $('#searchByBooth').val();
+          var verifed = $('#searchByVerifyed').val();
+          // Append to data
+          data.action = 'dynamicSearch';
+          data.searchByBooth = gender;
+          data.searchByVerifyed = verifed;
+          data.wardId = wardId;
+       }
+
+    },
+    'columns': [
+       { data: 'member_name' }, 
+       { data: 'member_mobile' },
+       { data: 'membership_number' }, 
+       { data: 'is_verified' }, 
+       { data: 'editid' }, 
+    ],
+  });
+
+  $('#searchByVerifyed').change(function(){
+    dataTable.draw();
+  });
+
+  $('#searchByBooth').change(function(){
+    dataTable.draw();
+  });
+
+
+
+
+});
 
 function editwardofficebearers(id,role) {
     paramData = {'obid':id,'action':'editwardOfficeBearers','role':role}                     
@@ -284,7 +359,7 @@ function editwardofficebearers(id,role) {
     });
 }
 function removeofficbearers(id,sub){
-    var wardId = $('#wradId').val();
+    var wardId = $('#wardId').val();
     paramData = {'ofid':id,'action':'deleteWardMembers','ward':wardId,'subRole':sub}
     ajax({
             a:"districtmodel",
@@ -297,7 +372,7 @@ function removeofficbearers(id,sub){
 }
 
 function createNewBooth(){
-    var wardId = $('#wradId').val();
+    var wardId = $('#wardId').val();
     paramModel = {'action':'addEditNewBooth','ward':wardId}
     ajax({
         a:"districtmodel",
@@ -310,7 +385,7 @@ function createNewBooth(){
 }
 
 function editBooth(id){
-    var wardId = $('#wradId').val();
+    var wardId = $('#wardId').val();
     paramModel = {'action':'addEditNewBooth','ward':wardId,'boothid':id}
     ajax({
         a:"districtmodel",
@@ -323,7 +398,7 @@ function editBooth(id){
 }
 
 function removeBooth(id){
-    var wardId = $('#wradId').val();
+    var wardId = $('#wardId').val();
     paramData = {'boothid':id,'action':'deleteBooth','wardId':wardId}
     ajax({
         a:"districtmodel",
@@ -337,11 +412,11 @@ function removeBooth(id){
 
 
 function addNewBoothIncharge(role){
-    var wradId = $('#wradId').val();
+    var wardId = $('#wardId').val();
     var districtID = $('#districtID').val();
     var mandal_id = $('#mandal_id').val();
 
-    model = {'action':'addNewIncharge','role':role,'wradId':wradId,'districtID':districtID,'mandal_id':mandal_id}
+    model = {'action':'addNewIncharge','role':role,'wardId':wardId,'districtID':districtID,'mandal_id':mandal_id}
     ajax({
             a:"districtmodel",
             b:model,
@@ -351,5 +426,24 @@ function addNewBoothIncharge(role){
             }
     });   
 }
+function editMember(id){
+    // alert(id);
+}
+function createNewMember(){
 
+    $('.deleteModel').on('show', function () {
+      $('.modal-body',this).css({width:'auto',height:'auto', 'max-height':'100%'});
+});
+
+    var wardId = $('#wardId').val();
+    paramModel = {'action':'addEditMember','ward':wardId}
+    ajax({
+        a:"districtmodel",
+        b:paramModel,
+        c:function(){},
+        d:function(data){
+            $('#modelshow').html(data);
+        }
+    });   
+}
 </script>
