@@ -235,7 +235,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php $getmember = 'select * from '.TBL_BJP_MEMBER.' where `ward_id`='.$value->id.' AND `status` ="A"  ORDER BY `member_name` ASC';
+                <?php  $getmember = 'select * from '.TBL_BJP_MEMBER.' where `ward_id`='.$value->id.' AND `status` ="A"  ORDER BY `member_name` ASC';
                       $getmemberList=dB::mExecuteSql($getmember);
                           $i = 1; 
                           foreach($getmemberList as $key=>$val){ ?>
