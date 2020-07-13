@@ -51,7 +51,7 @@
    <body class="fixed-left">
       <div class="modal-popup"></div>
       <!-- Begin page -->
-      <div id="wrapper">
+      <div id="wrapper" class="forced enlarged">
       <!-- Top Bar Start -->
       <div class="topbar">
          <!-- LOGO -->
@@ -150,7 +150,7 @@
                   </li>
                   <li>
                   <a href="member.php" class="waves-effect waves-primary">
-                     <i class="ti-settings"></i> <span> Edit Member  </span>
+                     <i class="ti-user"></i> <span> Edit Member  </span>
                      <span class="menu-arrow"></span>
                      </a>
                   </li>

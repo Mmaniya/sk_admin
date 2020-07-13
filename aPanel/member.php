@@ -87,9 +87,17 @@
                         <option value='NILL'>NILL</option>
                      </select>
                   </div><br><hr>
+                  <label>Active/Inactive Members Details </label>
+                  <div class="row col-sm-12">
+                     <select id='searchByStatus' name="status" class=" col-sm-3 form-control">
+                        <option value='A'>-- Member Status--</option>
+                        <option value='A'>Active</option>
+                        <option value='I'>Inactive</option>
+                     </select>
+                  </div><br><hr>
                   <form action="javascript:void(0)" id="formUpadetAllMember" method="POST">
                   <input type="hidden" name="action" value="updateAllMember">
-                  <table id='membersTable' class='display dataTable table table-striped table-bordered'>  
+                  <table id='membersTable' class='display dataTable table table-striped table-bordered' style="width:100%">  
                      <thead>
                         <tr>
                            <th colspan='6' style="color:#ff9933">MEMBERS TABLE
@@ -167,6 +175,7 @@ $(document).ready(function() {
           var Community    = $('#searchByCommunity').val();
           var gender       = $('#searchByGender').val();
           var age          = $('#searchByAge').val();
+          var status       = $('#searchByStatus').val();
 
           // Append to data
           data.action = 'dynamicSearch';
@@ -181,6 +190,7 @@ $(document).ready(function() {
           data.searchByCommunity = Community;
           data.searchByGender = gender;
           data.searchByAge = age;
+          data.searchByStatus = status;
 
        }
     },
@@ -257,11 +267,6 @@ $(document).ready(function() {
     $('#searchByWard').val('');
     $('#searchByBooth').val('');
     $('#searchByBoothBranch').val('');
-   //  $('#searchByVerifyed').val('');
-   //  $('#searchByWhatsappLink').val('');
-   //  $('#searchByCommunity').val('');
-   //  $('#searchByGender').val('');
-   //  $('#searchByAge').val('');
 
       param = {'act':'getallConstituency','dist':dist}
       ajax({
@@ -282,12 +287,6 @@ $(document).ready(function() {
     $('#searchByWard').val('');
     $('#searchByBooth').val('');
     $('#searchByBoothBranch').val('');
-   //  $('#searchByVerifyed').val('');
-   //  $('#searchByWhatsappLink').val('');
-   //  $('#searchByCommunity').val('');
-   //  $('#searchByGender').val('');
-   //  $('#searchByAge').val('');
-      
       param = {'act':'getallMandal','dist':dist,'const':constituency}
       ajax({
          a:"memberajax",
@@ -305,11 +304,6 @@ $(document).ready(function() {
     $('#searchByWard').val('');
     $('#searchByBooth').val('');
     $('#searchByBoothBranch').val('');
-   //  $('#searchByVerifyed').val('');
-   //  $('#searchByWhatsappLink').val('');
-   //  $('#searchByCommunity').val('');
-   //  $('#searchByGender').val('');
-   //  $('#searchByAge').val('');
 
       param = {'act':'getallWard','mandal':mandal}
       ajax({
@@ -327,12 +321,6 @@ $(document).ready(function() {
 
     $('#searchByBooth').val('');
     $('#searchByBoothBranch').val('');
-   //  $('#searchByVerifyed').val('');
-   //  $('#searchByWhatsappLink').val('');
-   //  $('#searchByCommunity').val('');
-   //  $('#searchByGender').val('');
-   //  $('#searchByAge').val('');
-
       param = {'act':'getallBooth','ward':ward}
       ajax({
          a:"memberajax",
@@ -347,13 +335,6 @@ $(document).ready(function() {
   $('#searchByBooth').change(function(){
 
    $('#searchByBoothBranch').val('');
-   //  $('#searchByVerifyed').val('');
-   //  $('#searchByWhatsappLink').val('');
-   //  $('#searchByCommunity').val('');
-   //  $('#searchByGender').val('');
-   //  $('#searchByAge').val('');
-
-
       var booth = $(this).val();
       param = {'act':'getallBoothBranch','booth':booth}
       ajax({
@@ -383,6 +364,9 @@ $(document).ready(function() {
     dataTable.draw();
   });
   $('#searchByAge').change(function(){
+    dataTable.draw();
+  });
+  $('#searchByStatus').change(function(){
     dataTable.draw();
   });
 
@@ -422,6 +406,42 @@ function createNewMember(){
             $('#modelshow').html(data);
         }
     });   
+}
+
+function deleteMember(id){
+   paramModel = {'action':'memberDelete','memberID':id}
+    ajax({
+        a:"membermodel",
+        b:paramModel,
+        c:function(){},
+        d:function(data){
+            $('#modelshow').html(data);
+        }
+    }); 
+}
+
+function restoreMember(id){
+paramModel = {'action':'memberRetore','memberID':id}
+ ajax({
+     a:"membermodel",
+     b:paramModel,
+     c:function(){},
+     d:function(data){
+         $('#modelshow').html(data);
+     }
+ }); 
+}
+
+function viewMember(id){
+paramModel = {'action':'memberDetailsView','memberID':id}
+ ajax({
+     a:"membermodel",
+     b:paramModel,
+     c:function(){},
+     d:function(data){
+         $('#modelshow').html(data);
+     }
+ }); 
 }
 </script>
 <?php } include "template.php"; ?>

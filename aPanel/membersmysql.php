@@ -24,6 +24,7 @@ if($_POST['action'] == 'dynamicSearch') {
     $searchByCommunity      = $_POST['searchByCommunity'];
     $searchByGender         = $_POST['searchByGender'];
     $searchByAge            = $_POST['searchByAge'];
+    $searchByStatus         = $_POST['searchByStatus'];
 
     ## Search 
     $searchQuery = " ";
@@ -59,7 +60,11 @@ if($_POST['action'] == 'dynamicSearch') {
         $searchQuery .= " and (member_age ='".$searchByAge."' ) ";
     }
 
-
+    if($searchByAge != ''){
+        $searchQuery .= " and (member_age ='".$searchByAge."' ) ";
+    }
+    $searchQuery .= "and (status ='".$searchByStatus."')";
+    
     if($searchValue != ''){
     $searchQuery .= " and (member_name like '%".$searchValue."%' or 
     member_mobile like '%".$searchValue."%' or 
@@ -67,7 +72,7 @@ if($_POST['action'] == 'dynamicSearch') {
     }
 
     ## Total number of records without filtering
-    $sel = mysqli_query($con,"select count(*) as allcount from ".TBL_BJP_MEMBER."");
+    $sel = mysqli_query($con,"select count(*) as allcount from ".TBL_BJP_MEMBER." WHERE status='".$searchByStatus."'");
     $records = mysqli_fetch_assoc($sel);
     $totalRecords = $records['allcount'];
 
@@ -88,16 +93,25 @@ if($_POST['action'] == 'dynamicSearch') {
         }else{
             $verified = '<span class="badge badge-danger">NO</span>';
         }
+
+
+        if($_POST['searchByStatus'] == 'A'){ 
+            $action = '<a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".memberModel"  onclick="editMember('.$row['id'].')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>&nbsp;&nbsp;
+            <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".memberModel"  onclick="deleteMember('.$row['id'].')" ><i class="fa fa-trash" aria-hidden="true"></i></a>&nbsp;&nbsp;
+            <a href="javascript:void(0)" style="float:center;color:green" data-toggle="modal" data-target=".memberModel"  onclick="viewMember('.$row['id'].')" ><i class="fa fa-eye" aria-hidden="true"></i></a>';
+         } else if($_POST['searchByStatus'] == 'I'){ 
+            $action = '<a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".memberModel"  onclick="editMember('.$row['id'].')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>&nbsp;&nbsp;
+            <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".memberModel"  onclick="restoreMember('.$row['id'].')" ><i class="fa fa-undo" aria-hidden="true"></i></a>&nbsp;&nbsp;
+            <a href="javascript:void(0)" style="float:center;color:green" data-toggle="modal" data-target=".memberModel"  onclick="viewMember('.$row['id'].')" ><i class="fa fa-eye" aria-hidden="true"></i></a>';
+         }
+        
     $data[] = array(
         $row['id'],
         $row['member_name'],
         $row['member_mobile'],
         $row['membership_number'],
         $verified,
-        $action = '<a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".memberModel"  onclick="editMember('.$row['id'].')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>&nbsp;&nbsp;
-            <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".memberModel"  onclick="deleteMember('.$row['id'].')" ><i class="fa fa-trash" aria-hidden="true"></i></a>&nbsp;&nbsp;
-            <a href="javascript:void(0)" style="float:center;color:green" data-toggle="modal" data-target=".memberModel"  onclick="viewMember('.$row['id'].')" ><i class="fa fa-eye" aria-hidden="true"></i></a>',
-
+        $action,   
     );
     }
 

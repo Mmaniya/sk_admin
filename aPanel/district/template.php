@@ -148,6 +148,12 @@
                            <!-- <li><a href="district/adddistrict.php">Add District</a></li> -->
                      </ul>
                   </li>
+                  <li>
+                  <a href="../member.php" class="waves-effect waves-primary">
+                     <i class="ti-user"></i> <span> Edit Member  </span>
+                     <span class="menu-arrow"></span>
+                     </a>
+                  </li>
                      <!-- <li>
                         <a href="district.php" class="waves-effect waves-primary">
                         <i class="fa fa-map-marker "></i><span>District</span>

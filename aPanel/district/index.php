@@ -85,19 +85,7 @@
                      $('#myTable').html(data);
                   }
             });
-            
-            // function openModelBox(id){
-            //    paramData = {'id':id}
-            //       ajax({
-            //       a:"districtajax",
-            //       b:paramData,
-            //       c:function(){},
-            //       d:function(data){
-            //             $('#modelview').html(data);
-            //       }});
-            //    };
-
-            
+              
    });
 
 
