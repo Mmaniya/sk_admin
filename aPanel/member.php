@@ -28,8 +28,6 @@
                </div>
                <div class="card-body">  
                <label> Members Filter by Mandal</label>
-               <form action="javascript:void(0)" id="formUpadetAllMember" method="POST">
-                  <input type="hidden" name="action" value="updateAllMember">
                   <div class="row  col-sm-12">
                      <select id='searchByDistrict' name="district_id" class="col-sm-3 form-control">
                       <option value='' disabled selected>--Select District--</option>
@@ -88,9 +86,9 @@
                         <option value='SIRUPANMAI'>SIRUPANMAI</option>
                         <option value='NILL'>NILL</option>
                      </select>
-                     <a href="javascript:void(0);" id="updateAllMember" data-toggle="modal" data-target=".memberModel" class="offset-sm-1 col-sm-3 form-control btn btn-success">Update All Member</a>
                   </div><br><hr>
-               </form>
+                  <form action="javascript:void(0)" id="formUpadetAllMember" method="POST">
+                  <input type="hidden" name="action" value="updateAllMember">
                   <table id='membersTable' class='display dataTable table table-striped table-bordered'>  
                      <thead>
                         <tr>
@@ -99,14 +97,16 @@
                            </th>
                         </tr>                     
                         <tr>
+                        <th><input name="select_all" value="1" id="member-select-all" type="checkbox" /></th>
                            <th>Name</th>
                            <th>Mobile</th>
                            <th>Membership No</th>
                            <th>Verified</th>
-                           <th>Action</th>
-                        </tr>
+                           <th>Action</th>                        
                      </thead>
                   </table>
+                  <a href="javascript:void(0);" id="updateAllMember" data-toggle="modal" data-target=".memberModel" class="col-sm-3 form-control btn btn-success">Update With Selected Member</a>
+                  </form>
                </div>
                </div>
             </div>
@@ -124,6 +124,13 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
+   // setInterval( function () {
+   // dataTable.ajax.reload( null, false );
+   // }, 10000 );
+   // setTimeout(function(){ 
+      // $('#membersTable').data.reload();
+   // }, 3000);
+
    param = {'act':'getallDistrict'}
    ajax({
         a:"memberajax",
@@ -177,17 +184,85 @@ $(document).ready(function() {
 
        }
     },
-    'columns': [
-       { data: 'member_name' }, 
-       { data: 'member_mobile' },
-       { data: 'membership_number' }, 
-       { data: 'is_verified' }, 
-       { data: 'editid' }, 
-    ],
+   //  'columns': [
+   //     { data: 'member_name' }, 
+   //     { data: 'member_mobile' },
+   //     { data: 'membership_number' }, 
+   //     { data: 'is_verified' }, 
+   //     { data: 'editid' }, 
+   //     { data: 'updateMem' },
+   //  ],
+   'columnDefs': [{
+         'targets': 0,
+         'searchable':false,
+         'orderable':false,
+         'className': 'dt-body-center',
+         'render': function (data, type, full, meta){
+             return '<input type="checkbox" name="member_id[]" value="' 
+                + $('<div/>').text(data).html() + '">';
+         }
+      }],
+      'order': [1, 'asc']    
   });
+
+   // Handle click on "Select all" control
+   $('#member-select-all').on('click', function(){
+      // Check/uncheck all checkboxes in the table
+      var rows = dataTable.rows({ 'search': 'applied' }).nodes();
+      $('input[type="checkbox"]', rows).prop('checked', this.checked);
+   });
+
+   // Handle click on checkbox to set state of "Select all" control
+   $('#membersTable tbody').on('change', 'input[type="checkbox"]', function(){
+      // If checkbox is not checked
+      if(!this.checked){
+         var el = $('#member-select-all').get(0);
+         // If "Select all" control is checked and has 'indeterminate' property
+         if(el && el.checked && ('indeterminate' in el)){
+            // Set visual state of "Select all" control 
+            // as 'indeterminate'
+            el.indeterminate = true;
+         }
+      }
+   });
+    
+   $('#formUpadetAllMember').on('submit', function(e){
+      var form = this;
+
+      // Iterate over all checkboxes in the table
+      dataTable.$('input[type="checkbox"]').each(function(){
+         // If checkbox doesn't exist in DOM
+         if(!$.contains(document, this)){
+            // If checkbox is checked
+            if(this.checked){
+               // Create a hidden element 
+               $(form).append(
+                  $('<input>')
+                     .attr('type', 'hidden')
+                     .attr('name', this.name)
+                     .val(this.value)
+               );
+            }
+         } 
+      });
+      // Prevent actual form submission
+      e.preventDefault();
+   });
+
 
   $('#searchByDistrict').change(function(){
      var dist = $(this).val();
+    $('#searchByConstituency').val('');
+    $('#searchByMandal').val('');
+    $('#searchByWard').val('');
+    $('#searchByBooth').val('');
+    $('#searchByBoothBranch').val('');
+   //  $('#searchByVerifyed').val('');
+   //  $('#searchByWhatsappLink').val('');
+   //  $('#searchByCommunity').val('');
+   //  $('#searchByGender').val('');
+   //  $('#searchByAge').val('');
+
       param = {'act':'getallConstituency','dist':dist}
       ajax({
          a:"memberajax",
@@ -202,6 +277,16 @@ $(document).ready(function() {
   $('#searchByConstituency').change(function(){
       var dist = $('#searchByDistrict').val();
       var constituency = $(this).val();
+
+    $('#searchByMandal').val('');
+    $('#searchByWard').val('');
+    $('#searchByBooth').val('');
+    $('#searchByBoothBranch').val('');
+   //  $('#searchByVerifyed').val('');
+   //  $('#searchByWhatsappLink').val('');
+   //  $('#searchByCommunity').val('');
+   //  $('#searchByGender').val('');
+   //  $('#searchByAge').val('');
       
       param = {'act':'getallMandal','dist':dist,'const':constituency}
       ajax({
@@ -216,6 +301,16 @@ $(document).ready(function() {
   });
   $('#searchByMandal').change(function(){
       var mandal = $(this).val();
+
+    $('#searchByWard').val('');
+    $('#searchByBooth').val('');
+    $('#searchByBoothBranch').val('');
+   //  $('#searchByVerifyed').val('');
+   //  $('#searchByWhatsappLink').val('');
+   //  $('#searchByCommunity').val('');
+   //  $('#searchByGender').val('');
+   //  $('#searchByAge').val('');
+
       param = {'act':'getallWard','mandal':mandal}
       ajax({
          a:"memberajax",
@@ -229,6 +324,15 @@ $(document).ready(function() {
   });
   $('#searchByWard').change(function(){
       var ward = $(this).val();
+
+    $('#searchByBooth').val('');
+    $('#searchByBoothBranch').val('');
+   //  $('#searchByVerifyed').val('');
+   //  $('#searchByWhatsappLink').val('');
+   //  $('#searchByCommunity').val('');
+   //  $('#searchByGender').val('');
+   //  $('#searchByAge').val('');
+
       param = {'act':'getallBooth','ward':ward}
       ajax({
          a:"memberajax",
@@ -241,6 +345,15 @@ $(document).ready(function() {
     dataTable.draw();
   });
   $('#searchByBooth').change(function(){
+
+   $('#searchByBoothBranch').val('');
+   //  $('#searchByVerifyed').val('');
+   //  $('#searchByWhatsappLink').val('');
+   //  $('#searchByCommunity').val('');
+   //  $('#searchByGender').val('');
+   //  $('#searchByAge').val('');
+
+
       var booth = $(this).val();
       param = {'act':'getallBoothBranch','booth':booth}
       ajax({
@@ -256,6 +369,7 @@ $(document).ready(function() {
   $('#searchByBoothBranch').change(function(){
     dataTable.draw();
   });
+
   $('#searchByVerifyed').change(function(){
     dataTable.draw();
   });

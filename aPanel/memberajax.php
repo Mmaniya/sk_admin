@@ -81,7 +81,7 @@
     if($_POST['act'] == 'getallDistrict'){
         $param = array('tableName' => TBL_BJP_DISTRICT, 'fields' => array('*'), 'showSql' => 'N', 'orderby' => 'id', 'sortby' => 'desc');
         $districtList = Table::getData($param); ?>
-            <option value='' disabled <?php if($_POST['selected'] == ''){?> selected <? }?>>--Select District--</option>
+            <option value='' <?php if($_POST['selected'] == ''){?> selected <? }?>>--Select District--</option>
        <?php foreach($districtList as $K => $V) { ?>
                 <option <?php if($V->id == $_POST['selected']){ echo 'selected="selected"'; } ?> value="<?php echo $V->id ?>"><?php echo $V->district_name ?></option>
         <?php }
@@ -143,15 +143,37 @@
         }
         if ($_POST['id'] == '') {
             $param['status'] = 'A';
+            $param['mp_const_id'] = '1';
             $param['added_by'] = $_SESSION['user_id'];
             $param['added_date'] = date('Y-m-d H:i:s', time());
-            $rsDtls = Table::insertData(array('tableName' => TBL_BJP_MEMBER, 'fields' => $param, 'showSql' => 'Y'));
+            $rsDtls = Table::insertData(array('tableName' => TBL_BJP_MEMBER, 'fields' => $param, 'showSql' => 'N'));
         } else {
             $param['status'] = 'A';
+            $param['mp_const_id'] = '1';
             $param['updated_date'] = date('Y-m-d H:i:s', time());
             $param['updated_by'] = $_SESSION['user_id'];
             $where = array('id' => $_POST['id']);
-            Table::updateData(array('tableName' => TBL_BJP_MEMBER, 'fields' => $param, 'where' => $where, 'showSql' => 'Y'));
+            Table::updateData(array('tableName' => TBL_BJP_MEMBER, 'fields' => $param, 'where' => $where, 'showSql' => 'N'));
         }
+        exit();
+    }
+
+    if($_POST['act'] == 'updateAllMembers'){
+        ob_clean();
+        $params = array('state_id','district_id','lg_const_id','mandal_id','ward_id','booth_id','booth_branch_id');
+        foreach($params as $K => $V) {
+            $param[$V] = $$V = check_input($_POST[$V]);
+        }
+      
+        foreach(explode(',',$_POST['id']) as $key=>$val) {
+        if ($_POST['id'] != '') {
+            $param['status'] = 'A';
+            $param['mp_const_id'] = '1';
+            $param['updated_date'] = date('Y-m-d H:i:s', time());
+            $param['updated_by'] = $_SESSION['user_id'];
+            $where = array('id' => $val); 
+           Table::updateData(array('tableName' => TBL_BJP_MEMBER, 'fields' => $param, 'where' => $where, 'showSql' => 'Y'));
+        }
+    }
         exit();
     }

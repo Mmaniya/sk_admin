@@ -69,6 +69,7 @@ include 'includes.php';
          }
    });
 </script>
+<!-- 1. EDIT MODEL DATA FOR DISTRICT  -->
 <?php } else if($modelAction == 'addEditMember'){ ?>
 <div class="modal-content">
    <div class="modal-header">
@@ -370,12 +371,14 @@ include 'includes.php';
                b:formData,
                c:function(){},
                d:function(data){
+                  $('#membersTable').dataTable()._fnAjaxUpdate();
                   $('.memberModel').modal('toggle');              
                }          
             });
          }
    });
 </script>
+<!-- 2. UPDATE ALL MEMBERS   -->
 <?php } else if($modelAction == 'updateAllMember'){ ?>
 <div class="modal-content">
    <div class="modal-header">
@@ -385,57 +388,67 @@ include 'includes.php';
       </button>
    </div>
    <div class="modal-body">
-      <form action="javascript:void(0)" id="formAddEditMember" method="POST">
+      <form action="javascript:void(0)" id="formupdateAllMember" method="POST">
          <?php 
-            $searchQuery = " ";
+         //    $searchQuery = " ";
     
-            if($_POST["lg_const_id"] != ''){
-                $searchQuery .= " and (lg_const_id='".$_POST["lg_const_id"]."') ";
-            }
-            if($_POST["mandal_id"] != ''){
-               $searchQuery .= " and (mandal_id='".$_POST["mandal_id"]."') ";
-            }
-            if($_POST["ward_id"] != ''){
-                $searchQuery .= " and (ward_id='".$_POST["ward_id"]."') ";
-            }
-            if($_POST["booth_id"] != ''){
-                $searchQuery .= " and (booth_id='".$_POST["booth_id"]."') ";
-            }
-            if($_POST["booth_branch_id"] != ''){
-                $searchQuery .= " and (booth_branch_id='".$_POST["booth_branch_id"]."') ";
-            }
-            if($_POST["is_verified"] != ''){
-                $searchQuery .= " and (is_verified = '".$_POST["is_verified"]."' ) ";
-            }
-            if($_POST["is_wag_link_sent"] != ''){
-                $searchQuery .= " and (is_wag_link_sent = '".$_POST["is_wag_link_sent"]."' ) ";
-            }
-            if($_POST["member_community"] != ''){
-                $searchQuery .= " and (member_community ='".$_POST["member_community"]."' ) ";
-            }
-            if($_POST["member_gender"] != ''){
-                $searchQuery .= " and (member_gender ='".$_POST["member_gender"]."' ) ";
-            }   
-            if($_POST["member_age"] != ''){
-                $searchQuery .= " and (member_age ='".$_POST["member_age"]."' ) ";
-            }
+         //    if($_POST["lg_const_id"] != ''){
+         //        $searchQuery .= " and (lg_const_id='".$_POST["lg_const_id"]."') ";
+         //    }
+         //    if($_POST["mandal_id"] != ''){
+         //       $searchQuery .= " and (mandal_id='".$_POST["mandal_id"]."') ";
+         //    }
+         //    if($_POST["ward_id"] != ''){
+         //        $searchQuery .= " and (ward_id='".$_POST["ward_id"]."') ";
+         //    }
+         //    if($_POST["booth_id"] != ''){
+         //        $searchQuery .= " and (booth_id='".$_POST["booth_id"]."') ";
+         //    }
+         //    if($_POST["booth_branch_id"] != ''){
+         //        $searchQuery .= " and (booth_branch_id='".$_POST["booth_branch_id"]."') ";
+         //    }
+         //    if($_POST["is_verified"] != ''){
+         //        $searchQuery .= " and (is_verified = '".$_POST["is_verified"]."' ) ";
+         //    }
+         //    if($_POST["is_wag_link_sent"] != ''){
+         //        $searchQuery .= " and (is_wag_link_sent = '".$_POST["is_wag_link_sent"]."' ) ";
+         //    }
+         //    if($_POST["member_community"] != ''){
+         //        $searchQuery .= " and (member_community ='".$_POST["member_community"]."' ) ";
+         //    }
+         //    if($_POST["member_gender"] != ''){
+         //        $searchQuery .= " and (member_gender ='".$_POST["member_gender"]."' ) ";
+         //    }   
+         //    if($_POST["member_age"] != ''){
+         //        $searchQuery .= " and (member_age ='".$_POST["member_age"]."' ) ";
+         //    }
+         //    if($_POST["member_id"] == ''){
 
-           $qry = 'select * from '.TBL_BJP_MEMBER.' WHERE `district_id`='.trim($_POST["district_id"]).''.$searchQuery.'';
-           $memberList=dB::mExecuteSql($qry);
+         //   $qry = 'select * from '.TBL_BJP_MEMBER.' WHERE `district_id`='.trim($_POST["district_id"]).''.$searchQuery.'';
+         //   $memberList=dB::mExecuteSql($qry);
 
-           $newarry = array();
-           foreach ($memberList as $K => $V){
-               $newarry[]= $V->id;
-           }
-           $member = implode(',',$newarry);
-
+         //   $newarry = array();
+         if($_POST['member_id'] != ''){
+           foreach ($_POST['member_id'] as $K => $V){
+               $member = implode(',',$_POST['member_id']);
+            }
+         }
          ?>
-         <input type="hidden" value="addEditMember" name="act">
-            <input type="hidden" value="<?php echo $member; ?>" name="memberID">
+         <!-- <input type="text" value="<?php // echo $member; ?>" name="id"> -->
+         <?php //} else { 
+
+           // $member = implode(',',$_POST["member_id"]);
+         ?>
+         <?php // } ?>
+
+         <input type="hidden" value="<?php echo $member; ?>" name="id">
+
+         <input type="hidden" value="updateAllMembers" name="act">
+            <input type="hidden" value="1" name="state_id">
          <h6>MEMBER MANDAL DETAILS</h6>
          <div class="row">
             <select id='District' name="district_id" class="col-sm-3 form-control"> 
-                  <option value=''  disabled selected>--Select District--</option>     
+                  <option value='' disabled selected>--Select District--</option>     
             </select>    
             <select id='Constituency' name="lg_const_id" class="offset-sm-1 col-sm-3 form-control">
                <option value=''  disabled selected>--Select Constituency--</option>
@@ -461,16 +474,15 @@ include 'includes.php';
    </div>
 </div>
 <script>
-
-      paramDist = {'act':'getallDistrict'}
-      ajax({
-         a:"memberajax",
-         b:paramDist,
-         c:function(){},
-         d:function(data){
-               $('#District').html(data);
-         }
-      });
+   paramDist = {'act':'getallDistrict'}
+   ajax({
+      a:"memberajax",
+      b:paramDist,
+      c:function(){},
+      d:function(data){
+            $('#District').html(data);
+      }
+   });
 
    $('#District').change(function(){
       var dist = $(this).val();
@@ -532,6 +544,28 @@ include 'includes.php';
                $('#BoothBranch').html(data);
             }
          });
-   }); 
+   });
+   $('form#formupdateAllMember').validate({
+         // rules: {
+         //    member_name: "required",
+         //    member_name_ta: "required",
+         // },
+         // messages: {
+         //    state_id: "Please Enter Name",
+         //    district_name: "Please Enter Tamil Name of Member",
+         // },
+         submitHandler: function(form){
+         var formData = $('form#formupdateAllMember').serialize();
+            ajax({
+               a:"memberajax",
+               b:formData,
+               c:function(){},
+               d:function(data){
+                  $('#membersTable').dataTable()._fnAjaxUpdate();
+                  $('.memberModel').modal('toggle');              
+               }          
+            });
+         }
+   });
 </script>
 <?php } ?>

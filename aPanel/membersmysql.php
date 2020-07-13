@@ -77,7 +77,8 @@ if($_POST['action'] == 'dynamicSearch') {
     $totalRecordwithFilter = $records['allcount'];
 
     ## Fetch records
-     $empQuery = "select * from ".TBL_BJP_MEMBER." WHERE `district_id`=".$searchBydistID."".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+    // $empQuery = "select * from ".TBL_BJP_MEMBER." WHERE `district_id`=".$searchBydistID."".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+    $empQuery = "select * from ".TBL_BJP_MEMBER." WHERE `district_id`=".$searchBydistID."".$searchQuery." order by member_name  ".$columnSortOrder." limit ".$row.",".$rowperpage;
     $empRecords = mysqli_query($con, $empQuery);
     $data = array();
 
@@ -88,13 +89,15 @@ if($_POST['action'] == 'dynamicSearch') {
             $verified = '<span class="badge badge-danger">NO</span>';
         }
     $data[] = array(
-        "member_name"=>$row['member_name'],
-        "member_mobile"=>$row['member_mobile'],
-        "membership_number"=>$row['membership_number'],
-        "is_verified"=>$verified,
-        "editid"=>'<a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".memberModel"  onclick="editMember('.$row['id'].')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>&nbsp;&nbsp;
+        $row['id'],
+        $row['member_name'],
+        $row['member_mobile'],
+        $row['membership_number'],
+        $verified,
+        $action = '<a href="javascript:void(0)" style="float:center;color:#fd7e14" data-toggle="modal" data-target=".memberModel"  onclick="editMember('.$row['id'].')" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>&nbsp;&nbsp;
             <a href="javascript:void(0)" style="float:center;color:red" data-toggle="modal" data-target=".memberModel"  onclick="deleteMember('.$row['id'].')" ><i class="fa fa-trash" aria-hidden="true"></i></a>&nbsp;&nbsp;
-            <a href="javascript:void(0)" style="float:center;color:green" data-toggle="modal" data-target=".memberModel"  onclick="viewMember('.$row['id'].')" ><i class="fa fa-eye" aria-hidden="true"></i></a>'
+            <a href="javascript:void(0)" style="float:center;color:green" data-toggle="modal" data-target=".memberModel"  onclick="viewMember('.$row['id'].')" ><i class="fa fa-eye" aria-hidden="true"></i></a>',
+
     );
     }
 
